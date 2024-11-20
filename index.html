@@ -39,6 +39,7 @@
         #restartButton {
             top: 60px;
             cursor: pointer;
+            display: none;
         }
         button {
             margin: 10px;
@@ -195,7 +196,7 @@
 
         // Game Setup
         function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.4, lift: -10, velocity: 0 };
+            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -12, velocity: 0 };
             pipes = [];
             score = 0;
             isGameOver = false;
@@ -211,6 +212,7 @@
             initGame();
             canvas.style.display = "block";
             startButton.style.display = "none";
+            restartButton.style.display = "none";
             window.addEventListener("click", birdFlap);
             window.addEventListener("touchstart", birdFlap);
             gameLoop();
