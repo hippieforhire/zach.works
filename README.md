@@ -1,1 +1,1 @@
-This is just the begginning of my learning journey.
+Hey Skye! Hey Addy! Hey Mom! Hey Dad! Love all!
