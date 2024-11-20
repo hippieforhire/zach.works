@@ -116,9 +116,13 @@
         let gameOver = false;
         let gameStarted = false;
 
-        canvas.addEventListener("touchstart", () => {
+        // Add both mouse and touch controls
+        function flap() {
             if (gameStarted && !gameOver) bird.velocity = bird.jump;
-        });
+        }
+
+        canvas.addEventListener("touchstart", flap);
+        canvas.addEventListener("click", flap);
 
         window.addEventListener("keydown", () => {
             if (gameStarted && !gameOver) bird.velocity = bird.jump;
