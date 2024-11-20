@@ -87,6 +87,7 @@
             transform: scale(1.1);
         }
 
+        /* New clock style */
         #clock {
             position: absolute;
             top: 10px;
@@ -103,24 +104,66 @@
         <h1>Welcome to Zach.works</h1>
         <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
 
+        <!-- Clock -->
         <div id="clock"></div>
+
+        <!-- Buttons for features -->
         <button onclick="changeBackgroundColor()">Change Background Color</button>
         <button onclick="displayRandomQuote()">Get Random Quote</button>
         <button onclick="playNumberGuess()">Play Number Guessing Game</button>
         <button id="startGameButton">Play Flappy Bird Game</button>
 
+        <!-- Quote Display -->
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
+
+        <!-- Number Guessing Game -->
         <div id="guessOutput"></div>
     </div>
 
+    <!-- Game elements -->
     <div id="score">Score: 0</div>
     <button id="restartButton" onclick="restartGame()">Restart Game</button>
     <canvas id="gameCanvas" width="480" height="640"></canvas>
+
+    <!-- Particle Canvas for Effects -->
     <canvas id="particleCanvas"></canvas>
 
+    <!-- Dark/Light Mode Toggle -->
     <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
 
     <script>
+        // Background Color Change
+        function changeBackgroundColor() {
+            const colors = ["black", "blue", "green", "purple", "orange", "red"];
+            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Random Quotes
+        const quotes = [
+            "The best time to plant a tree was 20 years ago. The second best time is now.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "Believe you can and you're halfway there.",
+            "Do what you can, with what you have, where you are.",
+            "Hardships often prepare ordinary people for an extraordinary destiny."
+        ];
+
+        function displayRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById("quote").textContent = randomQuote;
+        }
+
+        // Number Guessing Game
+        function playNumberGuess() {
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
+            const guess = prompt("Guess a number between 1 and 10:");
+            const output = document.getElementById("guessOutput");
+            if (parseInt(guess) === randomNumber) {
+                output.textContent = `You guessed right! The number was ${randomNumber}.`;
+            } else {
+                output.textContent = `Sorry, you guessed ${guess}. The correct number was ${randomNumber}.`;
+            }
+        }
+
         // Dark/Light Mode
         let darkMode = true;
         function toggleDarkLight() {
@@ -143,6 +186,7 @@
         const restartButton = document.getElementById("restartButton");
         let bird, pipes, score, isGameOver, timer;
 
+        // Game Setup
         function initGame() {
             bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -12, velocity: 0 };
             pipes = [];
@@ -173,7 +217,9 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
-            if (bird.y + bird.height > canvas.height || bird.y < 0) endGame();
+            if (bird.y + bird.height > canvas.height || bird.y < 0) {
+                endGame();
+            }
             drawBird();
             updatePipes();
             drawPipes();
@@ -188,11 +234,14 @@
         }
 
         function updatePipes() {
-            if (timer % 90 === 0) {
-                const pipeHeight = Math.random() * (canvas.height / 2) + 100;
-                pipes.push({ x: canvas.width, y: pipeHeight });
+            if (timer % 60 === 0 && !isGameOver) {
+                const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
+                const gap = 150; // Ensure consistent pipe spacing
+                pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
             }
-            pipes.forEach(pipe => pipe.x -= 3);
+            pipes.forEach(pipe => {
+                pipe.x -= 3;
+            });
             pipes = pipes.filter(pipe => pipe.x + 50 > 0);
         }
 
@@ -200,24 +249,26 @@
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
                 ctx.fillRect(pipe.x, 0, 50, pipe.y);
-                ctx.fillRect(pipe.x, pipe.y + 185, 50, canvas.height - pipe.y - 185);
+                ctx.fillRect(pipe.x, pipe.y + pipe.gap, 50, canvas.height - pipe.y - pipe.gap);
             });
         }
 
         function checkCollisions() {
             pipes.forEach(pipe => {
-                if (
-                    bird.x + bird.width > pipe.x &&
-                    bird.x < pipe.x + 50 &&
-                    (bird.y < pipe.y || bird.y + bird.height > pipe.y + 185)
-                ) endGame();
+                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
+                    if (bird.y < pipe.y || bird.y + bird.height > pipe.y + pipe.gap) {
+                        endGame();
+                    }
+                }
             });
         }
 
         function endGame() {
             isGameOver = true;
-            document.getElementById("score").style.display = "none";
+            window.removeEventListener("click", birdFlap);
+            window.removeEventListener("touchstart", birdFlap);
             restartButton.style.display = "block";
+            document.getElementById("score").textContent += " - Game Over!";
         }
 
         function restartGame() {
@@ -225,10 +276,25 @@
             gameLoop();
         }
 
-        window.onload = function() {
-            startButton.style.display = "inline-block";
-            startButton.addEventListener("click", startGame);
-        }
+        startButton.addEventListener("click", startGame);
+
+        // Clock Display
+        setInterval(() => {
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            document.getElementById("clock").textContent = time;
+        }, 1000);
+
+        // Particle Effect (Optional)
+        const particleCanvas = document.getElementById("particleCanvas");
+        const particleCtx = particleCanvas.getContext("2d");
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
