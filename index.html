@@ -161,14 +161,15 @@
         // Dark/Light Mode
         let darkMode = true;
         function toggleDarkLight() {
+            const darkLightToggleButton = document.getElementById("darkLightToggle");
             if (darkMode) {
                 document.body.style.backgroundColor = 'white';
                 document.body.style.color = 'black';
-                document.getElementById("darkLightToggle").textContent = "Switch to Dark Mode";
+                darkLightToggleButton.textContent = "Switch to Dark Mode";
             } else {
                 document.body.style.backgroundColor = 'black';
                 document.body.style.color = 'white';
-                document.getElementById("darkLightToggle").textContent = "Switch to Light Mode";
+                darkLightToggleButton.textContent = "Switch to Light Mode";
             }
             darkMode = !darkMode;
         }
@@ -218,6 +219,7 @@
             updatePipes();
             drawPipes();
             checkCollisions();
+            updateScore();
             timer++;
             requestAnimationFrame(gameLoop);
         }
@@ -273,6 +275,7 @@
         }
 
         function updateScore() {
+            score++;
             document.getElementById("score").textContent = `Score: ${score}`;
         }
 
