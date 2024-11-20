@@ -25,7 +25,7 @@
             background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
         }
         #score {
-            position: absolute;
+            position: fixed;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
@@ -89,8 +89,8 @@
 
         /* New clock style */
         #clock {
-            position: absolute;
-            top: 50px;
+            position: fixed;
+            top: 100px;
             left: 10px;
             font-size: 2rem;
             font-weight: bold;
@@ -193,7 +193,7 @@
             score = 0;
             isGameOver = false;
             timer = 0;
-            document.getElementById("score").textContent = `Score: ${score}`;
+            updateScore();
             document.getElementById("score").style.display = "block";
             restartButton.style.display = "none";
         }
@@ -276,6 +276,10 @@
             window.addEventListener("click", birdFlap);
             window.addEventListener("touchstart", birdFlap);
             gameLoop();
+        }
+
+        function updateScore() {
+            document.getElementById("score").textContent = `Score: ${score}`;
         }
 
         startButton.addEventListener("click", startGame);
