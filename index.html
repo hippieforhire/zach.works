@@ -86,12 +86,26 @@
         button:hover {
             transform: scale(1.1);
         }
+
+        /* New clock style */
+        #clock {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 2;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div id="content">
         <h1>Welcome to Zach.works</h1>
         <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
+
+        <!-- Clock -->
+        <div id="clock"></div>
 
         <!-- Buttons for features -->
         <button onclick="changeBackgroundColor()">Change Background Color</button>
@@ -253,59 +267,62 @@
         }
 
         function updatePipes() {
-            if (timer % 90 === 0) {
-                const gap = Math.random() * (canvas.height - 200) + 100;
-                pipes.push({ x: canvas.width, gap, width: 60 });
+            if (timer % 60 === 0 && !isGameOver) {
+                const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
+                pipes.push({ x: canvas.width, y: pipeHeight });
             }
-            pipes.forEach(pipe => pipe.x -= 3);
-            pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
+            pipes.forEach(pipe => {
+                pipe.x -= 3;
+            });
+            pipes = pipes.filter(pipe => pipe.x + 50 > 0);
         }
 
         function drawPipes() {
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, pipe.width, pipe.gap - 100);
-                ctx.fillRect(pipe.x, pipe.gap + 100, pipe.width, canvas.height);
+                ctx.fillRect(pipe.x, 0, 50, pipe.y);
+                ctx.fillRect(pipe.x, pipe.y + 100, 50, canvas.height - pipe.y - 100);
             });
         }
 
         function checkCollisions() {
             pipes.forEach(pipe => {
-                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + pipe.width) {
-                    if (bird.y < pipe.gap - 100 || bird.y + bird.height > pipe.gap + 100) {
+                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
+                    if (bird.y < pipe.y || bird.y + bird.height > pipe.y + 100) {
                         endGame();
                     }
                 }
             });
         }
 
-       function endGame() {
-    isGameOver = true;
-    createParticles(bird.x + bird.width / 2, bird.y + bird.height / 2);
-    drawParticles();
-    function drawParticlesLoop() {
-        drawParticles();
-        if (particles.length > 0) {
-            requestAnimationFrame(drawParticlesLoop);
+        function endGame() {
+            isGameOver = true;
+            createParticles(bird.x, bird.y);
+            document.getElementById("score").style.display = "none";
+            restartButton.style.display = "block";
         }
-    }
-    drawParticlesLoop();
-    setTimeout(() => {
-        restartButton.style.display = "block";
-        document.getElementById("score").style.display = "none";
-    }, 1000);
-}
 
         function restartGame() {
-            particles = [];
-            startButton.style.display = "block";
             initGame();
-            canvas.style.display = "none";
-            restartButton.style.display = "none";
+            gameLoop();
         }
 
-        startButton.addEventListener("click", startGame);
-        startButton.addEventListener("touchstart", startGame);
+        // Clock Implementation
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            const seconds = String(now.getSeconds()).padStart(2, "0");
+            document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Initialize Page
+        window.onload = function() {
+            startButton.style.display = "inline-block";
+        }
     </script>
 </body>
 </html>
