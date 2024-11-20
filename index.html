@@ -3,111 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Zach.works</title>
+    <title>Welcome to Zach.works</title>
     <style>
         body {
             background-color: black;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
             font-family: Arial, sans-serif;
             text-align: center;
-            flex-direction: column;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            margin: 0;
         }
         h1 {
+            margin-top: 20px;
             font-size: 2.5rem;
         }
         p {
             font-size: 1.5rem;
-            margin: 10px 0;
         }
-        button, input {
-            margin-top: 20px;
+        #gameCanvas {
+            display: block;
+            margin: 20px auto;
+            background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        button {
+            margin: 10px;
             padding: 10px 20px;
             font-size: 1rem;
-            border: none;
-            background-color: white;
-            color: black;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        button:hover {
-            background-color: gray;
-            color: white;
-        }
-        input {
-            width: 50px;
-            text-align: center;
-        }
-        #game-message {
-            margin-top: 20px;
-            font-size: 1.2rem;
+        #quote-box {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            width: 80%;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Welcome</h1>
-        <p>My name is Zach Rogers. I am just playing around with coding right now.</p>
-        <button onclick="changeBackgroundColor()">Change Background</button>
-        <button onclick="showRandomQuote()">Show Random Quote</button>
-        <p id="quote"></p>
-        
-        <!-- Game Section -->
-        <h2>Guess the Number Game</h2>
-        <p>Guess a number between 1 and 10:</p>
-        <input type="number" id="guess-input" min="1" max="10" />
-        <button onclick="playGame()">Submit Guess</button>
-        <p id="game-message"></p>
+    <h1>Welcome to Zach.works</h1>
+    <p>My name is Zach Rogers. I am just playing around with coding right now. Click the buttons below!</p>
+
+    <!-- Quotes Section -->
+    <div id="quote-box">
+        <h2>Random Quote:</h2>
+        <p id="quote">Click the button to generate a quote!</p>
+        <button onclick="generateQuote()">Generate Quote</button>
     </div>
 
+    <!-- Buttons for other features -->
+    <button onclick="changeBackgroundColor()">Change Background Color</button>
+    <button onclick="playNumberGuessingGame()">Play Number Guessing Game</button>
+
+    <!-- Flappy Bird Section -->
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="480" height="640"></canvas>
+
     <script>
-        // Background color change function
+        // Background color changer
         function changeBackgroundColor() {
-            const colors = ["#FF5733", "#33FF57", "#3357FF", "#F4D03F", "#A569BD", "#48C9B0"];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.style.backgroundColor = randomColor;
+            const colors = ['red', 'blue', 'green', 'purple', 'yellow'];
+            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
 
-        // Random quote generator function
-        function showRandomQuote() {
-            const quotes = [
-                "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
-                "Do what you can, with what you have, where you are. - Theodore Roosevelt",
-                "In the middle of every difficulty lies opportunity. - Albert Einstein",
-                "It does not matter how slowly you go as long as you do not stop. - Confucius",
-                "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
-                "The best way to predict the future is to create it. - Peter Drucker",
-                "Happiness is not something ready-made. It comes from your own actions. - Dalai Lama"
-            ];
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById("quote").textContent = randomQuote;
-        }
-
-        // Guess the Number Game
-        let randomNumber = Math.floor(Math.random() * 10) + 1;
-
-        function playGame() {
-            const userGuess = Number(document.getElementById("guess-input").value);
-            const message = document.getElementById("game-message");
-
-            if (!userGuess || userGuess < 1 || userGuess > 10) {
-                message.textContent = "Please enter a number between 1 and 10.";
-                return;
-            }
-
-            if (userGuess === randomNumber) {
-                message.textContent = "🎉 Correct! You guessed the number!";
-                randomNumber = Math.floor(Math.random() * 10) + 1; // Reset the game
-            } else {
-                message.textContent = "❌ Wrong! Try again.";
+        // Number guessing game
+        function playNumberGuessingGame() {
+            let randomNumber = Math.floor(Math.random() * 100) + 1;
+            let guess;
+            while (guess !== randomNumber) {
+                guess = parseInt(prompt("Guess a number between 1 and 100:"));
+                if (guess < randomNumber) {
+                    alert("Too low! Try again.");
+                } else if (guess > randomNumber) {
+                    alert("Too high! Try again.");
+                } else {
+                    alert("You guessed it! The number was " + randomNumber);
+                    break;
+                }
             }
         }
+
+        // Quote generator
+        const quotes = [
+            "The journey of a thousand miles begins with one step.",
+            "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+            "Life is what happens when you're busy making other plans.",
+            "Success usually comes to those who are too busy to be looking for it.",
+            "Don't watch the clock; do what it does. Keep going."
+        ];
+        function generateQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById("quote").textContent = quotes[randomIndex];
+        }
+
+        // Flappy Bird Game Code
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const bird = { x: 50, y: 200, width: 20, height: 20, velocity: 0, gravity: 0.5, jump: -10 };
+        const pipes = [];
+        const pipeWidth = 50;
+        const pipeGap = 150;
+        let score = 0;
+        let gameOver = false;
+
+        window.addEventListener("keydown", () => { if (!gameOver) bird.velocity = bird.jump; });
+
+        function createPipe() {
+            const pipeHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+            pipes.push({ x: canvas.width, y: 0, width: pipeWidth, height: pipeHeight, passed: false });
+            pipes.push({ x: canvas.width, y: pipeHeight + pipeGap, width: pipeWidth, height: canvas.height - pipeHeight - pipeGap, passed: false });
+        }
+
+        function drawBird() { ctx.fillStyle = "yellow"; ctx.fillRect(bird.x, bird.y, bird.width, bird.height); }
+        function drawPipes() { ctx.fillStyle = "green"; pipes.forEach(pipe => ctx.fillRect(pipe.x, pipe.y, pipe.width, pipe.height)); }
+        function checkCollision() { pipes.forEach(pipe => { if (bird.x < pipe.x + pipe.width && bird.x + bird.width > pipe.x && bird.y < pipe.y + pipe.height && bird.y + bird.height > pipe.y) gameOver = true; }); if (bird.y <= 0 || bird.y + bird.height >= canvas.height) gameOver = true; }
+        function updateScore() { pipes.forEach(pipe => { if (!pipe.passed && pipe.x + pipe.width < bird.x) { pipe.passed = true; score += 0.5; } }); document.getElementById("score").textContent = `Score: ${Math.floor(score)}`; }
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            bird.velocity += bird.gravity; bird.y += bird.velocity;
+            pipes.forEach(pipe => pipe.x -= 2);
+            if (pipes.length && pipes[0].x + pipeWidth < 0) pipes.splice(0, 2);
+            if (!pipes.length || pipes[pipes.length - 1].x < canvas.width - 200) createPipe();
+            drawBird(); drawPipes(); updateScore(); checkCollision();
+            if (!gameOver) requestAnimationFrame(gameLoop);
+            else { ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = "white"; ctx.textAlign = "center"; ctx.font = "30px Arial"; ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2); ctx.font = "20px Arial"; ctx.fillText(`Final Score: ${Math.floor(score)}`, canvas.width / 2, canvas.height / 2 + 30); }
+        }
+
+        // Start the Flappy Bird game
+        gameLoop();
     </script>
 </body>
 </html>
