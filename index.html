@@ -86,8 +86,6 @@
         button:hover {
             transform: scale(1.1);
         }
-
-        /* New clock style */
         #clock {
             position: absolute;
             top: 10px;
@@ -179,44 +177,12 @@
             darkMode = !darkMode;
         }
 
-        // Particle Effects for Game Over
-        const particleCanvas = document.getElementById("particleCanvas");
-        const pctx = particleCanvas.getContext("2d");
-        let particles = [];
-        function createParticles(x, y) {
-            for (let i = 0; i < 50; i++) {
-                particles.push({
-                    x: x,
-                    y: y,
-                    size: Math.random() * 5 + 1,
-                    speedX: Math.random() * 2 - 1,
-                    speedY: Math.random() * 2 - 1,
-                    life: 100
-                });
-            }
-        }
-        function drawParticles() {
-            pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-            particles = particles.filter(p => p.life > 0);
-            particles.forEach(p => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                p.life -= 1;
-                pctx.fillStyle = "rgba(255, 255, 255, " + (p.life / 100) + ")";
-                pctx.beginPath();
-                pctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                pctx.fill();
-            });
-        }
-
-        // Flappy Bird Game Logic
+        // Flappy Bird Game
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const startButton = document.getElementById("startGameButton");
-        const restartButton = document.getElementById("restartButton");
         let bird, pipes, score, isGameOver, timer;
 
-        // Game Setup
         function initGame() {
             bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -12, velocity: 0 };
             pipes = [];
@@ -225,18 +191,13 @@
             timer = 0;
             document.getElementById("score").textContent = `Score: ${score}`;
             document.getElementById("score").style.display = "block";
-            restartButton.style.display = "none";
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
         }
 
         function startGame() {
             initGame();
             canvas.style.display = "block";
             startButton.style.display = "none";
-            restartButton.style.display = "none";
             window.addEventListener("click", birdFlap);
-            window.addEventListener("touchstart", birdFlap);
             gameLoop();
         }
 
@@ -256,7 +217,6 @@
             updatePipes();
             drawPipes();
             checkCollisions();
-            drawParticles();
             timer++;
             requestAnimationFrame(gameLoop);
         }
@@ -267,28 +227,27 @@
         }
 
         function updatePipes() {
-            if (timer % 60 === 0 && !isGameOver) {
-                const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-                pipes.push({ x: canvas.width, y: pipeHeight });
+            if (timer % 90 === 0) {
+                const gap = 150;
+                const pipeHeight = Math.floor(Math.random() * (canvas.height - gap));
+                pipes.push({ x: canvas.width, top: pipeHeight, bottom: pipeHeight + gap });
             }
-            pipes.forEach(pipe => {
-                pipe.x -= 3;
-            });
-            pipes = pipes.filter(pipe => pipe.x + 50 > 0);
+            pipes.forEach(pipe => (pipe.x -= 3));
+            pipes = pipes.filter(pipe => pipe.x > -50);
         }
 
         function drawPipes() {
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, 50, pipe.y);
-                ctx.fillRect(pipe.x, pipe.y + 185, 50, canvas.height - pipe.y - 100);
+                ctx.fillRect(pipe.x, 0, 50, pipe.top);
+                ctx.fillRect(pipe.x, pipe.bottom, 50, canvas.height - pipe.bottom);
             });
         }
 
         function checkCollisions() {
             pipes.forEach(pipe => {
                 if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
-                    if (bird.y < pipe.y || bird.y + bird.height > pipe.y + 100) {
+                    if (bird.y < pipe.top || bird.y + bird.height > pipe.bottom) {
                         endGame();
                     }
                 }
@@ -297,33 +256,12 @@
 
         function endGame() {
             isGameOver = true;
-            createParticles(bird.x, bird.y);
-            document.getElementById("score").style.display = "none";
-            restartButton.style.display = "block";
         }
 
-        function restartGame() {
-            initGame();
-            gameLoop();
-        }
-
-        // Clock Implementation
-        function updateClock() {
+        setInterval(() => {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, "0");
-            const minutes = String(now.getMinutes()).padStart(2, "0");
-            const seconds = String(now.getSeconds()).padStart(2, "0");
-            document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Initialize Page
-        window.onload = function() {
-            startButton.style.display = "inline-block";
-            startButton.addEventListener("click", startGame);
-        }
+            document.getElementById("clock").textContent = now.toLocaleTimeString();
+        }, 1000);
     </script>
 </body>
 </html>
