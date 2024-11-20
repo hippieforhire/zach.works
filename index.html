@@ -86,6 +86,8 @@
         button:hover {
             transform: scale(1.1);
         }
+
+        /* New clock style */
         #clock {
             position: absolute;
             top: 10px;
@@ -177,10 +179,11 @@
             darkMode = !darkMode;
         }
 
-        // Flappy Bird Game
+        // Flappy Bird Game Logic
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const startButton = document.getElementById("startGameButton");
+        const restartButton = document.getElementById("restartButton");
         let bird, pipes, score, isGameOver, timer;
 
         function initGame() {
@@ -191,13 +194,13 @@
             timer = 0;
             document.getElementById("score").textContent = `Score: ${score}`;
             document.getElementById("score").style.display = "block";
+            restartButton.style.display = "none";
         }
 
         function startGame() {
             initGame();
             canvas.style.display = "block";
             startButton.style.display = "none";
-            window.addEventListener("click", birdFlap);
             gameLoop();
         }
 
@@ -216,8 +219,6 @@
             drawBird();
             updatePipes();
             drawPipes();
-            checkCollisions();
-            timer++;
             requestAnimationFrame(gameLoop);
         }
 
@@ -227,41 +228,48 @@
         }
 
         function updatePipes() {
-            if (timer % 90 === 0) {
-                const gap = 150;
-                const pipeHeight = Math.floor(Math.random() * (canvas.height - gap));
-                pipes.push({ x: canvas.width, top: pipeHeight, bottom: pipeHeight + gap });
+            if (timer % 60 === 0 && !isGameOver) {
+                const pipeHeight = Math.floor(Math.random() * 200) + 50;
+                pipes.push({ x: canvas.width, y: pipeHeight });
             }
-            pipes.forEach(pipe => (pipe.x -= 3));
-            pipes = pipes.filter(pipe => pipe.x > -50);
+            pipes.forEach(pipe => pipe.x -= 3);
+            pipes = pipes.filter(pipe => pipe.x + 50 > 0);
         }
 
         function drawPipes() {
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, 50, pipe.top);
-                ctx.fillRect(pipe.x, pipe.bottom, 50, canvas.height - pipe.bottom);
-            });
-        }
-
-        function checkCollisions() {
-            pipes.forEach(pipe => {
-                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
-                    if (bird.y < pipe.top || bird.y + bird.height > pipe.bottom) {
-                        endGame();
-                    }
-                }
+                ctx.fillRect(pipe.x, 0, 50, pipe.y);
+                ctx.fillRect(pipe.x, pipe.y + 120, 50, canvas.height - pipe.y - 120);
             });
         }
 
         function endGame() {
             isGameOver = true;
+            document.getElementById("score").style.display = "none";
+            restartButton.style.display = "block";
         }
 
-        setInterval(() => {
+        function restartGame() {
+            initGame();
+            gameLoop();
+        }
+
+        // Clock Implementation
+        function updateClock() {
             const now = new Date();
-            document.getElementById("clock").textContent = now.toLocaleTimeString();
-        }, 1000);
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            const seconds = String(now.getSeconds()).padStart(2, "0");
+            document.getElementById("clock").textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+
+        // Event Listeners
+        startButton.addEventListener("click", startGame);
+        document.addEventListener("keydown", (e) => {
+            if (e.key === " ") birdFlap();
+        });
     </script>
 </body>
 </html>
