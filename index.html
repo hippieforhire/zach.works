@@ -73,25 +73,31 @@
             pointer-events: none;
             z-index: -1;
         }
+        #content {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to Zach.works</h1>
-    <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
+    <div id="content">
+        <h1>Welcome to Zach.works</h1>
+        <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
 
-    <!-- Buttons for features -->
-    <button onclick="changeBackgroundColor()">Change Background Color</button>
-    <button onclick="displayRandomQuote()">Get Random Quote</button>
-    <button onclick="playNumberGuess()">Play Number Guessing Game</button>
-    <button id="startGameButton">Play Flappy Bird Game</button>
+        <!-- Buttons for features -->
+        <button onclick="changeBackgroundColor()">Change Background Color</button>
+        <button onclick="displayRandomQuote()">Get Random Quote</button>
+        <button onclick="playNumberGuess()">Play Number Guessing Game</button>
+        <button id="startGameButton">Play Flappy Bird Game</button>
 
-    <!-- Quote Display -->
-    <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
+        <!-- Quote Display -->
+        <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
 
-    <!-- Number Guessing Game -->
-    <div id="guessOutput"></div>
+        <!-- Number Guessing Game -->
+        <div id="guessOutput"></div>
+    </div>
 
-    <!-- Flappy Bird Game -->
+    <!-- Game elements -->
     <div id="score">Score: 0</div>
     <button id="restartButton" onclick="restartGame()">Restart Game</button>
     <canvas id="gameCanvas" width="480" height="640"></canvas>
@@ -189,7 +195,7 @@
 
         // Game Setup
         function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -15, velocity: 0 };
+            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.4, lift: -10, velocity: 0 };
             pipes = [];
             score = 0;
             isGameOver = false;
@@ -231,6 +237,7 @@
                 score++;
                 document.getElementById("score").textContent = `Score: ${score}`;
             }
+            drawParticles();
             requestAnimationFrame(gameLoop);
         }
 
@@ -240,13 +247,11 @@
         }
 
         function updatePipes() {
-            if (timer % 100 === 0) {
+            if (timer % 90 === 0) {
                 const gap = Math.random() * (canvas.height - 200) + 100;
                 pipes.push({ x: canvas.width, gap, width: 60 });
             }
-            pipes.forEach(pipe => {
-                pipe.x -= 3;
-            });
+            pipes.forEach(pipe => pipe.x -= 3);
             pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
         }
 
