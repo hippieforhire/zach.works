@@ -279,15 +279,22 @@
             });
         }
 
-        function endGame() {
-            isGameOver = true;
-            createParticles(bird.x + bird.width / 2, bird.y + bird.height / 2);
-            drawParticles();
-            setTimeout(() => {
-                restartButton.style.display = "block";
-                document.getElementById("score").style.display = "none";
-            }, 1000);
+       function endGame() {
+    isGameOver = true;
+    createParticles(bird.x + bird.width / 2, bird.y + bird.height / 2);
+    drawParticles();
+    function drawParticlesLoop() {
+        drawParticles();
+        if (particles.length > 0) {
+            requestAnimationFrame(drawParticlesLoop);
         }
+    }
+    drawParticlesLoop();
+    setTimeout(() => {
+        restartButton.style.display = "block";
+        document.getElementById("score").style.display = "none";
+    }, 1000);
+}
 
         function restartGame() {
             particles = [];
