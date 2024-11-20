@@ -20,7 +20,7 @@
             font-size: 1.5rem;
         }
         #gameCanvas {
-            display: block;
+            display: none;
             margin: 20px auto;
             background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
         }
@@ -34,6 +34,7 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 10px 20px;
             border-radius: 10px;
+            display: none;
         }
         button {
             margin: 10px;
@@ -41,82 +42,87 @@
             font-size: 1rem;
             cursor: pointer;
         }
-        #quote-box {
-            margin: 20px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            width: 80%;
+        #quote {
+            margin: 20px;
+            font-size: 1.5rem;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <h1>Welcome to Zach.works</h1>
-    <p>My name is Zach Rogers. I am just playing around with coding right now. Click the buttons below!</p>
+    <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
 
-    <!-- Quotes Section -->
-    <div id="quote-box">
-        <h2>Random Quote:</h2>
-        <p id="quote">Click the button to generate a quote!</p>
-        <button onclick="generateQuote()">Generate Quote</button>
-    </div>
-
-    <!-- Buttons for other features -->
+    <!-- Buttons for features -->
     <button onclick="changeBackgroundColor()">Change Background Color</button>
-    <button onclick="playNumberGuessingGame()">Play Number Guessing Game</button>
+    <button onclick="displayRandomQuote()">Get Random Quote</button>
+    <button onclick="playNumberGuess()">Play Number Guessing Game</button>
+    <button id="startGameButton">Play Flappy Bird Game</button>
 
-    <!-- Flappy Bird Section -->
+    <!-- Quote Display -->
+    <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
+
+    <!-- Number Guessing Game -->
+    <div id="guessOutput"></div>
+
+    <!-- Flappy Bird Game -->
     <div id="score">Score: 0</div>
     <canvas id="gameCanvas" width="480" height="640"></canvas>
 
     <script>
-        // Background color changer
+        // Background Color Change
         function changeBackgroundColor() {
-            const colors = ['red', 'blue', 'green', 'purple', 'yellow'];
+            const colors = ["black", "blue", "green", "purple", "orange", "red"];
             document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
 
-        // Number guessing game
-        function playNumberGuessingGame() {
-            let randomNumber = Math.floor(Math.random() * 100) + 1;
-            let guess;
-            while (guess !== randomNumber) {
-                guess = parseInt(prompt("Guess a number between 1 and 100:"));
-                if (guess < randomNumber) {
-                    alert("Too low! Try again.");
-                } else if (guess > randomNumber) {
-                    alert("Too high! Try again.");
-                } else {
-                    alert("You guessed it! The number was " + randomNumber);
-                    break;
-                }
+        // Random Quotes
+        const quotes = [
+            "The best time to plant a tree was 20 years ago. The second best time is now.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "Believe you can and you're halfway there.",
+            "Do what you can, with what you have, where you are.",
+            "Hardships often prepare ordinary people for an extraordinary destiny."
+        ];
+
+        function displayRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById("quote").textContent = randomQuote;
+        }
+
+        // Number Guessing Game
+        function playNumberGuess() {
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
+            const guess = prompt("Guess a number between 1 and 10:");
+            const output = document.getElementById("guessOutput");
+            if (parseInt(guess) === randomNumber) {
+                output.textContent = `You guessed right! The number was ${randomNumber}.`;
+            } else {
+                output.textContent = `Sorry, you guessed ${guess}. The correct number was ${randomNumber}.`;
             }
         }
 
-        // Quote generator
-        const quotes = [
-            "The journey of a thousand miles begins with one step.",
-            "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
-            "Life is what happens when you're busy making other plans.",
-            "Success usually comes to those who are too busy to be looking for it.",
-            "Don't watch the clock; do what it does. Keep going."
-        ];
-        function generateQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            document.getElementById("quote").textContent = quotes[randomIndex];
-        }
-
-        // Flappy Bird Game Code
+        // Flappy Bird Game
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const startButton = document.getElementById("startGameButton");
+        const scoreDisplay = document.getElementById("score");
+
         const bird = { x: 50, y: 200, width: 20, height: 20, velocity: 0, gravity: 0.5, jump: -10 };
         const pipes = [];
         const pipeWidth = 50;
         const pipeGap = 150;
         let score = 0;
         let gameOver = false;
+        let gameStarted = false;
 
-        window.addEventListener("keydown", () => { if (!gameOver) bird.velocity = bird.jump; });
+        canvas.addEventListener("touchstart", () => {
+            if (gameStarted && !gameOver) bird.velocity = bird.jump;
+        });
+
+        window.addEventListener("keydown", () => {
+            if (gameStarted && !gameOver) bird.velocity = bird.jump;
+        });
 
         function createPipe() {
             const pipeHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
@@ -127,7 +133,7 @@
         function drawBird() { ctx.fillStyle = "yellow"; ctx.fillRect(bird.x, bird.y, bird.width, bird.height); }
         function drawPipes() { ctx.fillStyle = "green"; pipes.forEach(pipe => ctx.fillRect(pipe.x, pipe.y, pipe.width, pipe.height)); }
         function checkCollision() { pipes.forEach(pipe => { if (bird.x < pipe.x + pipe.width && bird.x + bird.width > pipe.x && bird.y < pipe.y + pipe.height && bird.y + bird.height > pipe.y) gameOver = true; }); if (bird.y <= 0 || bird.y + bird.height >= canvas.height) gameOver = true; }
-        function updateScore() { pipes.forEach(pipe => { if (!pipe.passed && pipe.x + pipe.width < bird.x) { pipe.passed = true; score += 0.5; } }); document.getElementById("score").textContent = `Score: ${Math.floor(score)}`; }
+        function updateScore() { pipes.forEach(pipe => { if (!pipe.passed && pipe.x + pipe.width < bird.x) { pipe.passed = true; score += 0.5; } }); scoreDisplay.textContent = `Score: ${Math.floor(score)}`; }
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             bird.velocity += bird.gravity; bird.y += bird.velocity;
@@ -139,8 +145,22 @@
             else { ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = "white"; ctx.textAlign = "center"; ctx.font = "30px Arial"; ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2); ctx.font = "20px Arial"; ctx.fillText(`Final Score: ${Math.floor(score)}`, canvas.width / 2, canvas.height / 2 + 30); }
         }
 
-        // Start the Flappy Bird game
-        gameLoop();
+        function startGame() {
+            pipes.length = 0;
+            bird.y = 200;
+            bird.velocity = 0;
+            score = 0;
+            gameOver = false;
+            gameStarted = true;
+
+            canvas.style.display = "block";
+            scoreDisplay.style.display = "block";
+            startButton.style.display = "none";
+
+            gameLoop();
+        }
+
+        startButton.addEventListener("click", startGame);
     </script>
 </body>
 </html>
