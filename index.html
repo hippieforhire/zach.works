@@ -25,16 +25,13 @@
             background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
         }
         #score {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
             font-size: 24px;
             color: white;
             background: rgba(0, 0, 0, 0.5);
             padding: 10px 20px;
             border-radius: 10px;
             display: none;
+            margin-top: 10px;
         }
         #restartButton {
             position: absolute;
@@ -89,23 +86,18 @@
 
         /* New clock style */
         #clock {
-            position: fixed;
-            top: 100px;
-            left: 10px;
             font-size: 2rem;
             font-weight: bold;
-            z-index: 2;
             color: white;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div id="content">
         <h1>Welcome to Zach.works</h1>
-        <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
-
-        <!-- Clock -->
         <div id="clock"></div>
+        <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
 
         <!-- Buttons for features -->
         <button onclick="changeBackgroundColor()">Change Background Color</button>
@@ -116,12 +108,14 @@
         <!-- Quote Display -->
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
 
+        <!-- Score Display -->
+        <div id="score">Score: 0</div>
+
         <!-- Number Guessing Game -->
         <div id="guessOutput"></div>
     </div>
 
     <!-- Game elements -->
-    <div id="score">Score: 0</div>
     <button id="restartButton" onclick="restartGame()">Restart Game</button>
     <canvas id="gameCanvas" width="480" height="640"></canvas>
 
