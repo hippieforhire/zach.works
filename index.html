@@ -81,6 +81,15 @@
             font-weight: bold;
             color: white;
             margin-top: 10px;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow-text 5s infinite linear;
+        }
+
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
     </style>
 </head>
