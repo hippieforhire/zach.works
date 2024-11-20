@@ -15,15 +15,17 @@
             margin: 0;
             font-family: Arial, sans-serif;
             text-align: center;
-            transition: background-color 0.5s ease;
+            flex-direction: column;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
         h1 {
             font-size: 2.5rem;
         }
         p {
             font-size: 1.5rem;
+            margin: 10px 0;
         }
-        button {
+        button, input {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 1rem;
@@ -38,20 +40,73 @@
             background-color: gray;
             color: white;
         }
+        input {
+            width: 50px;
+            text-align: center;
+        }
+        #game-message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
     <div>
         <h1>Welcome</h1>
-        <p>My name is Zach Rogers. I am just playing around with coding right now. Click the button to change the background color!</p>
+        <p>My name is Zach Rogers. I am just playing around with coding right now.</p>
         <button onclick="changeBackgroundColor()">Change Background</button>
+        <button onclick="showRandomQuote()">Show Random Quote</button>
+        <p id="quote"></p>
+        
+        <!-- Game Section -->
+        <h2>Guess the Number Game</h2>
+        <p>Guess a number between 1 and 10:</p>
+        <input type="number" id="guess-input" min="1" max="10" />
+        <button onclick="playGame()">Submit Guess</button>
+        <p id="game-message"></p>
     </div>
 
     <script>
+        // Background color change function
         function changeBackgroundColor() {
             const colors = ["#FF5733", "#33FF57", "#3357FF", "#F4D03F", "#A569BD", "#48C9B0"];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.body.style.backgroundColor = randomColor;
+        }
+
+        // Random quote generator function
+        function showRandomQuote() {
+            const quotes = [
+                "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+                "Do what you can, with what you have, where you are. - Theodore Roosevelt",
+                "In the middle of every difficulty lies opportunity. - Albert Einstein",
+                "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
+                "The best way to predict the future is to create it. - Peter Drucker",
+                "Happiness is not something ready-made. It comes from your own actions. - Dalai Lama"
+            ];
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById("quote").textContent = randomQuote;
+        }
+
+        // Guess the Number Game
+        let randomNumber = Math.floor(Math.random() * 10) + 1;
+
+        function playGame() {
+            const userGuess = Number(document.getElementById("guess-input").value);
+            const message = document.getElementById("game-message");
+
+            if (!userGuess || userGuess < 1 || userGuess > 10) {
+                message.textContent = "Please enter a number between 1 and 10.";
+                return;
+            }
+
+            if (userGuess === randomNumber) {
+                message.textContent = "🎉 Correct! You guessed the number!";
+                randomNumber = Math.floor(Math.random() * 10) + 1; // Reset the game
+            } else {
+                message.textContent = "❌ Wrong! Try again.";
+            }
         }
     </script>
 </body>
