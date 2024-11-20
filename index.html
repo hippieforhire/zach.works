@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Zach.works</title>
+    <title>Interactive Zach.works</title>
     <style>
         body {
             background-color: black;
@@ -15,6 +15,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             text-align: center;
+            transition: background-color 0.5s ease;
         }
         h1 {
             font-size: 2.5rem;
@@ -22,12 +23,36 @@
         p {
             font-size: 1.5rem;
         }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        button:hover {
+            background-color: gray;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div>
         <h1>Welcome</h1>
-        <p>I am Zach Rogers, and this is my site, clearly under maintenance. Hopefully I can get this up and going soon!</p>
+        <p>Click the button to change the background color!</p>
+        <button onclick="changeBackgroundColor()">Change Background</button>
     </div>
+
+    <script>
+        function changeBackgroundColor() {
+            const colors = ["#FF5733", "#33FF57", "#3357FF", "#F4D03F", "#A569BD", "#48C9B0"];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        }
+    </script>
 </body>
 </html>
