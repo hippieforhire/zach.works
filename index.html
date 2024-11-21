@@ -91,9 +91,6 @@
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
         }
-        #weatherWidget, #memoryMatchGame, #ticTacToeGame {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -136,7 +133,7 @@
         </div>
 
         <!-- Drawing Canvas -->
-        <div id="drawingCanvasContainer" style="display:none;">
+        <div id="drawingCanvasContainer">
             <canvas id="drawingCanvas" width="500" height="400" style="border:1px solid #000;"></canvas>
             <button onclick="clearDrawingCanvas()">Clear Canvas</button>
         </div>
@@ -351,6 +348,34 @@
             particleCanvas.height = window.innerHeight;
         });
 
+        // Drawing Canvas Logic
+        function showDrawingCanvas() {
+            document.getElementById('drawingCanvasContainer').style.display = 'block';
+        }
+
+        const drawingCanvas = document.getElementById('drawingCanvas');
+        const drawingCtx = drawingCanvas.getContext('2d');
+        let drawing = false;
+
+        drawingCanvas.addEventListener('mousedown', () => drawing = true);
+        drawingCanvas.addEventListener('mouseup', () => drawing = false);
+        drawingCanvas.addEventListener('mousemove', draw);
+
+        function draw(event) {
+            if (!drawing) return;
+            drawingCtx.lineWidth = 5;
+            drawingCtx.lineCap = 'round';
+            drawingCtx.strokeStyle = 'black';
+            drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
+            drawingCtx.stroke();
+            drawingCtx.beginPath();
+            drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
+        }
+
+        function clearDrawingCanvas() {
+            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        }
+
         // Tic-Tac-Toe Game Logic
         function showTicTacToeGame() {
             const ticTacToeGame = document.getElementById('ticTacToeGame');
@@ -413,35 +438,6 @@
             board.fill('');
             currentPlayer = 'X';
             setupTicTacToe();
-        }
-    </script>
-    <script>
-        // Drawing Canvas Logic
-        function showDrawingCanvas() {
-            document.getElementById('drawingCanvasContainer').style.display = 'block';
-        }
-
-        const drawingCanvas = document.getElementById('drawingCanvas');
-        const drawingCtx = drawingCanvas.getContext('2d');
-        let drawing = false;
-
-        drawingCanvas.addEventListener('mousedown', () => drawing = true);
-        drawingCanvas.addEventListener('mouseup', () => drawing = false);
-        drawingCanvas.addEventListener('mousemove', draw);
-
-        function draw(event) {
-            if (!drawing) return;
-            drawingCtx.lineWidth = 5;
-            drawingCtx.lineCap = 'round';
-            drawingCtx.strokeStyle = 'black';
-            drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-            drawingCtx.stroke();
-            drawingCtx.beginPath();
-            drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-        }
-
-        function clearDrawingCanvas() {
-            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
         }
 
         // Rock-Paper-Scissors Logic
