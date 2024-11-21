@@ -529,5 +529,80 @@
             setupTicTacToe();
         }
     </script>
+  <script>
+    // Calculator Logic
+    function showCalculator() {
+        document.getElementById('calculator').style.display = 'block';
+    }
+
+    function calcInput(value) {
+        const display = document.getElementById('calcDisplay');
+        display.value += value;
+    }
+
+    function calcClear() {
+        document.getElementById('calcDisplay').value = '';
+    }
+
+    function calcResult() {
+        const display = document.getElementById('calcDisplay');
+        try {
+            display.value = eval(display.value);
+        } catch {
+            display.value = 'Error';
+        }
+    }
+
+    // Drawing Canvas Logic
+    function showDrawingCanvas() {
+        document.getElementById('drawingCanvasContainer').style.display = 'block';
+    }
+
+    const drawingCanvas = document.getElementById('drawingCanvas');
+    const drawingCtx = drawingCanvas.getContext('2d');
+    let drawing = false;
+
+    drawingCanvas.addEventListener('mousedown', () => drawing = true);
+    drawingCanvas.addEventListener('mouseup', () => drawing = false);
+    drawingCanvas.addEventListener('mousemove', draw);
+
+    function draw(event) {
+        if (!drawing) return;
+        drawingCtx.lineWidth = 5;
+        drawingCtx.lineCap = 'round';
+        drawingCtx.strokeStyle = 'black';
+        drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
+        drawingCtx.stroke();
+        drawingCtx.beginPath();
+        drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
+    }
+
+    function clearDrawingCanvas() {
+        drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    }
+
+    // Rock-Paper-Scissors Logic
+    function showRockPaperScissors() {
+        document.getElementById('rockPaperScissors').style.display = 'block';
+    }
+
+    function playRPS(choice) {
+        const choices = ['rock', 'paper', 'scissors'];
+        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+        const result = document.getElementById('rpsResult');
+
+        if (choice === computerChoice) {
+            result.textContent = `It's a tie! Both chose ${choice}.`;
+        } else if (
+            (choice === 'rock' && computerChoice === 'scissors') ||
+            (choice === 'paper' && computerChoice === 'rock') ||
+            (choice === 'scissors' && computerChoice === 'paper')
+        ) {
+            result.textContent = `You win! ${choice} beats ${computerChoice}.`;
+        } else {
+            result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
+        }
+    }
+</script>  
 </body>
 </html>
