@@ -223,6 +223,7 @@
         <div id="score">Score: 0</div>
         <canvas id="gameCanvas" width="480" height="640"></canvas>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
+        <div id="guessOutput"></div>
     </div>
 
     <!-- Particle Effects Canvas -->
@@ -348,8 +349,8 @@
         }
 
         function updatePipes() {
-            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 250) {
-                const pipeHeight = Math.floor(Math.random() * (canvas.height - 100)) + 50;
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
+                const pipeHeight = Math.floor(Math.random() * (canvas.height - 200)) + 50;
                 pipes.push({ x: canvas.width, y: 0, width: 50, height: pipeHeight });
                 pipes.push({ x: canvas.width, y: pipeHeight + 100, width: 50, height: canvas.height - pipeHeight - 100 });
                 score++;
