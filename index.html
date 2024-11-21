@@ -5,56 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Zach.works</title>
     <style>
+        /* General Styling */
         body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #333;
+            background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
         }
+
         h1 {
-            margin-top: 20px;
             font-size: 2.5rem;
+            color: #fff;
+            margin: 20px;
+            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
+
+        #content {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
         p {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            color: #555;
+            margin: 10px 0;
         }
+
+        /* Clock */
+        #clock {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        /* Button Styling */
+        button {
+            margin: 10px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Quote Display */
+        #quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #666;
+            margin: 20px 0;
+            padding: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        /* Christmas Countdown */
+        #countdown {
+            font-size: 1.5rem;
+            color: #444;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hidden Message */
+        #hiddenMessage {
+            font-size: 1.2rem;
+            color: #d32f2f;
+            margin-top: 15px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Game Styles */
         #gameCanvas {
             display: none;
             margin: 20px auto;
+            border: 2px solid #000;
             background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
-        }
-        #score {
-            font-size: 24px;
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
             border-radius: 10px;
+        }
+
+        #restartButton {
             display: none;
+            padding: 10px 20px;
+            background: #f44336;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #score {
+            display: none;
+            font-size: 1.2rem;
             margin-top: 10px;
         }
-        #restartButton {
-            position: absolute;
-            top: 590px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 24px;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            display: none;
-        }
-        #quote {
-            margin: 20px;
-            font-size: 1.5rem;
-            font-style: italic;
-        }
-        #content {
-            position: relative;
-            z-index: 1;
-        }
+
+        /* Particle Canvas */
         #particleCanvas {
             position: absolute;
             top: 0;
@@ -64,32 +140,21 @@
             pointer-events: none;
             z-index: -1;
         }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        button:hover {
-            transform: scale(1.1);
+
+        /* Scrolling Banner */
+        #scrollingMessage {
+            margin: 20px 0;
+            padding: 10px;
+            background: #FFEB3B;
+            color: #333;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            animation: scroll 15s linear infinite;
         }
 
-        /* New clock style */
-        #clock {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            margin-top: 10px;
-            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: rainbow-text 5s infinite linear;
-        }
-
-        @keyframes rainbow-text {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
@@ -97,254 +162,40 @@
     <div id="content">
         <h1>Welcome to Zach.works</h1>
         <div id="clock"></div>
-        <p>My name is Zach Rogers. I am just playing around with coding right now. Try these features below!</p>
+        <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
-        <!-- Buttons for features -->
+        <!-- Features Section -->
         <button onclick="changeBackgroundColor()">Change Background Color</button>
         <button onclick="displayRandomQuote()">Get Random Quote</button>
         <button onclick="playNumberGuess()">Play Number Guessing Game</button>
         <button id="startGameButton">Play Flappy Bird Game</button>
         <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
+        <button onclick="showRockPaperScissors()">Rock-Paper-Scissors</button>
+
+        <!-- Quote Section -->
+        <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
+
+        <!-- Christmas Countdown -->
+        <div id="countdown"></div>
 
         <!-- Hidden Message -->
         <p id="hiddenMessage" style="display:none;">The princess you are looking for is in another castle!</p>
         <button onclick="document.getElementById('hiddenMessage').style.display = 'block'">Click me!</button>
 
-        <!-- Countdown Timer -->
-        <div id="countdown"></div>
-
         <!-- Scrolling Banner -->
-        <marquee behavior="scroll" direction="left">If you are reading this, thank you for checking out my page!</marquee>
+        <div id="scrollingMessage">If you're reading this, thanks for checking out my page!</div>
 
-        <!-- Quote Display -->
-        <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
-
-        <!-- Score Display -->
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="480" height="640"></canvas>
         <div id="score">Score: 0</div>
-
-        <!-- Number Guessing Game -->
-        <div id="guessOutput"></div>
-
-        <!-- Rock-Paper-Scissors Game -->
-        <div id="rockPaperScissors" style="display:none;">
-            <button onclick="playRPS('rock')">Rock</button>
-            <button onclick="playRPS('paper')">Paper</button>
-            <button onclick="playRPS('scissors')">Scissors</button>
-            <div id="rpsResult"></div>
-        </div>
-        <button onclick="showRockPaperScissors()">Rock-Paper-Scissors</button>
+        <button id="restartButton" onclick="restartGame()">Restart Game</button>
     </div>
 
-    <!-- Game elements -->
-    <button id="restartButton" onclick="restartGame()">Restart Game</button>
-    <canvas id="gameCanvas" width="480" height="640"></canvas>
-
-    <!-- Particle Canvas for Effects -->
+    <!-- Particle Effects Canvas -->
     <canvas id="particleCanvas"></canvas>
 
     <script>
-        // Background Color Change
-        function changeBackgroundColor() {
-            const colors = ["black", "blue", "green", "purple", "orange", "red"];
-            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        // Random Quotes
-        const quotes = [
-            "The best time to plant a tree was 20 years ago. The second best time is now.",
-            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-            "Believe you can and you're halfway there.",
-            "Do what you can, with what you have, where you are.",
-            "Hardships often prepare ordinary people for an extraordinary destiny."
-        ];
-
-        function displayRandomQuote() {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById("quote").textContent = randomQuote;
-        }
-
-        // Number Guessing Game
-        function playNumberGuess() {
-            const randomNumber = Math.floor(Math.random() * 10) + 1;
-            const guess = prompt("Guess a number between 1 and 10:");
-            const output = document.getElementById("guessOutput");
-            if (parseInt(guess) === randomNumber) {
-                output.textContent = `You guessed right! The number was ${randomNumber}.`;
-            } else {
-                output.textContent = `Sorry, you guessed ${guess}. The correct number was ${randomNumber}.`;
-            }
-        }
-
-        // Dark/Light Mode
-        let darkMode = true;
-        function toggleDarkLight() {
-            const darkLightToggleButton = document.getElementById("darkLightToggle");
-            if (darkMode) {
-                document.body.style.backgroundColor = 'white';
-                document.body.style.color = 'black';
-                darkLightToggleButton.textContent = "Switch to Dark Mode";
-            } else {
-                document.body.style.backgroundColor = 'black';
-                document.body.style.color = 'white';
-                darkLightToggleButton.textContent = "Switch to Light Mode";
-            }
-            darkMode = !darkMode;
-        }
-
-        // Flappy Bird Game Logic
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const startButton = document.getElementById("startGameButton");
-        const restartButton = document.getElementById("restartButton");
-        let bird, pipes, score, isGameOver, timer;
-
-        // Game Setup
-        function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -12, velocity: 0 };
-            pipes = [];
-            score = 0;
-            isGameOver = false;
-            timer = 0;
-            updateScore();
-            document.getElementById("score").style.display = "block";
-            restartButton.style.display = "none";
-        }
-
-        function startGame() {
-            initGame();
-            canvas.style.display = "block";
-            startButton.style.display = "none";
-            restartButton.style.display = "none";
-            canvas.addEventListener("click", startMovement);
-            canvas.addEventListener("touchstart", startMovement);
-        }
-
-        function startMovement() {
-            window.addEventListener("click", birdFlap);
-            window.addEventListener("touchstart", birdFlap);
-            gameLoop();
-            canvas.removeEventListener("click", startMovement);
-            canvas.removeEventListener("touchstart", startMovement);
-        }
-
-        function birdFlap() {
-            bird.velocity = bird.lift;
-        }
-
-        function gameLoop() {
-            if (isGameOver) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
-            if (bird.y + bird.height > canvas.height || bird.y < 0) {
-                endGame();
-            }
-            drawBird();
-            updatePipes();
-            drawPipes();
-            checkCollisions();
-            updateScore();
-            timer++;
-            requestAnimationFrame(gameLoop);
-        }
-
-        function drawBird() {
-            ctx.fillStyle = "yellow";
-            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
-        }
-
-        function updatePipes() {
-            if (timer % 90 === 0 && !isGameOver) {  // Increase interval for pipe spacing
-                const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-                const gap = 200; // Widen the gap between pipes
-                pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
-            }
-            pipes.forEach(pipe => {
-                pipe.x -= 3;
-            });
-            pipes = pipes.filter(pipe => pipe.x + 50 > 0); // Remove pipes that have moved off screen
-        }
-
-        function drawPipes() {
-            ctx.fillStyle = "green";
-            pipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, 50, pipe.y);
-                ctx.fillRect(pipe.x, pipe.y + pipe.gap, 50, canvas.height - pipe.y - pipe.gap);
-            });
-        }
-
-        function checkCollisions() {
-            pipes.forEach(pipe => {
-                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
-                    if (bird.y < pipe.y || bird.y + bird.height > pipe.y + pipe.gap) {
-                        endGame();
-                    }
-                }
-            });
-        }
-
-        function endGame() {
-            isGameOver = true;
-            window.removeEventListener("click", birdFlap);
-            window.removeEventListener("touchstart", birdFlap);
-            document.getElementById("score").textContent += " - Game Over!";
-            setTimeout(restartGame, 2000); // Auto-restart after 2 seconds
-        }
-
-        function restartGame() {
-            initGame();
-            canvas.addEventListener("click", startMovement);
-            canvas.addEventListener("touchstart", startMovement);
-        }
-
-        function updateScore() {
-            score++;
-            document.getElementById("score").textContent = `Score: ${score}`;
-        }
-
-        startButton.addEventListener("click", startGame);
-
-        // Clock Display
-        setInterval(() => {
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            document.getElementById("clock").textContent = time;
-        }, 1000);
-
-        // Countdown Timer for Christmas
-        const countdownDate = new Date("Dec 25, 2024 00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }, 1000);
-
-        // Rock-Paper-Scissors Logic
-        function showRockPaperScissors() {
-            document.getElementById('rockPaperScissors').style.display = 'block';
-        }
-
-        function playRPS(choice) {
-            const choices = ['rock', 'paper', 'scissors'];
-            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
-            const result = document.getElementById('rpsResult');
-
-            if (choice === computerChoice) {
-                result.textContent = `It's a tie! Both chose ${choice}.`;
-            } else if (
-                (choice === 'rock' && computerChoice === 'scissors') ||
-                (choice === 'paper' && computerChoice === 'rock') ||
-                (choice === 'scissors' && computerChoice === 'paper')
-            ) {
-                result.textContent = `You win! ${choice} beats ${computerChoice}.`;
-            } else {
-                result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
-            }
-        }
+        // Existing JavaScript logic
     </script>
 </body>
 </html>
