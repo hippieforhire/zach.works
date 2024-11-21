@@ -148,6 +148,48 @@
             <h2>Tic-Tac-Toe</h2>
             <div id="ticTacToeBoard"></div>
         </div>
+
+        <!-- Calculator -->
+        <div id="calculator" style="display:none;">
+            <input type="text" id="calcDisplay" readonly>
+            <br>
+            <button onclick="calcInput('1')">1</button>
+            <button onclick="calcInput('2')">2</button>
+            <button onclick="calcInput('3')">3</button>
+            <button onclick="calcInput('+')">+</button>
+            <br>
+            <button onclick="calcInput('4')">4</button>
+            <button onclick="calcInput('5')">5</button>
+            <button onclick="calcInput('6')">6</button>
+            <button onclick="calcInput('-')">-</button>
+            <br>
+            <button onclick="calcInput('7')">7</button>
+            <button onclick="calcInput('8')">8</button>
+            <button onclick="calcInput('9')">9</button>
+            <button onclick="calcInput('*')">*</button>
+            <br>
+            <button onclick="calcInput('0')">0</button>
+            <button onclick="calcClear()">C</button>
+            <button onclick="calcResult()">=</button>
+            <button onclick="calcInput('/')">/</button>
+        </div>
+        <button onclick="showCalculator()">Calculator</button>
+
+        <!-- Drawing Canvas -->
+        <div id="drawingCanvasContainer" style="display:none;">
+            <canvas id="drawingCanvas" width="500" height="400" style="border:1px solid #000;"></canvas>
+            <button onclick="clearDrawingCanvas()">Clear Canvas</button>
+        </div>
+        <button onclick="showDrawingCanvas()">Drawing Canvas</button>
+
+        <!-- Rock-Paper-Scissors Game -->
+        <div id="rockPaperScissors" style="display:none;">
+            <button onclick="playRPS('rock')">Rock</button>
+            <button onclick="playRPS('paper')">Paper</button>
+            <button onclick="playRPS('scissors')">Scissors</button>
+            <div id="rpsResult"></div>
+        </div>
+        <button onclick="showRockPaperScissors()">Rock-Paper-Scissors</button>
     </div>
 
     <!-- Game elements -->
