@@ -10,7 +10,7 @@
             margin: 0;
             font-family: 'Roboto', Arial, sans-serif;
             color: #333;
-            background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+            background: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,17 +19,16 @@
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #fff;
+            font-size: 3rem;
+            color: #333;
             margin: 20px;
-            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         #content {
             width: 90%;
             max-width: 1200px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
@@ -109,12 +108,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Game Styles */
@@ -122,7 +117,7 @@
             display: none;
             margin: 20px auto;
             border: 2px solid #000;
-            background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+            background: #87ceeb;
             border-radius: 10px;
         }
 
@@ -167,6 +162,32 @@
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
+
+        /* Additional Styling */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .container button {
+            width: calc(33% - 20px);
+            min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .container button {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -176,12 +197,14 @@
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
         <!-- Features Section -->
-        <button onclick="changeBackgroundColor()">Change Background Color</button>
-        <button onclick="displayRandomQuote()">Get Random Quote</button>
-        <button onclick="playNumberGuess()">Play Number Guessing Game</button>
-        <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
-        <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
-        <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
+        <div class="container">
+            <button onclick="changeBackgroundColor()">Change Background Color</button>
+            <button onclick="displayRandomQuote()">Get Random Quote</button>
+            <button onclick="playNumberGuess()">Play Number Guessing Game</button>
+            <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
+            <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
+            <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
+        </div>
 
         <!-- Quote Section -->
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
