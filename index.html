@@ -209,7 +209,8 @@
         // Background Color Change
         function changeBackgroundColor() {
             const colors = ["#1e3c72", "#2a5298", "#4CAF50", "#f44336", "#FFEB3B"];
-            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = randomColor;
         }
 
         // Random Quotes
@@ -243,11 +244,11 @@
         function toggleDarkLight() {
             const darkLightToggleButton = document.getElementById("darkLightToggle");
             if (darkMode) {
-                document.body.style.backgroundColor = 'white';
+                document.body.style.background = 'white';
                 document.body.style.color = '#333';
                 darkLightToggleButton.textContent = "Switch to Dark Mode";
             } else {
-                document.body.style.backgroundColor = '#1e3c72';
+                document.body.style.background = '#1e3c72';
                 document.body.style.color = 'white';
                 darkLightToggleButton.textContent = "Switch to Light Mode";
             }
