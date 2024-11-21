@@ -105,7 +105,6 @@
         <button onclick="playNumberGuess()">Play Number Guessing Game</button>
         <button id="startGameButton">Play Flappy Bird Game</button>
         <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
-        <button onclick="showTicTacToeGame()">Play Tic-Tac-Toe</button>
 
         <!-- Hidden Message -->
         <p id="hiddenMessage" style="display:none;">The princess you are looking for is in another castle!</p>
@@ -125,28 +124,6 @@
 
         <!-- Number Guessing Game -->
         <div id="guessOutput"></div>
-
-        <!-- Tic-Tac-Toe Game -->
-        <div id="ticTacToeGame">
-            <h2>Tic-Tac-Toe</h2>
-            <div id="ticTacToeBoard"></div>
-        </div>
-
-        <!-- Drawing Canvas -->
-        <div id="drawingCanvasContainer">
-            <canvas id="drawingCanvas" width="500" height="400" style="border:1px solid #000;"></canvas>
-            <button onclick="clearDrawingCanvas()">Clear Canvas</button>
-        </div>
-        <button onclick="showDrawingCanvas()">Drawing Canvas</button>
-
-        <!-- Rock-Paper-Scissors Game -->
-        <div id="rockPaperScissors" style="display:none;">
-            <button onclick="playRPS('rock')">Rock</button>
-            <button onclick="playRPS('paper')">Paper</button>
-            <button onclick="playRPS('scissors')">Scissors</button>
-            <div id="rpsResult"></div>
-        </div>
-        <button onclick="showRockPaperScissors()">Rock-Paper-Scissors</button>
     </div>
 
     <!-- Game elements -->
@@ -347,134 +324,6 @@
             particleCanvas.width = window.innerWidth;
             particleCanvas.height = window.innerHeight;
         });
-
-        // Drawing Canvas Logic
-        function showDrawingCanvas() {
-            document.getElementById('drawingCanvasContainer').style.display = 'block';
-        }
-
-        const drawingCanvas = document.getElementById('drawingCanvas');
-        const drawingCtx = drawingCanvas.getContext('2d');
-        let drawing = false;
-
-        drawingCanvas.addEventListener('mousedown', () => drawing = true);
-        drawingCanvas.addEventListener('mouseup', () => drawing = false);
-        drawingCanvas.addEventListener('mousemove', draw);
-
-        function draw(event) {
-            if (!drawing) return;
-            drawingCtx.lineWidth = 5;
-            drawingCtx.lineCap = 'round';
-            drawingCtx.strokeStyle = 'black';
-            drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-            drawingCtx.stroke();
-            drawingCtx.beginPath();
-            drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-        }
-
-        function clearDrawingCanvas() {
-            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-        }
-
-        // Tic-Tac-Toe Game Logic
-        function showTicTacToeGame() {
-            const ticTacToeGame = document.getElementById('ticTacToeGame');
-            ticTacToeGame.style.display = 'block';
-            setupTicTacToe();
-        }
-
-        const ticTacToeBoard = document.getElementById('ticTacToeBoard');
-        const board = ['', '', '', '', '', '', '', '', ''];
-        let currentPlayer = 'X';
-
-        function setupTicTacToe() {
-            ticTacToeBoard.innerHTML = '';
-            board.forEach((cell, index) => {
-                const cellElement = document.createElement('div');
-                cellElement.className = 'tic-tac-toe-cell';
-                cellElement.dataset.index = index;
-                cellElement.addEventListener('click', onCellClick);
-                ticTacToeBoard.appendChild(cellElement);
-            });
-        }
-
-        function onCellClick(event) {
-            const cellElement = event.currentTarget;
-            const index = cellElement.dataset.index;
-            if (board[index] === '') {
-                board[index] = currentPlayer;
-                cellElement.textContent = currentPlayer;
-                if (checkWin()) {
-                    setTimeout(() => alert(`${currentPlayer} wins!`), 10);
-                    resetTicTacToe();
-                } else if (board.every(cell => cell !== '')) {
-                    setTimeout(() => alert('Draw!'), 10);
-                    resetTicTacToe();
-                } else {
-                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                }
-            }
-        }
-
-        function checkWin() {
-            const winningCombinations = [
-                [0, 1, 2],
-                [3, 4, 5],
-                [6, 7, 8],
-                [0, 3, 6],
-                [1, 4, 7],
-                [2, 5, 8],
-                [0, 4, 8],
-                [2, 4, 6]
-            ];
-            return winningCombinations.some(combination => {
-                return combination.every(index => {
-                    return board[index] === currentPlayer;
-                });
-            });
-        }
-
-        function resetTicTacToe() {
-            board.fill('');
-            currentPlayer = 'X';
-            setupTicTacToe();
-        }
-
-        // Rock-Paper-Scissors Logic
-        function showRockPaperScissors() {
-            document.getElementById('rockPaperScissors').style.display = 'block';
-        }
-
-        function playRPS(choice) {
-            const choices = ['rock', 'paper', 'scissors'];
-            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
-            const result = document.getElementById('rpsResult');
-
-            if (choice === computerChoice) {
-                result.textContent = `It's a tie! Both chose ${choice}.`;
-            } else if (
-                (choice === 'rock' && computerChoice === 'scissors') ||
-                (choice === 'paper' && computerChoice === 'rock') ||
-                (choice === 'scissors' && computerChoice === 'paper')
-            ) {
-                result.textContent = `You win! ${choice} beats ${computerChoice}.`;
-            } else {
-    result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
-    }
-}
-</script>
-<script src="tictactoe.js"></script>
-<script src="drawingcanvas.js"></script>
-<script>
-    function showTicTacToeGame() {
-        const ticTacToeGame = document.getElementById('ticTacToeGame');
-        ticTacToeGame.style.display = 'block';
-        setupTicTacToe();
-    }
-
-    function showDrawingCanvas() {
-        setupDrawingCanvas();
-    }
-</script>
+    </script>
 </body>
 </html>
