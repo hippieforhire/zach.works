@@ -108,8 +108,6 @@
         <button onclick="playNumberGuess()">Play Number Guessing Game</button>
         <button id="startGameButton">Play Flappy Bird Game</button>
         <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
-        <button onclick="showWeatherWidget()">Show Weather</button>
-        <button onclick="showMemoryMatchGame()">Play Memory Match Game</button>
         <button onclick="showTicTacToeGame()">Play Tic-Tac-Toe</button>
 
         <!-- Hidden Message -->
@@ -131,49 +129,11 @@
         <!-- Number Guessing Game -->
         <div id="guessOutput"></div>
 
-        <!-- Weather Widget -->
-        <div id="weatherWidget">
-            <h2>Weather in Hannibal, MO</h2>
-            <div id="weather"></div>
-        </div>
-
-        <!-- Memory Match Game -->
-        <div id="memoryMatchGame">
-            <h2>Memory Match Game</h2>
-            <div id="memoryGameBoard"></div>
-        </div>
-
         <!-- Tic-Tac-Toe Game -->
         <div id="ticTacToeGame">
             <h2>Tic-Tac-Toe</h2>
             <div id="ticTacToeBoard"></div>
         </div>
-
-        <!-- Calculator -->
-        <div id="calculator" style="display:none;">
-            <input type="text" id="calcDisplay" readonly>
-            <br>
-            <button onclick="calcInput('1')">1</button>
-            <button onclick="calcInput('2')">2</button>
-            <button onclick="calcInput('3')">3</button>
-            <button onclick="calcInput('+')">+</button>
-            <br>
-            <button onclick="calcInput('4')">4</button>
-            <button onclick="calcInput('5')">5</button>
-            <button onclick="calcInput('6')">6</button>
-            <button onclick="calcInput('-')">-</button>
-            <br>
-            <button onclick="calcInput('7')">7</button>
-            <button onclick="calcInput('8')">8</button>
-            <button onclick="calcInput('9')">9</button>
-            <button onclick="calcInput('*')">*</button>
-            <br>
-            <button onclick="calcInput('0')">0</button>
-            <button onclick="calcClear()">C</button>
-            <button onclick="calcResult()">=</button>
-            <button onclick="calcInput('/')">/</button>
-        </div>
-        <button onclick="showCalculator()">Calculator</button>
 
         <!-- Drawing Canvas -->
         <div id="drawingCanvasContainer" style="display:none;">
@@ -391,80 +351,6 @@
             particleCanvas.height = window.innerHeight;
         });
 
-        // Weather Widget Logic
-        function showWeatherWidget() {
-            const weatherWidget = document.getElementById('weatherWidget');
-            weatherWidget.style.display = 'block';
-            fetchWeather();
-        }
-
-        function fetchWeather() {
-            const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=Hannibal,us&appid=${apiKey}&units=imperial`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const weather = document.getElementById('weather');
-                    weather.innerHTML = `
-                        <p>Temperature: ${data.main.temp}°F</p>
-                        <p>Weather: ${data.weather[0].description}</p>
-                    `;
-                })
-                .catch(error => console.error('Error fetching weather data:', error));
-        }
-
-        // Memory Match Game Logic
-        function showMemoryMatchGame() {
-            const memoryMatchGame = document.getElementById('memoryMatchGame');
-            memoryMatchGame.style.display = 'block';
-            setupMemoryGame();
-        }
-
-        const memoryGameBoard = document.getElementById('memoryGameBoard');
-        const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
-        let firstCard = null;
-        let secondCard = null;
-        let firstCardElement = null;
-
-        function setupMemoryGame() {
-            memoryGameBoard.innerHTML = '';
-            const shuffledCards = cards.sort(() => 0.5 - Math.random());
-            shuffledCards.forEach(card => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card';
-                cardElement.dataset.value = card;
-                cardElement.innerHTML = `<div class="card-back">?</div><div class="card-front">${card}</div>`;
-                cardElement.addEventListener('click', onCardClick);
-                memoryGameBoard.appendChild(cardElement);
-            });
-        }
-
-        function onCardClick(event) {
-            const clickedCard = event.currentTarget;
-            if (!firstCard) {
-                firstCard = clickedCard.dataset.value;
-                firstCardElement = clickedCard;
-                clickedCard.classList.add('flipped');
-            } else if (!secondCard && clickedCard !== firstCardElement) {
-                secondCard = clickedCard.dataset.value;
-                clickedCard.classList.add('flipped');
-                if (firstCard === secondCard) {
-                    firstCardElement = null;
-                    firstCard = null;
-                    secondCard = null;
-                } else {
-                    setTimeout(() => {
-                        firstCardElement.classList.remove('flipped');
-                        clickedCard.classList.remove('flipped');
-                        firstCardElement = null;
-                        firstCard = null;
-                        secondCard = null;
-                    }, 1000);
-                }
-            }
-        }
-
         // Tic-Tac-Toe Game Logic
         function showTicTacToeGame() {
             const ticTacToeGame = document.getElementById('ticTacToeGame');
@@ -529,80 +415,57 @@
             setupTicTacToe();
         }
     </script>
-  <script>
-    // Calculator Logic
-    function showCalculator() {
-        document.getElementById('calculator').style.display = 'block';
-    }
-
-    function calcInput(value) {
-        const display = document.getElementById('calcDisplay');
-        display.value += value;
-    }
-
-    function calcClear() {
-        document.getElementById('calcDisplay').value = '';
-    }
-
-    function calcResult() {
-        const display = document.getElementById('calcDisplay');
-        try {
-            display.value = eval(display.value);
-        } catch {
-            display.value = 'Error';
+    <script>
+        // Drawing Canvas Logic
+        function showDrawingCanvas() {
+            document.getElementById('drawingCanvasContainer').style.display = 'block';
         }
-    }
 
-    // Drawing Canvas Logic
-    function showDrawingCanvas() {
-        document.getElementById('drawingCanvasContainer').style.display = 'block';
-    }
+        const drawingCanvas = document.getElementById('drawingCanvas');
+        const drawingCtx = drawingCanvas.getContext('2d');
+        let drawing = false;
 
-    const drawingCanvas = document.getElementById('drawingCanvas');
-    const drawingCtx = drawingCanvas.getContext('2d');
-    let drawing = false;
+        drawingCanvas.addEventListener('mousedown', () => drawing = true);
+        drawingCanvas.addEventListener('mouseup', () => drawing = false);
+        drawingCanvas.addEventListener('mousemove', draw);
 
-    drawingCanvas.addEventListener('mousedown', () => drawing = true);
-    drawingCanvas.addEventListener('mouseup', () => drawing = false);
-    drawingCanvas.addEventListener('mousemove', draw);
-
-    function draw(event) {
-        if (!drawing) return;
-        drawingCtx.lineWidth = 5;
-        drawingCtx.lineCap = 'round';
-        drawingCtx.strokeStyle = 'black';
-        drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-        drawingCtx.stroke();
-        drawingCtx.beginPath();
-        drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
-    }
-
-    function clearDrawingCanvas() {
-        drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-    }
-
-    // Rock-Paper-Scissors Logic
-    function showRockPaperScissors() {
-        document.getElementById('rockPaperScissors').style.display = 'block';
-    }
-
-    function playRPS(choice) {
-        const choices = ['rock', 'paper', 'scissors'];
-        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
-        const result = document.getElementById('rpsResult');
-
-        if (choice === computerChoice) {
-            result.textContent = `It's a tie! Both chose ${choice}.`;
-        } else if (
-            (choice === 'rock' && computerChoice === 'scissors') ||
-            (choice === 'paper' && computerChoice === 'rock') ||
-            (choice === 'scissors' && computerChoice === 'paper')
-        ) {
-            result.textContent = `You win! ${choice} beats ${computerChoice}.`;
-        } else {
-            result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
+        function draw(event) {
+            if (!drawing) return;
+            drawingCtx.lineWidth = 5;
+            drawingCtx.lineCap = 'round';
+            drawingCtx.strokeStyle = 'black';
+            drawingCtx.lineTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
+            drawingCtx.stroke();
+            drawingCtx.beginPath();
+            drawingCtx.moveTo(event.clientX - drawingCanvas.offsetLeft, event.clientY - drawingCanvas.offsetTop);
         }
-    }
-</script>  
+
+        function clearDrawingCanvas() {
+            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        }
+
+        // Rock-Paper-Scissors Logic
+        function showRockPaperScissors() {
+            document.getElementById('rockPaperScissors').style.display = 'block';
+        }
+
+        function playRPS(choice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            const result = document.getElementById('rpsResult');
+
+            if (choice === computerChoice) {
+                result.textContent = `It's a tie! Both chose ${choice}.`;
+            } else if (
+                (choice === 'rock' && computerChoice === 'scissors') ||
+                (choice === 'paper' && computerChoice === 'rock') ||
+                (choice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result.textContent = `You win! ${choice} beats ${computerChoice}.`;
+            } else {
+                result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
+            }
+        }
+    </script>
 </body>
 </html>
