@@ -124,6 +124,15 @@
 
         <!-- Number Guessing Game -->
         <div id="guessOutput"></div>
+
+        <!-- Rock-Paper-Scissors Game -->
+        <div id="rockPaperScissors" style="display:none;">
+            <button onclick="playRPS('rock')">Rock</button>
+            <button onclick="playRPS('paper')">Paper</button>
+            <button onclick="playRPS('scissors')">Scissors</button>
+            <div id="rpsResult"></div>
+        </div>
+        <button onclick="showRockPaperScissors()">Rock-Paper-Scissors</button>
     </div>
 
     <!-- Game elements -->
@@ -253,9 +262,7 @@
             pipes.forEach(pipe => {
                 pipe.x -= 3;
             });
-            pipes = pipes.filter(pipe => pipe.x + 50 > 0);
-        }
-
+            pipes are filtered to remove those that have moved off screen
         function drawPipes() {
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
@@ -314,16 +321,28 @@
             document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }, 1000);
 
-        // Particle Effect (Optional)
-        const particleCanvas = document.getElementById("particleCanvas");
-        const particleCtx = particleCanvas.getContext("2d");
-        particleCanvas.width = window.innerWidth;
-        particleCanvas.height = window.innerHeight;
+        // Rock-Paper-Scissors Logic
+        function showRockPaperScissors() {
+            document.getElementById('rockPaperScissors').style.display = 'block';
+        }
 
-        window.addEventListener("resize", () => {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
-        });
+        function playRPS(choice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            const result = document.getElementById('rpsResult');
+
+            if (choice === computerChoice) {
+                result.textContent = `It's a tie! Both chose ${choice}.`;
+            } else if (
+                (choice === 'rock' && computerChoice === 'scissors') ||
+                (choice === 'paper' && computerChoice === 'rock') ||
+                (choice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result.textContent = `You win! ${choice} beats ${computerChoice}.`;
+            } else {
+                result.textContent = `You lose! ${computerChoice} beats ${choice}.`;
+            }
+        }
     </script>
 </body>
 </html>
