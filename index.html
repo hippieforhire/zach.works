@@ -106,6 +106,16 @@
         <button id="startGameButton">Play Flappy Bird Game</button>
         <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
 
+        <!-- Hidden Message -->
+        <p id="hiddenMessage" style="display:none;">The princess you are looking for is in another castle!</p>
+        <button onclick="document.getElementById('hiddenMessage').style.display = 'block'">Click me!</button>
+
+        <!-- Countdown Timer -->
+        <div id="countdown"></div>
+
+        <!-- Scrolling Banner -->
+        <marquee behavior="scroll" direction="left">If you are reading this, thank you for checking out my page!</marquee>
+
         <!-- Quote Display -->
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
 
@@ -290,6 +300,18 @@
             const now = new Date();
             const time = now.toLocaleTimeString();
             document.getElementById("clock").textContent = time;
+        }, 1000);
+
+        // Countdown Timer for Christmas
+        const countdownDate = new Date("Dec 25, 2024 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }, 1000);
 
         // Particle Effect (Optional)
