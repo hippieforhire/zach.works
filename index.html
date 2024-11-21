@@ -280,7 +280,7 @@
         function startFlappyBirdGame() {
             canvas = document.getElementById('gameCanvas');
             ctx = canvas.getContext('2d');
-            bird = { x: 50, y: 150, width: 20, height: 20, gravity: 1, lift: -12, velocity: 0 };
+            bird = { x: 50, y: 150, width: 20, height: 20, gravity: 0.6, lift: -10, velocity: 0 };
             birdImg = new Image();
             birdImg.src = 'https://via.placeholder.com/20x20'; // Replace with the path to your bird image
             pipes = [];
@@ -313,7 +313,7 @@
             bird.y += bird.velocity;
             if (bird.y + bird.height > canvas.height) {
                 bird.y = canvas.height - bird.height;
-                bird.velocity = 0;
+                bird.velocity = bird.lift; // Prevent bird from sliding on the ground
             } else if (bird.y < 0) {
                 bird.y = 0;
                 bird.velocity = 0;
