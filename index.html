@@ -91,6 +91,9 @@
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
         }
+        #weatherWidget, #memoryMatchGame, #ticTacToeGame {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +108,9 @@
         <button onclick="playNumberGuess()">Play Number Guessing Game</button>
         <button id="startGameButton">Play Flappy Bird Game</button>
         <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
+        <button onclick="showWeatherWidget()">Show Weather</button>
+        <button onclick="showMemoryMatchGame()">Play Memory Match Game</button>
+        <button onclick="showTicTacToeGame()">Play Tic-Tac-Toe</button>
 
         <!-- Hidden Message -->
         <p id="hiddenMessage" style="display:none;">The princess you are looking for is in another castle!</p>
@@ -344,6 +350,12 @@
         });
 
         // Weather Widget Logic
+        function showWeatherWidget() {
+            const weatherWidget = document.getElementById('weatherWidget');
+            weatherWidget.style.display = 'block';
+            fetchWeather();
+        }
+
         function fetchWeather() {
             const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
             const url = `https://api.openweathermap.org/data/2.5/weather?q=Hannibal,us&appid=${apiKey}&units=imperial`;
@@ -360,10 +372,13 @@
                 .catch(error => console.error('Error fetching weather data:', error));
         }
 
-        // Fetch weather data on page load
-        window.onload = fetchWeather;
-
         // Memory Match Game Logic
+        function showMemoryMatchGame() {
+            const memoryMatchGame = document.getElementById('memoryMatchGame');
+            memoryMatchGame.style.display = 'block';
+            setupMemoryGame();
+        }
+
         const memoryGameBoard = document.getElementById('memoryGameBoard');
         const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
         let firstCard = null;
@@ -408,10 +423,13 @@
             }
         }
 
-        // Setup the memory match game on page load
-        window.onload = setupMemoryGame;
-
         // Tic-Tac-Toe Game Logic
+        function showTicTacToeGame() {
+            const ticTacToeGame = document.getElementById('ticTacToeGame');
+            ticTacToeGame.style.display = 'block';
+            setupTicTacToe();
+        }
+
         const ticTacToeBoard = document.getElementById('ticTacToeBoard');
         const board = ['', '', '', '', '', '', '', '', ''];
         let currentPlayer = 'X';
@@ -468,10 +486,6 @@
             currentPlayer = 'X';
             setupTicTacToe();
         }
-
-        // Setup the tic-tac-toe game on page load
-        window.onload = setupTicTacToe;
-
     </script>
 </body>
 </html>
