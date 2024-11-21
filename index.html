@@ -262,7 +262,9 @@
             pipes.forEach(pipe => {
                 pipe.x -= 3;
             });
-            pipes are filtered to remove those that have moved off screen
+            pipes = pipes.filter(pipe => pipe.x + 50 > 0); // Remove pipes that have moved off screen
+        }
+
         function drawPipes() {
             ctx.fillStyle = "green";
             pipes.forEach(pipe => {
