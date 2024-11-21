@@ -196,9 +196,16 @@
             canvas.style.display = "block";
             startButton.style.display = "none";
             restartButton.style.display = "none";
+            canvas.addEventListener("click", startMovement);
+            canvas.addEventListener("touchstart", startMovement);
+        }
+
+        function startMovement() {
             window.addEventListener("click", birdFlap);
             window.addEventListener("touchstart", birdFlap);
             gameLoop();
+            canvas.removeEventListener("click", startMovement);
+            canvas.removeEventListener("touchstart", startMovement);
         }
 
         function birdFlap() {
@@ -261,15 +268,14 @@
             isGameOver = true;
             window.removeEventListener("click", birdFlap);
             window.removeEventListener("touchstart", birdFlap);
-            restartButton.style.display = "block";
             document.getElementById("score").textContent += " - Game Over!";
+            setTimeout(restartGame, 2000); // Auto-restart after 2 seconds
         }
 
         function restartGame() {
             initGame();
-            window.addEventListener("click", birdFlap);
-            window.addEventListener("touchstart", birdFlap);
-            gameLoop();
+            canvas.addEventListener("click", startMovement);
+            canvas.addEventListener("touchstart", startMovement);
         }
 
         function updateScore() {
