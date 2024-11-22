@@ -351,5 +351,145 @@
             alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
         }
     </script>
+    <canvas id="spaceInvadersCanvas" width="800" height="600"></canvas>
+<script>
+    const canvas = document.getElementById('spaceInvadersCanvas');
+    const ctx = canvas.getContext('2d');
+    let rightPressed = false;
+    let leftPressed = false;
+    let spacePressed = false;
+    const player = {
+        width: 50,
+        height: 20,
+        x: (canvas.width - 50) / 2,
+        y: canvas.height - 30,
+        speed: 7,
+        bulletSpeed: 5,
+        bullets: [],
+        shoot() {
+            this.bullets.push({ x: this.x + this.width / 2, y: this.y, active: true });
+        }
+    };
+
+    const aliens = [];
+    const rows = 5;
+    const cols = 11;
+    const alienWidth = 40;
+    const alienHeight = 30;
+    const alienPadding = 10;
+    const alienOffsetTop = 30;
+    const alienOffsetLeft = 30;
+    const alienSpeed = 1;
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            aliens.push({
+                x: c * (alienWidth + alienPadding) + alienOffsetLeft,
+                y: r * (alienHeight + alienPadding) + alienOffsetTop,
+                width: alienWidth,
+                height: alienHeight,
+                active: true
+            });
+        }
+    }
+
+    function drawPlayer() {
+        ctx.fillStyle = '#00ff00';
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    function drawAliens() {
+        ctx.fillStyle = '#ff0000';
+        aliens.forEach(alien => {
+            if (alien.active) {
+                ctx.fillRect(alien.x, alien.y, alien.width, alien.height);
+            }
+        });
+    }
+
+    function drawBullets() {
+        ctx.fillStyle = '#ffffff';
+        player.bullets.forEach(bullet => {
+            if (bullet.active) {
+                ctx.fillRect(bullet.x, bullet.y, 5, 10);
+            }
+        });
+    }
+
+    function updatePlayer() {
+        if (rightPressed && player.x < canvas.width - player.width) {
+            player.x += player.speed;
+        } else if (leftPressed && player.x > 0) {
+            player.x -= player.speed;
+        }
+
+        player.bullets.forEach(bullet => {
+            if (bullet.active) {
+                bullet.y -= player.bulletSpeed;
+                if (bullet.y < 0) {
+                    bullet.active = false;
+                }
+            }
+        });
+    }
+
+    function updateAliens() {
+        aliens.forEach(alien => {
+            if (alien.active) {
+                alien.x += alienSpeed;
+                if (alien.x + alien.width > canvas.width || alien.x < 0) {
+                    alienSpeed = -alienSpeed;
+                    aliens.forEach(a => a.y += alienHeight / 2);
+                }
+            }
+        });
+
+        player.bullets.forEach(bullet => {
+            aliens.forEach(alien => {
+                if (alien.active && bullet.active &&
+                    bullet.x > alien.x && bullet.x < alien.x + alien.width &&
+                    bullet.y > alien.y && bullet.y < alien.y + alien.height) {
+                    alien.active = false;
+                    bullet.active = false;
+                }
+            });
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        drawAliens();
+        drawBullets();
+        updatePlayer();
+        updateAliens();
+        requestAnimationFrame(draw);
+    }
+
+    function keyDownHandler(e) {
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+            rightPressed = true;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+            leftPressed = true;
+        } else if (e.key === ' ' || e.key === 'Spacebar') {
+            spacePressed = true;
+            player.shoot();
+        }
+    }
+
+    function keyUpHandler(e) {
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+            rightPressed = false;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+            leftPressed = false;
+        } else if (e.key === ' ' || e.key === 'Spacebar') {
+            spacePressed = false;
+        }
+    }
+
+    document.addEventListener('keydown', keyDownHandler, false);
+    document.addEventListener('keyup', keyUpHandler, false);
+    draw();
+</script>
 </body>
 </html>
