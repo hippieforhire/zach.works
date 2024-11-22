@@ -173,7 +173,6 @@
             <button onclick="displayRandomQuote()">Get Random Quote</button>
             <button onclick="playNumberGuess()">Play Number Guessing Game</button>
             <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
-            <button id="startSpaceInvadersButton" onclick="startSpaceInvadersGame()">Play Space Invaders</button>
             <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
             <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
         </div>
@@ -190,7 +189,6 @@
     </div>
 
     <canvas id="particleCanvas"></canvas>
-    <script src="spaceinvaders.js"></script>
     <script>
         function changeBackgroundColor() {
             const colors = ["#6200ea", "#03dac5", "#bb86fc", "#cf6679", "#3700b3"];
@@ -375,23 +373,14 @@
                 result = "It's a draw!";
             } else if (
                 (userChoice === "Rock" && computerChoice === "Scissors") ||
-                (userChoice === "Paper" and computerChoice === "Rock") ||
-                (userChoice === "Scissors" and computerChoice === "Paper")
+                (userChoice === "Paper" && computerChoice === "Rock") ||
+                (userChoice === "Scissors" && computerChoice === "Paper")
             ) {
                 result = "You win!";
             } else {
                 result = "You lose!";
             }
             alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
-        }
-
-        function startSpaceInvadersGame() {
-            // Hide other elements
-            document.getElementById("content").style.display = "none";
-            // Show game canvas
-            document.getElementById("gameCanvas").style.display = "block";
-            // Start Space Invaders game
-            startSpaceInvaders();
         }
     </script>
 </body>
