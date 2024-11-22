@@ -266,232 +266,244 @@
         }, 1000);
 
         const countdownDate = new Date("Dec 25, 2024 00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s to Christmas`;
-        }, 1000);
+setInterval(() => {
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s to Christmas`;
+}, 1000);
 
-        // Flappy Bird Game Logic
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const startButton = document.getElementById("startGameButton");
-        const restartButton = document.getElementById("restartButton");
-        let bird, pipes, score, isGameOver, timer;
+// Flappy Bird Game Logic
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const startButton = document.getElementById("startGameButton");
+const restartButton = document.getElementById("restartButton");
+let bird, pipes, score, isGameOver, timer;
 
-        // Game Setup
-        function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 }; // Adjusted lift value
-            pipes = [];
-            score = 0;
-            isGameOver = false;
-            timer = 0;
-            updateScore();
-            document.getElementById("score").style.display = "block";
-            restartButton.style.display = "none";
-        }
+function initGame() {
+    bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 };
+    pipes = [];
+    score = 0;
+    isGameOver = false;
+    timer = 0;
+    updateScore();
+    document.getElementById("score").style.display = "block";
+    restartButton.style.display = "none";
+}
 
-        function startGame() {
-            initGame();
-            canvas.style.display = "block";
-            startButton.style.display = "none";
-            restartButton.style.display = "none";
-            canvas.addEventListener("click", startMovement);
-            canvas.addEventListener("touchstart", startMovement);
-        }
+function startGame() {
+    initGame();
+    canvas.style.display = "block";
+    startButton.style.display = "none";
+    restartButton.style.display = "none";
+    canvas.addEventListener("click", startMovement);
+    canvas.addEventListener("touchstart", startMovement);
+}
 
-        function startMovement() {
-            window.addEventListener("click", birdFlap);
-            window.addEventListener("touchstart", birdFlap);
-            gameLoop();
-            canvas.removeEventListener("click", startMovement);
-            canvas.removeEventListener("touchstart", startMovement);
-        }
+function startMovement() {
+    window.addEventListener("click", birdFlap);
+    window.addEventListener("touchstart", birdFlap);
+    gameLoop();
+    canvas.removeEventListener("click", startMovement);
+    canvas.removeEventListener("touchstart", startMovement);
+}
 
-        function birdFlap() {
-            bird.velocity = bird.lift;
-        }
+function birdFlap() {
+    bird.velocity = bird.lift;
+}
 
-        function gameLoop() {
-            if (isGameOver) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
-            if (bird.y + bird.height > canvas.height || bird.y < 0) {
+function gameLoop() {
+    if (isGameOver) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    bird.velocity += bird.gravity;
+    bird.y += bird.velocity;
+    if (bird.y + bird.height > canvas.height || bird.y < 0) {
+        endGame();
+    }
+    drawBird();
+    updatePipes();
+    drawPipes();
+    checkCollisions();
+    updateScore();
+    timer++;
+    requestAnimationFrame(gameLoop);
+}
+
+function drawBird() {
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+}
+
+function updatePipes() {
+    if (timer % 60 === 0 && !isGameOver) {
+        const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
+        const gap = 200;
+        pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
+    }
+    pipes.forEach(pipe => {
+        pipe.x -= 3;
+    });
+    pipes = pipes.filter(pipe => pipe.x + 50 > 0);
+}
+
+function drawPipes() {
+    ctx.fillStyle = "green";
+    pipes.forEach(pipe => {
+        ctx.fillRect(pipe.x, 0, 50, pipe.y);
+        ctx.fillRect(pipe.x, pipe.y + pipe.gap, 50, canvas.height - pipe.y - pipe.gap);
+    });
+}
+
+function checkCollisions() {
+    pipes.forEach(pipe => {
+        if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
+            if (bird.y < pipe.y || bird.y + bird.height > pipe.y + pipe.gap) {
                 endGame();
             }
-            drawBird();
-            updatePipes();
-            drawPipes();
-            checkCollisions();
-            updateScore();
-            timer++;
-            requestAnimationFrame(gameLoop);
         }
+    });
+}
 
-        function drawBird() {
-            ctx.fillStyle = "yellow";
-            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
-        }
+function endGame() {
+    isGameOver = true;
+    window.removeEventListener("click", birdFlap);
+    window.removeEventListener("touchstart", birdFlap);
+    document.getElementById("score").textContent += " - Game Over!";
+    setTimeout(restartGame, 2000);
+}
 
-        function updatePipes() {
-            if (timer % 60 === 0 && !isGameOver) {
-                const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-                const gap = 200; // Increased gap size
-                pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
-            }
-            pipes.forEach(pipe => {
-                pipe.x -= 3;
-            });
-            pipes = pipes.filter(pipe => pipe.x + 50 > 0);
-        }
+function restartGame() {
+    initGame();
+    canvas.addEventListener("click", startMovement);
+    canvas.addEventListener("touchstart", startMovement);
+}
 
-        function drawPipes() {
-            ctx.fillStyle = "green";
-            pipes.forEach(pipe => {
-                ctx.fillRect(pipe.x, 0, 50, pipe.y);
-                ctx.fillRect(pipe.x, pipe.y + pipe.gap, 50, canvas.height - pipe.y - pipe.gap);
-            });
-        }
+function updateScore() {
+    score++;
+    document.getElementById("score").textContent = `Score: ${score}`;
+}
 
-        function checkCollisions() {
-            pipes.forEach(pipe => {
-                if (bird.x + bird.width > pipe.x && bird.x < pipe.x + 50) {
-                    if (bird.y < pipe.y || bird.y + bird.height > pipe.y + pipe.gap) {
-                        endGame();
-                    }
-                }
-            });
-        }
+startButton.addEventListener("click", startGame);
 
-        function endGame() {
-            isGameOver = true;
-            window.removeEventListener("click", birdFlap);
-            window.removeEventListener("touchstart", birdFlap);
-            document.getElementById("score").textContent += " - Game Over!";
-            setTimeout(restartGame, 2000); // Auto-restart after 2 seconds
-        }
+function playRockPaperScissors() {
+    const choices = ["Rock", "Paper", "Scissors"];
+    const userChoice = prompt("Enter Rock, Paper, or Scissors:");
+    const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+    let result = "";
+    if (userChoice === computerChoice) {
+        result = "It's a draw!";
+    } else if (
+        (userChoice === "Rock" && computerChoice === "Scissors") ||
+        (userChoice === "Paper" && computerChoice === "Rock") ||
+        (userChoice === "Scissors" && computerChoice === "Paper")
+    ) {
+        result = "You win!";
+    } else {
+        result = "You lose!";
+    }
+    alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
+}
 
-        function restartGame() {
-            initGame();
-            canvas.addEventListener("click", startMovement);
-            canvas.addEventListener("touchstart", startMovement);
-        }
-
-        function updateScore() {
-            score++;
-            document.getElementById("score").textContent = `Score: ${score}`;
-        }
-
-        startButton.addEventListener("click", startGame);
-
-        function playRockPaperScissors() {
-            const choices = ["Rock", "Paper", "Scissors"];
-            const userChoice = prompt("Enter Rock, Paper, or Scissors:");
-            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
-            let result = "";
-            if (userChoice === computerChoice) {
-                result = "It's a draw!";
-            } else if (
-                (userChoice === "Rock" && computerChoice === "Scissors") ||
-                (userChoice === "Paper" && computerChoice === "Rock") ||
-                (userChoice === "Scissors" && computerChoice === "Paper")
-            ) {
-                result = "You win!";
-            } else {
-                result = "You lose!";
-            }
-            alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
-        }
-
-        // Zork Game Logic
-        const gameData = {
-            currentRoom: "entrance",
-            rooms: {
-                entrance: {
-                    description: "You are at the entrance of a dark cave. There is a torch on the wall.",
-                    commands: {
-                        take: "You take the torch.",
-                        go: "You step into the cave. It's very dark. You feel the air grow colder.",
-                        look: "The cave entrance looms ahead. The torch flickers faintly."
-                    },
-                    next: "darkRoom"
-                },
-                darkRoom: {
-                    description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
-                    commands: {
-                        light: "You light the torch and see a narrow passage ahead.",
-                        listen: "You hear faint whispers echoing in the distance.",
-                        go: "You walk into the passage cautiously.",
-                    },
-                    next: "treasureRoom"
-                },
-                treasureRoom: {
-                    description: "You enter a room glittering with treasure! You've found the lost gold!",
-                    commands: {
-                        take: "You gather as much treasure as you can carry.",
-                        leave: "You decide to leave the treasure and exit the cave safely."
-                    },
-                    next: "end"
-                }
+// Zork Game Logic
+const gameData = {
+    currentRoom: "entrance",
+    inventory: [],
+    rooms: {
+        entrance: {
+            description: "You are at the entrance of a dark cave. There is a torch on the wall.",
+            commands: {
+                take: "You take the torch.",
+                go: "You step into the cave. It's very dark. You feel the air grow colder.",
+                look: "The cave entrance looms ahead. The torch flickers faintly."
             },
-            end: {
-                description: "The adventure is over. Thank you for playing!",
-                commands: {}
-            }
-        };
+            items: ["torch"],
+            next: "darkRoom"
+        },
+        darkRoom: {
+            description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
+            commands: {
+                light: "You light the torch and see a narrow passage ahead.",
+                listen: "You hear faint whispers echoing in the distance.",
+                go: "You walk into the passage cautiously.",
+            },
+            items: [],
+            next: "treasureRoom"
+        },
+        treasureRoom: {
+            description: "You enter a room glittering with treasure! You've found the lost gold!",
+            commands: {
+                take: "You gather as much treasure as you can carry.",
+                leave: "You decide to leave the treasure and exit the cave safely."
+            },
+            items: ["gold"],
+            next: "end"
+        }
+    },
+    end: {
+        description: "The adventure is over. Thank you for playing!",
+        commands: {}
+    }
+};
 
-        let outputBox, inputBox;
+let outputBox, inputBox;
 
-        function startZorkGame() {
-            const gameContainer = document.getElementById("zorkGame");
-            outputBox = document.getElementById("output");
-            inputBox = document.getElementById("input");
+function startZorkGame() {
+    const gameContainer = document.getElementById("zorkGame");
+    outputBox = document.getElementById("output");
+    inputBox = document.getElementById("input");
 
-            gameContainer.style.display = "block";
-            outputBox.textContent = "";
+    gameContainer.style.display = "block";
+    outputBox.textContent = "";
+    addOutput(gameData.rooms[gameData.currentRoom].description);
+    inputBox.focus();
+}
+
+function handleZorkInput(event) {
+    if (event.key === "Enter") {
+        const command = inputBox.value.trim().toLowerCase();
+        inputBox.value = "";
+        processCommand(command);
+    }
+}
+
+function processCommand(command) {
+    const currentRoom = gameData.rooms[gameData.currentRoom];
+    const commands = currentRoom.commands;
+
+    if (commands[command]) {
+        addOutput(commands[command]);
+
+        // Add item to inventory if mentioned in command
+        const itemMatch = command.match(/take|grab|pick|lift|hold|carry|seize|snatch/);
+        if (itemMatch && currentRoom.items.includes(itemMatch[0])) {
+            gameData.inventory.push(itemMatch[0]);
+            addOutput(`You added ${itemMatch[0]} to your inventory.`);
+        }
+
+        // Progress to the next room if available
+        if ((["go", "forward", "move", "enter", "north", "south", "east", "west", "left", "right", "back"].includes(command)) && currentRoom.next) {
+            gameData.currentRoom = currentRoom.next;
             addOutput(gameData.rooms[gameData.currentRoom].description);
-            inputBox.focus();
         }
+    } else if (command === "inventory") {
+        addOutput(`Inventory: ${gameData.inventory.join(', ')}`);
+    } else if (command === "quit") {
+        addOutput("You have quit the game.");
+        gameData.currentRoom = "entrance"; // Reset the game
+    } else {
+        addOutput("I don't understand that command. Try something else.");
+    }
+}
 
-        function handleZorkInput(event) {
-            if (event.key === "Enter") {
-                const command = inputBox.value.trim().toLowerCase();
-                inputBox.value = "";
-                processCommand(command);
-            }
-        }
-
-        function processCommand(command) {
-            const currentRoom = gameData.rooms[gameData.currentRoom];
-            const commands = currentRoom.commands;
-
-            if (commands[command]) {
-                addOutput(commands[command]);
-
-                // Progress to the next room if available
-                if (command === "go" && currentRoom.next) {
-                    gameData.currentRoom = currentRoom.next;
-                    addOutput(gameData.rooms[gameData.currentRoom].description);
-                }
-            } else if (command === "quit") {
-                addOutput("You have quit the game.");
-                gameData.currentRoom = "entrance"; // Reset the game
-            } else {
-                addOutput("I don't understand that command. Try something else.");
-            }
-        }
-
-        function addOutput(text) {
-            const newParagraph = document.createElement("p");
-           newParagraph.textContent = text;
-            outputBox.appendChild(newParagraph);
-            outputBox.scrollTop = outputBox.scrollHeight;
-        }
+function addOutput(text) {
+    const newParagraph = document.createElement("p");
+    newParagraph.textContent = text;
+    outputBox.appendChild(newParagraph);
+    outputBox.scrollTop = outputBox.scrollHeight;
+}
     </script>
 </body>
 </html>
