@@ -450,7 +450,17 @@ const gameData = {
                 "go into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
                 "walk into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
                 "move into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
-                "run into cave": "You step into the cave. It's very dark. You feel the air grow colder."
+                "run into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
+                dance: "You dance around at the cave entrance.",
+                jump: "You jump up and down.",
+                "jump up": "You jump up.",
+                "jump down": "You jump down.",
+                "dance around": "You dance around at the cave entrance.",
+                "swing sword": "You don't have a sword.",
+                "hit wall": "You hit the wall. Nothing happens.",
+                "punch wall": "You punch the wall. Ouch!",
+                "kick wall": "You kick the wall. Ouch!",
+                duck: "You duck down."
             },
             items: ["torch"],
             next: "darkRoom"
@@ -485,7 +495,17 @@ const gameData = {
                 "inspect ceiling": "The ceiling is high and covered in stalactites.",
                 "examine ceiling": "The ceiling is high and covered in stalactites.",
                 "light torch": "You light the torch and see a narrow passage ahead.",
-                "use torch": "You use the torch to light your way."
+                "use torch": "You use the torch to light your way.",
+                dance: "You dance around in the dark room.",
+                jump: "You jump up and down.",
+                "jump up": "You jump up.",
+                "jump down": "You jump down.",
+                "dance around": "You dance around in the dark room.",
+                "swing sword": "You don't have a sword.",
+                "hit wall": "You hit the wall. Nothing happens.",
+                "punch wall": "You punch the wall. Ouch!",
+                "kick wall": "You kick the wall. Ouch!",
+                duck: "You duck down."
             },
             items: [],
             next: "treasureRoom"
@@ -526,7 +546,17 @@ const gameData = {
                 "examine floor": "The floor is covered in gold coins and jewels.",
                 "look at ceiling": "The ceiling is high and adorned with sparkling gems.",
                 "inspect ceiling": "The ceiling is high and adorned with sparkling gems.",
-                "examine ceiling": "The ceiling is high and adorned with sparkling gems."
+                "examine ceiling": "The ceiling is high and adorned with sparkling gems.",
+                dance: "You dance around the treasure room.",
+                jump: "You jump up and down.",
+                "jump up": "You jump up.",
+                "jump down": "You jump down.",
+                "dance around": "You dance around the treasure room.",
+                "swing sword": "You don't have a sword.",
+                "hit wall": "You hit the wall. Nothing happens.",
+                "punch wall": "You punch the wall. Ouch!",
+                "kick wall": "You kick the wall. Ouch!",
+                duck: "You duck down."
             },
             items: ["gold"],
             next: "end"
@@ -588,7 +618,7 @@ function processCommand(command) {
         addOutput("You have quit the game.");
         gameData.currentRoom = "entrance"; // Reset the game
     } else {
-        addOutput("I don't understand that command. Try something else.");
+        addOutput("You can't do that here!");
     }
 }
 
