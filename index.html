@@ -1,8 +1,10 @@
+Test 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Welcome to Zach.works</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -164,19 +166,20 @@
             display: none;
         }
         #zorkGame #output {
+            background: #1f1f1f;
             border: 1px solid #03dac5;
-            border-radius: 10px;
             padding: 10px;
-            margin-bottom: 10px;
-            max-height: 200px;
+            height: 200px;
             overflow-y: auto;
+            margin-bottom: 10px;
         }
         #zorkGame #input {
-            width: 100%;
+            width: calc(100% - 22px);
             padding: 10px;
             border: 1px solid #03dac5;
-            border-radius: 10px;
-            box-sizing: border-box;
+            border-radius: 5px;
+            background: #121212;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -191,7 +194,7 @@
             <button onclick="displayRandomQuote()">Get Random Quote</button>
             <button onclick="playNumberGuess()">Play Number Guessing Game</button>
             <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
-            <button id="zorkGameButton" onclick="startZorkGame()">Play Zork Game</button>
+            <button id="startZorkButton" onclick="startZorkGame()">Play Zork Game</button>
             <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
             <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
         </div>
@@ -205,7 +208,7 @@
         <canvas id="gameCanvas" width="480" height="640"></canvas>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
         <div id="guessOutput"></div>
-        
+
         <div id="zorkGame">
             <div id="output"></div>
             <input id="input" type="text" placeholder="Enter your command here..." onkeydown="handleZorkInput(event)">
@@ -282,8 +285,9 @@
         const restartButton = document.getElementById("restartButton");
         let bird, pipes, score, isGameOver, timer;
 
+        // Game Setup
         function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 };
+            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 }; // Adjusted lift value
             pipes = [];
             score = 0;
             isGameOver = false;
@@ -339,7 +343,7 @@
         function updatePipes() {
             if (timer % 60 === 0 && !isGameOver) {
                 const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-                const gap = 200;
+                const gap = 200; // Increased gap size
                 pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
             }
             pipes.forEach(pipe => {
@@ -371,7 +375,7 @@
             window.removeEventListener("click", birdFlap);
             window.removeEventListener("touchstart", birdFlap);
             document.getElementById("score").textContent += " - Game Over!";
-            setTimeout(restartGame, 2000);
+            setTimeout(restartGame, 2000); // Auto-restart after 2 seconds
         }
 
         function restartGame() {
@@ -406,6 +410,7 @@
             alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
         }
 
+        // Zork Game Logic
         const gameData = {
             currentRoom: "entrance",
             rooms: {
@@ -470,13 +475,14 @@
             if (commands[command]) {
                 addOutput(commands[command]);
 
+                // Progress to the next room if available
                 if (command === "go" && currentRoom.next) {
                     gameData.currentRoom = currentRoom.next;
                     addOutput(gameData.rooms[gameData.currentRoom].description);
                 }
             } else if (command === "quit") {
                 addOutput("You have quit the game.");
-                gameData.currentRoom = "entrance";
+                gameData.currentRoom = "entrance"; // Reset the game
             } else {
                 addOutput("I don't understand that command. Try something else.");
             }
@@ -484,7 +490,7 @@
 
         function addOutput(text) {
             const newParagraph = document.createElement("p");
-            newParagraph.textContent = text;
+           newParagraph.textContent = text;
             outputBox.appendChild(newParagraph);
             outputBox.scrollTop = outputBox.scrollHeight;
         }
