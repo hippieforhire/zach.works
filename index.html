@@ -411,6 +411,7 @@
         // Zork Game Logic
         const gameData = {
     currentRoom: "entrance",
+    inventory: [],
     rooms: {
         entrance: {
             description: "You are at the entrance of a dark cave. There is a torch on the wall.",
@@ -418,20 +419,38 @@
                 take: "You take the torch.",
                 grab: "You grab the torch.",
                 pick: "You take the torch.",
+                lift: "You lift the torch from its holder.",
+                hold: "You hold the torch.",
+                carry: "You carry the torch.",
                 forward: "You step into the cave. It's very dark. You feel the air grow colder.",
                 go: "You step into the cave. It's very dark. You feel the air grow colder.",
                 move: "You step into the cave. It's very dark. You feel the air grow colder.",
                 enter: "You step into the cave. It's very dark. You feel the air grow colder.",
                 north: "You step into the cave. It's very dark. You feel the air grow colder.",
-                look: "The cave entrance looms ahead. The torch flickers faintly."
+                look: "The cave entrance looms ahead. The torch flickers faintly.",
+                examine: "The torch is firmly fixed to the wall. It looks like it can be taken.",
+                inspect: "The torch is firmly fixed to the wall. It looks like it can be taken.",
+                search: "The torch is firmly fixed to the wall. It looks like it can be taken.",
+                view: "The cave entrance looms ahead. The torch flickers faintly.",
+                scan: "The cave entrance looms ahead. The torch flickers faintly."
             },
+            items: ["torch"],
             next: "darkRoom"
         },
         darkRoom: {
             description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
             commands: {
                 light: "You light the torch and see a narrow passage ahead.",
+                ignite: "You light the torch and see a narrow passage ahead.",
+                burn: "You light the torch and see a narrow passage ahead.",
                 listen: "You hear faint whispers echoing in the distance.",
+                hear: "You hear faint whispers echoing in the distance.",
+                drink: "You drink the cool dripping water. It refreshes you.",
+                collect: "You collect some water in a flask.",
+                scoop: "You collect some water in a flask.",
+                bottle: "You collect some water in a flask.",
+                quench: "You drink the cool dripping water. It refreshes you.",
+                sip: "You drink the cool dripping water. It refreshes you.",
                 forward: "You walk into the passage cautiously.",
                 go: "You walk into the passage cautiously.",
                 move: "You walk into the passage cautiously.",
@@ -442,8 +461,14 @@
                 west: "You walk into the passage cautiously.",
                 back: "You walk back to the entrance.",
                 left: "You walk into the passage cautiously.",
-                right: "You walk into the passage cautiously."
+                right: "You walk into the passage cautiously.",
+                explore: "You walk into the passage cautiously.",
+                proceed: "You walk into the passage cautiously.",
+                advance: "You walk into the passage cautiously.",
+                retreat: "You walk back to the entrance.",
+                return: "You walk back to the entrance."
             },
+            items: ["water"],
             next: "treasureRoom"
         },
         treasureRoom: {
@@ -452,12 +477,27 @@
                 take: "You gather as much treasure as you can carry.",
                 grab: "You gather as much treasure as you can carry.",
                 pick: "You gather as much treasure as you can carry.",
+                lift: "You gather as much treasure as you can carry.",
+                hold: "You gather as much treasure as you can carry.",
+                carry: "You gather as much treasure as you can carry.",
+                seize: "You gather as much treasure as you can carry.",
+                snatch: "You gather as much treasure as you can carry.",
                 leave: "You decide to leave the treasure and exit the cave safely.",
                 back: "You decide to leave the treasure and exit the cave safely.",
                 exit: "You decide to leave the treasure and exit the cave safely.",
                 forward: "You decide to leave the treasure and exit the cave safely.",
-                go: "You decide to leave the treasure and exit the cave safely."
+                go: "You decide to leave the treasure and exit the cave safely.",
+                move: "You decide to leave the treasure and exit the cave safely.",
+                enter: "You decide to leave the treasure and exit the cave safely.",
+                north: "You decide to leave the treasure and exit the cave safely.",
+                south: "You decide to leave the treasure and exit the cave safely.",
+                east: "You decide to leave the treasure and exit the cave safely.",
+                west: "You decide to leave the treasure and exit the cave safely.",
+                left: "You decide to leave the treasure and exit the cave safely.",
+                right: "You decide to leave the treasure and exit the cave safely."
             },
+            items: ["treasure"],
+            enemies: ["goblin"],
             next: "end"
         }
     },
@@ -494,12 +534,16 @@ function processCommand(command) {
 
     if (commands[command]) {
         addOutput(commands[command]);
-
-        // Progress to the next room if available
+        if (currentRoom.items.includes(command.split(' ')[1])) {
+            gameData.inventory.push(command.split(' ')[1]);
+            addOutput(`You added ${command.split(' ')[1]} to your inventory.`);
+        }
         if ((command === "go" || command === "forward" || command === "move" || command === "enter" || command === "north" || command === "south" || command === "east" || command === "west" || command === "left" || command === "right" || command === "back") && currentRoom.next) {
             gameData.currentRoom = currentRoom.next;
             addOutput(gameData.rooms[gameData.currentRoom].description);
         }
+    } else if (command === "inventory") {
+        addOutput(`Inventory: ${gameData.inventory.join(', ')}`);
     } else if (command === "quit") {
         addOutput("You have quit the game.");
         gameData.currentRoom = "entrance"; // Reset the game
@@ -513,6 +557,7 @@ function addOutput(text) {
     newParagraph.textContent = text;
     outputBox.appendChild(newParagraph);
     outputBox.scrollTop = outputBox.scrollHeight; // Auto-scroll to the bottom
+}
 }
     </script>
 </body>
