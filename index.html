@@ -416,8 +416,41 @@ const gameData = {
             description: "You are at the entrance of a dark cave. There is a torch on the wall.",
             commands: {
                 take: "You take the torch.",
+                grab: "You grab the torch.",
+                "take torch": "You take the torch.",
+                "grab torch": "You grab the torch.",
+                "take the torch": "You take the torch.",
+                "grab the torch": "You grab the torch.",
                 go: "You step into the cave. It's very dark. You feel the air grow colder.",
-                look: "The cave entrance looms ahead. The torch flickers faintly."
+                "go north": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "move north": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "walk north": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "run north": "You step into the cave. It's very dark. You feel the air grow colder.",
+                look: "The cave entrance looms ahead. The torch flickers faintly.",
+                examine: "The cave entrance looks ominous and dark.",
+                "examine torch": "The torch is old and covered in soot.",
+                "look around": "You see the cave entrance and a torch on the wall.",
+                "look at torch": "The torch is mounted on the wall.",
+                "inspect torch": "The torch is securely fastened to the wall.",
+                "light torch": "You light the torch and it flickers brightly.",
+                "use torch": "You use the torch to light your way.",
+                "take torch from wall": "You take the torch from the wall.",
+                "grab torch from wall": "You grab the torch from the wall.",
+                "pick up torch": "You pick up the torch.",
+                "seize torch": "You seize the torch.",
+                "hold torch": "You hold the torch in your hand.",
+                "carry torch": "You carry the torch with you.",
+                "snatch torch": "You snatch the torch from the wall.",
+                search: "You search around and find nothing else of interest.",
+                "search area": "You search the area but find nothing else.",
+                "look at cave": "The cave looks dark and foreboding.",
+                "inspect cave": "The cave entrance is dark and mysterious.",
+                "examine cave": "The cave entrance is dark and foreboding.",
+                "enter cave": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "go into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "walk into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "move into cave": "You step into the cave. It's very dark. You feel the air grow colder.",
+                "run into cave": "You step into the cave. It's very dark. You feel the air grow colder."
             },
             items: ["torch"],
             next: "darkRoom"
@@ -428,6 +461,31 @@ const gameData = {
                 light: "You light the torch and see a narrow passage ahead.",
                 listen: "You hear faint whispers echoing in the distance.",
                 go: "You walk into the passage cautiously.",
+                "go north": "You walk into the passage cautiously.",
+                "move north": "You walk into the passage cautiously.",
+                "walk north": "You walk into the passage cautiously.",
+                "run north": "You walk into the passage cautiously.",
+                "drink water": "You drink some water from a nearby puddle.",
+                "collect water": "You collect some water in a container.",
+                "fill bottle": "You fill your bottle with water.",
+                "listen closely": "You hear faint whispers echoing in the distance.",
+                "listen carefully": "You hear faint whispers echoing in the distance.",
+                "listen to whispers": "You try to make out the whispers but can't understand them.",
+                "look around": "You see a narrow passage ahead and hear the sound of dripping water.",
+                "examine room": "The room is pitch dark, and you can hear the sound of dripping water.",
+                "inspect room": "The room is pitch dark, and you can hear the sound of dripping water.",
+                "search room": "You search the room but find nothing else of interest.",
+                "look at walls": "The walls are damp and covered in moss.",
+                "inspect walls": "The walls are damp and covered in moss.",
+                "examine walls": "The walls are damp and covered in moss.",
+                "look at floor": "The floor is wet and uneven.",
+                "inspect floor": "The floor is wet and uneven.",
+                "examine floor": "The floor is wet and uneven.",
+                "look at ceiling": "The ceiling is high and covered in stalactites.",
+                "inspect ceiling": "The ceiling is high and covered in stalactites.",
+                "examine ceiling": "The ceiling is high and covered in stalactites.",
+                "light torch": "You light the torch and see a narrow passage ahead.",
+                "use torch": "You use the torch to light your way."
             },
             items: [],
             next: "treasureRoom"
@@ -436,7 +494,39 @@ const gameData = {
             description: "You enter a room glittering with treasure! You've found the lost gold!",
             commands: {
                 take: "You gather as much treasure as you can carry.",
-                leave: "You decide to leave the treasure and exit the cave safely."
+                grab: "You gather as much treasure as you can carry.",
+                "take treasure": "You gather as much treasure as you can carry.",
+                "grab treasure": "You gather as much treasure as you can carry.",
+                "take the treasure": "You gather as much treasure as you can carry.",
+                "grab the treasure": "You gather as much treasure as you can carry.",
+                leave: "You decide to leave the treasure and exit the cave safely.",
+                "go back": "You decide to leave the treasure and exit the cave safely.",
+                "leave treasure": "You decide to leave the treasure and exit the cave safely.",
+                "look at treasure": "The treasure glitters brightly in the torchlight.",
+                "examine treasure": "The treasure glitters brightly in the torchlight.",
+                "inspect treasure": "The treasure glitters brightly in the torchlight.",
+                "search treasure": "You search through the treasure and find gold coins and jewels.",
+                "take gold": "You take some gold coins.",
+                "grab gold": "You grab some gold coins.",
+                "take jewels": "You take some jewels.",
+                "grab jewels": "You grab some jewels.",
+                "take coins": "You take some gold coins.",
+                "grab coins": "You grab some gold coins.",
+                "take gems": "You take some gems.",
+                "grab gems": "You grab some gems.",
+                "look around": "The room is filled with glittering treasure.",
+                "search room": "You search the room but find nothing else of interest.",
+                "examine room": "The room is filled with glittering treasure.",
+                "inspect room": "The room is filled with glittering treasure.",
+                "look at walls": "The walls are lined with gold and jewels.",
+                "inspect walls": "The walls are lined with gold and jewels.",
+                "examine walls": "The walls are lined with gold and jewels.",
+                "look at floor": "The floor is covered in gold coins and jewels.",
+                "inspect floor": "The floor is covered in gold coins and jewels.",
+                "examine floor": "The floor is covered in gold coins and jewels.",
+                "look at ceiling": "The ceiling is high and adorned with sparkling gems.",
+                "inspect ceiling": "The ceiling is high and adorned with sparkling gems.",
+                "examine ceiling": "The ceiling is high and adorned with sparkling gems."
             },
             items: ["gold"],
             next: "end"
@@ -444,7 +534,11 @@ const gameData = {
     },
     end: {
         description: "The adventure is over. Thank you for playing!",
-        commands: {}
+        commands: {
+            "start over": "You decide to start your adventure over. You find yourself at the entrance of the cave.",
+            "play again": "You decide to start your adventure over. You find yourself at the entrance of the cave.",
+            quit: "You have quit the game. Thanks for playing!"
+        }
     }
 };
 
@@ -504,6 +598,6 @@ function addOutput(text) {
     outputBox.appendChild(newParagraph);
     outputBox.scrollTop = outputBox.scrollHeight;
 }
-    </script>
+</script>
 </body>
 </html>
