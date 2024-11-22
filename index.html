@@ -260,7 +260,7 @@
 
         // Game Setup
         function initGame() {
-            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -12, velocity: 0 };
+            bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -8, velocity: 0 }; // Decreased lift value
             pipes = [];
             score = 0;
             isGameOver = false;
@@ -316,7 +316,7 @@
         function updatePipes() {
             if (timer % 60 === 0 && !isGameOver) {
                 const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-                const gap = 150; // Ensure consistent pipe spacing
+                const gap = 200; // Increased gap size
                 pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
             }
             pipes.forEach(pipe => {
