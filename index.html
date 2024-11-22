@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Welcome to my page!</title>
+    <title>Welcome to Zach.works</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -185,7 +185,7 @@
     <div id="content">
         <h1>Welcome to Zach.works</h1>
         <div id="clock"></div>
-        <p>Hi, I'm Zach Rogers, and this is my site. I am just playing with different types of coding for now! Explore the features below!</p>
+        <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
         <div class="container">
             <button onclick="changeBackgroundColor()">Change Background Color</button>
@@ -410,155 +410,88 @@
 
         // Zork Game Logic
         const gameData = {
-    currentRoom: "entrance",
-    inventory: [],
-    rooms: {
-        entrance: {
-            description: "You are at the entrance of a dark cave. There is a torch on the wall.",
-            commands: {
-                take: "You take the torch.",
-                grab: "You grab the torch.",
-                pick: "You take the torch.",
-                lift: "You lift the torch from its holder.",
-                hold: "You hold the torch.",
-                carry: "You carry the torch.",
-                forward: "You step into the cave. It's very dark. You feel the air grow colder.",
-                go: "You step into the cave. It's very dark. You feel the air grow colder.",
-                move: "You step into the cave. It's very dark. You feel the air grow colder.",
-                enter: "You step into the cave. It's very dark. You feel the air grow colder.",
-                north: "You step into the cave. It's very dark. You feel the air grow colder.",
-                look: "The cave entrance looms ahead. The torch flickers faintly.",
-                examine: "The torch is firmly fixed to the wall. It looks like it can be taken.",
-                inspect: "The torch is firmly fixed to the wall. It looks like it can be taken.",
-                search: "The torch is firmly fixed to the wall. It looks like it can be taken.",
-                view: "The cave entrance looms ahead. The torch flickers faintly.",
-                scan: "The cave entrance looms ahead. The torch flickers faintly."
+            currentRoom: "entrance",
+            rooms: {
+                entrance: {
+                    description: "You are at the entrance of a dark cave. There is a torch on the wall.",
+                    commands: {
+                        take: "You take the torch.",
+                        go: "You step into the cave. It's very dark. You feel the air grow colder.",
+                        look: "The cave entrance looms ahead. The torch flickers faintly."
+                    },
+                    next: "darkRoom"
+                },
+                darkRoom: {
+                    description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
+                    commands: {
+                        light: "You light the torch and see a narrow passage ahead.",
+                        listen: "You hear faint whispers echoing in the distance.",
+                        go: "You walk into the passage cautiously.",
+                    },
+                    next: "treasureRoom"
+                },
+                treasureRoom: {
+                    description: "You enter a room glittering with treasure! You've found the lost gold!",
+                    commands: {
+                        take: "You gather as much treasure as you can carry.",
+                        leave: "You decide to leave the treasure and exit the cave safely."
+                    },
+                    next: "end"
+                }
             },
-            items: ["torch"],
-            next: "darkRoom"
-        },
-        darkRoom: {
-            description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
-            commands: {
-                light: "You light the torch and see a narrow passage ahead.",
-                ignite: "You light the torch and see a narrow passage ahead.",
-                burn: "You light the torch and see a narrow passage ahead.",
-                listen: "You hear faint whispers echoing in the distance.",
-                hear: "You hear faint whispers echoing in the distance.",
-                drink: "You drink the cool dripping water. It refreshes you.",
-                collect: "You collect some water in a flask.",
-                scoop: "You collect some water in a flask.",
-                bottle: "You collect some water in a flask.",
-                quench: "You drink the cool dripping water. It refreshes you.",
-                sip: "You drink the cool dripping water. It refreshes you.",
-                forward: "You walk into the passage cautiously.",
-                go: "You walk into the passage cautiously.",
-                move: "You walk into the passage cautiously.",
-                enter: "You walk into the passage cautiously.",
-                north: "You walk into the passage cautiously.",
-                south: "You walk back to the entrance.",
-                east: "You walk into the passage cautiously.",
-                west: "You walk into the passage cautiously.",
-                back: "You walk back to the entrance.",
-                left: "You walk into the passage cautiously.",
-                right: "You walk into the passage cautiously.",
-                explore: "You walk into the passage cautiously.",
-                proceed: "You walk into the passage cautiously.",
-                advance: "You walk into the passage cautiously.",
-                retreat: "You walk back to the entrance.",
-                return: "You walk back to the entrance."
-            },
-            items: ["water"],
-            next: "treasureRoom"
-        },
-        treasureRoom: {
-            description: "You enter a room glittering with treasure! You've found the lost gold!",
-            commands: {
-                take: "You gather as much treasure as you can carry.",
-                grab: "You gather as much treasure as you can carry.",
-                pick: "You gather as much treasure as you can carry.",
-                lift: "You gather as much treasure as you can carry.",
-                hold: "You gather as much treasure as you can carry.",
-                carry: "You gather as much treasure as you can carry.",
-                seize: "You gather as much treasure as you can carry.",
-                snatch: "You gather as much treasure as you can carry.",
-                leave: "You decide to leave the treasure and exit the cave safely.",
-                back: "You decide to leave the treasure and exit the cave safely.",
-                exit: "You decide to leave the treasure and exit the cave safely.",
-                forward: "You decide to leave the treasure and exit the cave safely.",
-                go: "You decide to leave the treasure and exit the cave safely.",
-                move: "You decide to leave the treasure and exit the cave safely.",
-                enter: "You decide to leave the treasure and exit the cave safely.",
-                north: "You decide to leave the treasure and exit the cave safely.",
-                south: "You decide to leave the treasure and exit the cave safely.",
-                east: "You decide to leave the treasure and exit the cave safely.",
-                west: "You decide to leave the treasure and exit the cave safely.",
-                left: "You decide to leave the treasure and exit the cave safely.",
-                right: "You decide to leave the treasure and exit the cave safely."
-            },
-            items: ["treasure"],
-            enemies: ["goblin"],
-            next: "end"
-        }
-    },
-    end: {
-        description: "The adventure is over. Thank you for playing!",
-        commands: {}
-    }
-};
+            end: {
+                description: "The adventure is over. Thank you for playing!",
+                commands: {}
+            }
+        };
 
-let outputBox, inputBox;
+        let outputBox, inputBox;
 
-function startZorkGame() {
-    const gameContainer = document.getElementById("zorkGame");
-    outputBox = document.getElementById("output");
-    inputBox = document.getElementById("input");
+        function startZorkGame() {
+            const gameContainer = document.getElementById("zorkGame");
+            outputBox = document.getElementById("output");
+            inputBox = document.getElementById("input");
 
-    gameContainer.style.display = "block";
-    outputBox.textContent = "";
-    addOutput(gameData.rooms[gameData.currentRoom].description);
-    inputBox.focus();
-}
-
-function handleZorkInput(event) {
-    if (event.key === "Enter") {
-        const command = inputBox.value.trim().toLowerCase();
-        inputBox.value = "";
-        processCommand(command);
-    }
-}
-
-function processCommand(command) {
-    const currentRoom = gameData.rooms[gameData.currentRoom];
-    const commands = currentRoom.commands;
-
-    if (commands[command]) {
-        addOutput(commands[command]);
-        if (currentRoom.items.includes(command.split(' ')[1])) {
-            gameData.inventory.push(command.split(' ')[1]);
-            addOutput(`You added ${command.split(' ')[1]} to your inventory.`);
-        }
-        if ((command === "go" || command === "forward" || command === "move" || command === "enter" || command === "north" || command === "south" || command === "east" || command === "west" || command === "left" || command === "right" || command === "back") && currentRoom.next) {
-            gameData.currentRoom = currentRoom.next;
+            gameContainer.style.display = "block";
+            outputBox.textContent = "";
             addOutput(gameData.rooms[gameData.currentRoom].description);
+            inputBox.focus();
         }
-    } else if (command === "inventory") {
-        addOutput(`Inventory: ${gameData.inventory.join(', ')}`);
-    } else if (command === "quit") {
-        addOutput("You have quit the game.");
-        gameData.currentRoom = "entrance"; // Reset the game
-    } else {
-        addOutput("I don't understand that command. Try something else.");
-    }
-}
 
-function addOutput(text) {
-    const newParagraph = document.createElement("p");
-    newParagraph.textContent = text;
-    outputBox.appendChild(newParagraph);
-    outputBox.scrollTop = outputBox.scrollHeight; // Auto-scroll to the bottom
-}
-}
+        function handleZorkInput(event) {
+            if (event.key === "Enter") {
+                const command = inputBox.value.trim().toLowerCase();
+                inputBox.value = "";
+                processCommand(command);
+            }
+        }
+
+        function processCommand(command) {
+            const currentRoom = gameData.rooms[gameData.currentRoom];
+            const commands = currentRoom.commands;
+
+            if (commands[command]) {
+                addOutput(commands[command]);
+
+                // Progress to the next room if available
+                if (command === "go" && currentRoom.next) {
+                    gameData.currentRoom = currentRoom.next;
+                    addOutput(gameData.rooms[gameData.currentRoom].description);
+                }
+            } else if (command === "quit") {
+                addOutput("You have quit the game.");
+                gameData.currentRoom = "entrance"; // Reset the game
+            } else {
+                addOutput("I don't understand that command. Try something else.");
+            }
+        }
+
+        function addOutput(text) {
+            const newParagraph = document.createElement("p");
+           newParagraph.textContent = text;
+            outputBox.appendChild(newParagraph);
+            outputBox.scrollTop = outputBox.scrollHeight;
+        }
     </script>
 </body>
 </html>
