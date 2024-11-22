@@ -189,8 +189,7 @@
     </div>
 
     <canvas id="particleCanvas"></canvas>
-
-    <script>
+        <script>
         function changeBackgroundColor() {
             const colors = ["#6200ea", "#03dac5", "#bb86fc", "#cf6679", "#3700b3"];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -505,22 +504,22 @@
     }
 
     function keyDownHandler(e) {
-        if (e.key === 'Right' || e.key === 'ArrowRight') {
+        if (e.key === 'Right' or e.key === 'ArrowRight') {
             rightPressed = true;
-        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        } else if (e.key === 'Left' or e.key === 'ArrowLeft') {
             leftPressed = true;
-        } else if (e.key === ' ' || e.key === 'Spacebar') {
+        } else if (e.key === ' ' or e.key === 'Spacebar') {
             spacePressed = true;
             player.shoot();
         }
     }
 
     function keyUpHandler(e) {
-        if (e.key === 'Right' || e.key === 'ArrowRight') {
+        if (e.key === 'Right' or e.key === 'ArrowRight') {
             rightPressed = false;
-        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        } else if (e.key === 'Left' or e.key === 'ArrowLeft') {
             leftPressed = false;
-        } else if (e.key === ' ' || e.key === 'Spacebar') {
+        } else if (e.key === ' ' or e.key === 'Spacebar') {
             spacePressed = false;
         }
     }
