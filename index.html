@@ -4,54 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Zach.works</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* General Styling */
         body {
             margin: 0;
             font-family: 'Roboto', Arial, sans-serif;
-            color: #333;
-            background: #f0f0f0;
+            background: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
+            padding: 20px;
         }
-
         h1 {
             font-size: 3rem;
-            color: #333;
-            margin: 20px;
+            color: #bb86fc;
+            margin: 20px 0;
         }
-
         #content {
-            width: 90%;
+            width: 100%;
             max-width: 1200px;
-            background: #fff;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            background: #1f1f1f;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
         }
-
         p {
             font-size: 1.2rem;
-            color: #555;
+            color: #b0b0b0;
             margin: 10px 0;
         }
-
-        /* Rainbow Clock */
-        @keyframes rainbow {
-            0% { color: red; }
-            14% { color: orange; }
-            28% { color: yellow; }
-            42% { color: green; }
-            57% { color: blue; }
-            71% { color: indigo; }
-            85% { color: violet; }
-            100% { color: red; }
-        }
-
         #clock {
             font-size: 2rem;
             font-weight: bold;
@@ -59,84 +44,79 @@
             margin: 10px 0;
             animation: rainbow 5s infinite;
         }
-
-        /* Button Styling */
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            14% { color: #ffa500; }
+            28% { color: #ffff00; }
+            42% { color: #008000; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #ee82ee; }
+            100% { color: #ff0000; }
+        }
         button {
             margin: 10px;
             padding: 12px 20px;
             font-size: 1rem;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #bb86fc;
+            color: #121212;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
         }
-
         button:hover {
-            background-color: #45a049;
+            background-color: #bb86fc;
             transform: scale(1.05);
         }
-
-        /* Quote Display */
         #quote {
             font-size: 1.5rem;
             font-style: italic;
-            color: #666;
+            color: #03dac5;
             margin: 20px 0;
             padding: 10px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #03dac5;
         }
-
-        /* Christmas Countdown */
         #countdown {
             font-size: 1.5rem;
-            color: #444;
+            color: #03dac5;
             margin: 10px 0;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
         }
-
-        /* Hidden Message */
         #hiddenMessage {
             font-size: 1.2rem;
-            color: #d32f2f;
+            color: #cf6679;
             margin-top: 15px;
+            display: none;
             animation: fadeIn 1s ease-in-out;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        /* Game Styles */
         #gameCanvas {
             display: none;
             margin: 20px auto;
-            border: 2px solid #000;
-            background: #87ceeb;
+            border: 2px solid #03dac5;
+            background: #121212;
             border-radius: 10px;
         }
-
         #restartButton {
             display: none;
             padding: 10px 20px;
-            background: #f44336;
-            color: #fff;
+            background: #cf6679;
+            color: #ffffff;
             border-radius: 5px;
             cursor: pointer;
         }
-
         #score {
             display: none;
             font-size: 1.2rem;
             margin-top: 10px;
         }
-
-        /* Particle Canvas */
         #particleCanvas {
             position: absolute;
             top: 0;
@@ -146,24 +126,19 @@
             pointer-events: none;
             z-index: -1;
         }
-
-        /* Scrolling Banner */
         #scrollingMessage {
             margin: 20px 0;
             padding: 10px;
-            background: #FFEB3B;
-            color: #333;
+            background: #03dac5;
+            color: #121212;
             font-size: 1.2rem;
             border-radius: 10px;
             animation: scroll 15s linear infinite;
         }
-
         @keyframes scroll {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
-
-        /* Additional Styling */
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -171,18 +146,15 @@
             gap: 10px;
             margin-top: 20px;
         }
-
         .container button {
             width: calc(33% - 20px);
             min-width: 150px;
         }
-
         @media (max-width: 768px) {
             .container button {
                 width: calc(50% - 20px);
             }
         }
-
         @media (max-width: 480px) {
             .container button {
                 width: 100%;
@@ -196,7 +168,6 @@
         <div id="clock"></div>
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
-        <!-- Features Section -->
         <div class="container">
             <button onclick="changeBackgroundColor()">Change Background Color</button>
             <button onclick="displayRandomQuote()">Get Random Quote</button>
@@ -206,38 +177,26 @@
             <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
         </div>
 
-        <!-- Quote Section -->
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
-
-        <!-- Christmas Countdown -->
         <div id="countdown"></div>
-
-        <!-- Hidden Message -->
-        <p id="hiddenMessage" style="display:none;">The princess you are looking for is in another castle!</p>
+        <p id="hiddenMessage">The princess you are looking for is in another castle!</p>
         <button onclick="document.getElementById('hiddenMessage').style.display = 'block'">Click me!</button>
-
-        <!-- Scrolling Banner -->
         <div id="scrollingMessage">If you're reading this, thanks for checking out my page!</div>
-
-        <!-- Game Canvas -->
         <div id="score">Score: 0</div>
         <canvas id="gameCanvas" width="480" height="640"></canvas>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
         <div id="guessOutput"></div>
     </div>
 
-    <!-- Particle Effects Canvas -->
     <canvas id="particleCanvas"></canvas>
 
     <script>
-        // Background Color Change
         function changeBackgroundColor() {
-            const colors = ["#1e3c72", "#2a5298", "#4CAF50", "#f44336", "#FFEB3B"];
+            const colors = ["#6200ea", "#03dac5", "#bb86fc", "#cf6679", "#3700b3"];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.body.style.background = randomColor;
         }
 
-        // Random Quotes
         const quotes = [
             "The best time to plant a tree was 20 years ago. The second best time is now.",
             "Success is not final, failure is not fatal: It is the courage to continue that counts.",
@@ -251,7 +210,6 @@
             document.getElementById("quote").textContent = randomQuote;
         }
 
-        // Number Guessing Game
         function playNumberGuess() {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const guess = prompt("Guess a number between 1 and 10:");
@@ -262,30 +220,27 @@
             }
         }
 
-        // Dark/Light Mode Toggle
         let darkMode = true;
         function toggleDarkLight() {
             const darkLightToggleButton = document.getElementById("darkLightToggle");
             if (darkMode) {
-                document.body.style.background = 'white';
-                document.body.style.color = '#333';
+                document.body.style.background = '#ffffff';
+                document.body.style.color = '#121212';
                 darkLightToggleButton.textContent = "Switch to Dark Mode";
             } else {
-                document.body.style.background = '#1e3c72';
-                document.body.style.color = 'white';
+                document.body.style.background = '#121212';
+                document.body.style.color = '#ffffff';
                 darkLightToggleButton.textContent = "Switch to Light Mode";
             }
             darkMode = !darkMode;
         }
 
-        // Clock Display
         setInterval(() => {
             const now = new Date();
             const time = now.toLocaleTimeString();
             document.getElementById("clock").textContent = time;
         }, 1000);
 
-        // Countdown Timer for Christmas
         const countdownDate = new Date("Dec 25, 2024 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -297,7 +252,6 @@
             document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s to Christmas`;
         }, 1000);
 
-        // Flappy Bird Game
         let canvas, ctx, bird, birdImg, pipes, score, gameInterval;
 
         function startFlappyBirdGame() {
@@ -305,7 +259,7 @@
             ctx = canvas.getContext('2d');
             bird = { x: 50, y: 150, width: 20, height: 20, gravity: 0.6, lift: -10, velocity: 0 };
             birdImg = new Image();
-            birdImg.src = 'https://via.placeholder.com/20x20'; // Replace with the path to your bird image
+            birdImg.src = 'https://via.placeholder.com/20x20';
             pipes = [];
             score = 0;
             canvas.style.display = 'block';
@@ -336,7 +290,7 @@
             bird.y += bird.velocity;
             if (bird.y + bird.height > canvas.height) {
                 bird.y = canvas.height - bird.height;
-                bird.velocity = bird.lift; // Prevent bird from sliding on the ground
+                bird.velocity = bird.lift;
             } else if (bird.y < 0) {
                 bird.y = 0;
                 bird.velocity = 0;
@@ -359,7 +313,7 @@
         }
 
         function drawPipes() {
-            ctx.fillStyle = 'green';
+            ctx.fillStyle = '#03dac5';
             pipes.forEach(pipe => ctx.fillRect(pipe.x, pipe.y, pipe.width, pipe.height));
         }
 
@@ -378,13 +332,11 @@
             });
         }
 
-        // Rock-Paper-Scissors Game
         function playRockPaperScissors() {
             const choices = ["Rock", "Paper", "Scissors"];
             const userChoice = prompt("Enter Rock, Paper, or Scissors:");
             const computerChoice = choices[Math.floor(Math.random() * choices.length)];
             let result = "";
-
             if (userChoice === computerChoice) {
                 result = "It's a draw!";
             } else if (
@@ -396,7 +348,6 @@
             } else {
                 result = "You lose!";
             }
-
             alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
         }
     </script>
