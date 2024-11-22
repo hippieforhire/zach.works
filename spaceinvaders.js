@@ -1,37 +1,53 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+let canvas, ctx;
+let player, bullets, invaders, invaderRows, invaderCols, invaderWidth, invaderHeight, invaderPadding, invaderOffsetTop, invaderOffsetLeft, bulletSpeed;
+let rightPressed, leftPressed, spacePressed, touchStartX, touchEndX;
 
-const player = {
-    width: 50,
-    height: 20,
-    x: canvas.width / 2 - 25,
-    y: canvas.height - 30,
-    speed: 5,
-    dx: 0
-};
+function initializeGame() {
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
 
-const bullets = [];
-const invaders = [];
-const invaderRows = 5;
-const invaderCols = 8;
-const invaderWidth = 40;
-const invaderHeight = 20;
-const invaderPadding = 20;
-const invaderOffsetTop = 30;
-const invaderOffsetLeft = 30;
-const bulletSpeed = 7;
-let rightPressed = false;
-let leftPressed = false;
-let spacePressed = false;
-let touchStartX = 0;
-let touchEndX = 0;
+    player = {
+        width: 50,
+        height: 20,
+        x: canvas.width / 2 - 25,
+        y: canvas.height - 30,
+        speed: 5,
+        dx: 0
+    };
 
-// Create invaders
-for (let i = 0; i < invaderRows; i++) {
-    invaders[i] = [];
-    for (let j = 0; j < invaderCols; j++) {
-        invaders[i][j] = { x: 0, y: 0, status: 1 };
+    bullets = [];
+    invaders = [];
+    invaderRows = 5;
+    invaderCols = 8;
+    invaderWidth = 40;
+    invaderHeight = 20;
+    invaderPadding = 20;
+    invaderOffsetTop = 30;
+    invaderOffsetLeft = 30;
+    bulletSpeed = 7;
+    rightPressed = false;
+    leftPressed = false;
+    spacePressed = false;
+    touchStartX = 0;
+    touchEndX = 0;
+
+    // Create invaders
+    for (let i = 0; i < invaderRows; i++) {
+        invaders[i] = [];
+        for (let j = 0; j < invaderCols; j++) {
+            invaders[i][j] = { x: 0, y: 0, status: 1 };
+        }
     }
+
+    // Event listeners
+    document.addEventListener('keydown', keyDownHandler);
+    document.addEventListener('keyup', keyUpHandler);
+    canvas.addEventListener('touchstart', touchStartHandler);
+    canvas.addEventListener('touchmove', touchMoveHandler);
+    canvas.addEventListener('touchend', touchEndHandler);
+
+    // Start the game loop
+    update();
 }
 
 // Draw player
@@ -181,12 +197,6 @@ function update() {
     requestAnimationFrame(update);
 }
 
-// Event listeners
-document.addEventListener('keydown', keyDownHandler);
-document.addEventListener('keyup', keyUpHandler);
-canvas.addEventListener('touchstart', touchStartHandler);
-canvas.addEventListener('touchmove', touchMoveHandler);
-canvas.addEventListener('touchend', touchEndHandler);
-
-// Start the game
-update();
+function startSpaceInvaders() {
+    initializeGame();
+}
