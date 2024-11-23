@@ -66,6 +66,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
+            width: calc(33% - 20px);
+            min-width: 150px;
         }
         button:hover {
             background-color: #bb86fc;
@@ -147,10 +149,6 @@
             justify-content: center;
             gap: 10px;
             margin-top: 20px;
-        }
-        .container button {
-            width: calc(33% - 20px);
-            min-width: 150px;
         }
         @media (max-width: 768px) {
             .container button {
