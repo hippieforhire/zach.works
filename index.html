@@ -179,6 +179,43 @@
             background: #121212;
             color: #ffffff;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -188,7 +225,7 @@
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
         <div class="container">
-            <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
+            <button id="startGameButton" onclick="openModal()">Play Flappy Bird Game</button>
             <button onclick="changeBackgroundColor()">Change Background Color</button>
             <button onclick="displayRandomQuote()">Get Random Quote</button>
             <button onclick="playNumberGuess()">Play Number Guessing Game</button>
@@ -198,9 +235,15 @@
             <button onclick="showVideo()">Show Video</button>
         </div>
 
-        <canvas id="gameCanvas" width="480" height="640"></canvas>
-        <button id="restartButton" onclick="restartGame()">Restart Game</button>
-        <div id="score">Score: 0</div>
+        <!-- The Modal -->
+        <div id="flappyBirdModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <canvas id="gameCanvas" width="480" height="640"></canvas>
+                <button id="restartButton" onclick="restartGame()">Restart Game</button>
+                <div id="score">Score: 0</div>
+            </div>
+        </div>
 
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
         <div id="countdown"></div>
@@ -282,6 +325,16 @@
 
         function showVideo() {
             document.getElementById('videoContainer').style.display = 'block';
+        }
+
+        function openModal() {
+            document.getElementById("flappyBirdModal").style.display = "block";
+            startGame();
+        }
+
+        function closeModal() {
+            document.getElementById("flappyBirdModal").style.display = "none";
+            // Cleanup game state if needed
         }
 
         // JavaScript to play the video on page load
