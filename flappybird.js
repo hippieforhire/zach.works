@@ -20,7 +20,7 @@ function initGame() {
 function startGame() {
     initGame();
     canvas.style.display = "block";
-    // startButton.style.display = "none"; // Remove this line to keep the button visible
+    startButton.style.display = "block"; // Ensure the start button remains visible
     restartButton.style.display = "none";
     canvas.addEventListener("click", startMovement);
     canvas.addEventListener("touchstart", startMovement);
