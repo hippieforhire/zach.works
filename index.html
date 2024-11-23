@@ -219,6 +219,9 @@
             const colors = ["#6200ea", "#03dac5", "#bb86fc", "#cf6679", "#3700b3"];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.body.style.background = randomColor;
+            document.getElementById('content').style.background = randomColor;
+            document.getElementById('zorkGame').querySelector('#output').style.background = randomColor;
+            document.getElementById('gameCanvas').style.background = randomColor;
         }
 
         const quotes = [
