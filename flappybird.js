@@ -20,7 +20,6 @@ function initGame() {
 function startGame() {
     initGame();
     canvas.style.display = "block";
-    startButton.style.display = "none"; // Hide the start button when game starts
     restartButton.style.display = "none";
     canvas.addEventListener("click", startMovement);
     canvas.addEventListener("touchstart", startMovement, { passive: false });
