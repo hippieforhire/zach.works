@@ -40,10 +40,10 @@ function birdFlap(event) {
     bird.velocity = bird.lift;
 }
 
-// Add this to prevent default behavior on touchmove
-document.addEventListener('touchmove', function(event) {
-    event.preventDefault();
-}, { passive: false });
+// Comment out the following line to allow scrolling on touch devices
+// document.addEventListener('touchmove', function(event) {
+//     event.preventDefault();
+// }, { passive: false });
 
 function gameLoop() {
     if (isGameOver) return;
