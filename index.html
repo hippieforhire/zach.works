@@ -181,19 +181,6 @@
             background: #121212;
             color: #ffffff;
         }
-        /* Added styles for video */
-        #videoContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        #videoPlayer {
-            width: 800px; /* Adjust the width as needed */
-            max-width: 100%;
-            border: 2px solid #03dac5;
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
@@ -201,15 +188,6 @@
         <h1>Welcome to Zach.works</h1>
         <div id="clock"></div>
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
-
-        <!-- Video Player -->
-        <div id="videoContainer">
-            <video id="videoPlayer" controls>
-                <source src="Video.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <button onclick="document.getElementById('videoPlayer').play()">Play Video</button>
-        </div>
 
         <div class="container">
             <button onclick="changeBackgroundColor()">Change Background Color</button>
@@ -219,6 +197,7 @@
             <button id="startZorkButton" onclick="startZorkGame()">Play Zork Game</button>
             <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
             <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
+            <button onclick="showVideo()">Show Video</button>
         </div>
 
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
@@ -235,11 +214,21 @@
             <div id="output"></div>
             <input id="input" type="text" placeholder="Enter your command here..." onkeydown="handleZorkInput(event)">
         </div>
+
+        <!-- Video Player -->
+        <div id="videoContainer" style="display:none;">
+            <video id="videoPlayer" controls>
+                <source src="Video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
 
     <canvas id="particleCanvas"></canvas>
     <script src="flappybird.js"></script>
     <script src="zork.js"></script>
+    <script src="rockpaperscissors.js"></script>
+    <script src="quotes.js"></script>
     <script>
         function changeBackgroundColor() {
             const colors = ["#6200ea", "#03dac5", "#bb86fc", "#cf6679", "#3700b3"];
@@ -248,19 +237,6 @@
             document.getElementById('content').style.background = randomColor;
             document.getElementById('zorkGame').querySelector('#output').style.background = randomColor;
             document.getElementById('gameCanvas').style.background = randomColor;
-        }
-
-        const quotes = [
-            "The best time to plant a tree was 20 years ago. The second best time is now.",
-            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-            "Believe you can and you're halfway there.",
-            "Do what you can, with what you have, where you are.",
-            "Hardships often prepare ordinary people for an extraordinary destiny."
-        ];
-
-        function displayRandomQuote() {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById("quote").textContent = randomQuote;
         }
 
         function playNumberGuess() {
@@ -305,23 +281,8 @@
             document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s to Christmas`;
         }, 1000);
 
-        function playRockPaperScissors() {
-            const choices = ["Rock", "Paper", "Scissors"];
-            const userChoice = prompt("Enter Rock, Paper, or Scissors:");
-            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
-            let result = "";
-            if (userChoice === computerChoice) {
-                result = "It's a draw!";
-            } else if (
-                (userChoice === "Rock" && computerChoice === "Scissors") ||
-                (userChoice === "Paper" && computerChoice === "Rock") ||
-                (userChoice === "Scissors" && computerChoice === "Paper")
-            ) {
-                result = "You win!";
-            } else {
-                result = "You lose!";
-            }
-            alert(`You chose ${userChoice}, computer chose ${computerChoice}. ${result}`);
+        function showVideo() {
+            document.getElementById('videoContainer').style.display = 'block';
         }
 
         // JavaScript to play the video on page load
