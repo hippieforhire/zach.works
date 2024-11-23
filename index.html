@@ -612,7 +612,7 @@ function processCommand(command) {
             gameData.currentRoom = currentRoom.next;
             addOutput(gameData.rooms[gameData.currentRoom].description);
         }
-    } else if (command === "inventory") {
+  } else if (command === "inventory") {
         addOutput(`Inventory: ${gameData.inventory.join(', ')}`);
     } else if (command === "quit") {
         addOutput("You have quit the game.");
@@ -629,5 +629,13 @@ function addOutput(text) {
     outputBox.scrollTop = outputBox.scrollHeight;
 }
 </script>
+
+<!-- Add the button to start Space Invaders -->
+<button id="startSpaceInvaders">Start Space Invaders</button>
+<!-- Add the canvas for Space Invaders -->
+<canvas id="spaceInvadersCanvas" width="800" height="600" style="display:none;"></canvas>
+
+<!-- Link to the Space Invaders JavaScript file -->
+<script src="spaceinvaders.js"></script>
 </body>
 </html>
