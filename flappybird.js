@@ -20,7 +20,7 @@ function initGame() {
 function startGame() {
     initGame();
     canvas.style.display = "block";
-    startButton.style.display = "block"; // Ensure the start button remains visible
+    startButton.style.display = "none"; // Hide the start button when game starts
     restartButton.style.display = "none";
     canvas.addEventListener("click", startMovement);
     canvas.addEventListener("touchstart", startMovement, { passive: false });
@@ -102,7 +102,7 @@ function endGame() {
     window.removeEventListener("click", birdFlap);
     window.removeEventListener("touchstart", birdFlap);
     document.getElementById("score").textContent += " - Game Over!";
-    setTimeout(restartGame, 2000); // Auto-restart after 2 seconds
+    restartButton.style.display = "block"; // Show the restart button when game is over
 }
 
 function restartGame() {
@@ -117,3 +117,4 @@ function updateScore() {
 }
 
 startButton.addEventListener("click", startGame);
+restartButton.addEventListener("click", restartGame);
