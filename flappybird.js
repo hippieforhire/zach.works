@@ -7,7 +7,7 @@ let bird, pipes, score, isGameOver, timer;
 
 // Game Setup
 function initGame() {
-    bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 }; // Adjusted lift value
+    bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 };
     pipes = [];
     score = 0;
     isGameOver = false;
@@ -26,7 +26,8 @@ function startGame() {
     canvas.addEventListener("touchstart", startMovement);
 }
 
-function startMovement() {
+function startMovement(event) {
+    event.preventDefault(); // Prevent default behavior such as zooming
     window.addEventListener("click", birdFlap);
     window.addEventListener("touchstart", birdFlap);
     gameLoop();
@@ -34,7 +35,8 @@ function startMovement() {
     canvas.removeEventListener("touchstart", startMovement);
 }
 
-function birdFlap() {
+function birdFlap(event) {
+    event.preventDefault(); // Prevent default behavior such as zooming
     bird.velocity = bird.lift;
 }
 
