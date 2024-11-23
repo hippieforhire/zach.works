@@ -188,24 +188,25 @@
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
 
         <div class="container">
+            <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
             <button onclick="changeBackgroundColor()">Change Background Color</button>
             <button onclick="displayRandomQuote()">Get Random Quote</button>
             <button onclick="playNumberGuess()">Play Number Guessing Game</button>
-            <button id="startGameButton" onclick="startFlappyBirdGame()">Play Flappy Bird Game</button>
             <button id="startZorkButton" onclick="startZorkGame()">Play Zork Game</button>
             <button id="darkLightToggle" onclick="toggleDarkLight()">Switch to Light Mode</button>
             <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
             <button onclick="showVideo()">Show Video</button>
         </div>
 
+        <canvas id="gameCanvas" width="480" height="640"></canvas>
+        <button id="restartButton" onclick="restartGame()">Restart Game</button>
+        <div id="score">Score: 0</div>
+
         <div id="quote">Click the "Get Random Quote" button for some inspiration!</div>
         <div id="countdown"></div>
         <p id="hiddenMessage">The princess you are looking for is in another castle!</p>
         <button onclick="document.getElementById('hiddenMessage').style.display = 'block'">Click me!</button>
         <div id="scrollingMessage">If you're reading this, thanks for checking out my page!</div>
-        <div id="score">Score: 0</div>
-        <canvas id="gameCanvas" width="480" height="640"></canvas>
-        <button id="restartButton" onclick="restartGame()">Restart Game</button>
         <div id="guessOutput"></div>
 
         <div id="zorkGame">
