@@ -181,6 +181,19 @@
             background: #121212;
             color: #ffffff;
         }
+        /* Added styles for video */
+        #videoContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #videoPlayer {
+            width: 800px; /* Adjust the width as needed */
+            max-width: 100%;
+            border: 2px solid #03dac5;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -188,6 +201,14 @@
         <h1>Welcome to Zach.works</h1>
         <div id="clock"></div>
         <p>Hi, I'm Zach Rogers, and this is my coding playground. Explore the features below!</p>
+
+        <!-- Video Player -->
+        <div id="videoContainer">
+            <video id="videoPlayer" controls>
+                <source src="video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
 
         <div class="container">
             <button onclick="changeBackgroundColor()">Change Background Color</button>
@@ -276,7 +297,7 @@
             const distance = countdownDate - now;
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const minutes = Math.floor((distance % (1000 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s to Christmas`;
         }, 1000);
@@ -384,6 +405,12 @@
             outputBox.appendChild(newParagraph);
             outputBox.scrollTop = outputBox.scrollHeight;
         }
+
+        // JavaScript to play the video on page load
+        window.onload = function() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.play();
+        };
     </script>
     <script src="flappybird.js"></script>
 </body>
