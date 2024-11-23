@@ -23,13 +23,13 @@ function startGame() {
     startButton.style.display = "block"; // Ensure the start button remains visible
     restartButton.style.display = "none";
     canvas.addEventListener("click", startMovement);
-    canvas.addEventListener("touchstart", startMovement);
+    canvas.addEventListener("touchstart", startMovement, { passive: false });
 }
 
 function startMovement(event) {
     event.preventDefault(); // Prevent default behavior such as zooming
     window.addEventListener("click", birdFlap);
-    window.addEventListener("touchstart", birdFlap);
+    window.addEventListener("touchstart", birdFlap, { passive: false });
     gameLoop();
     canvas.removeEventListener("click", startMovement);
     canvas.removeEventListener("touchstart", startMovement);
@@ -39,6 +39,11 @@ function birdFlap(event) {
     event.preventDefault(); // Prevent default behavior such as zooming
     bird.velocity = bird.lift;
 }
+
+// Add this to prevent default behavior on touchmove
+document.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+}, { passive: false });
 
 function gameLoop() {
     if (isGameOver) return;
