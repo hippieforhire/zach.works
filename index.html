@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Zach.works</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -11,13 +11,12 @@
             font-family: 'Roboto', Arial, sans-serif;
             background: #121212;
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
             padding: 20px;
-            overflow-y: scroll; /* Ensure scrolling is enabled */
+            height: auto;
+            overflow-x: hidden;
+        }
+        html {
+            scroll-behavior: smooth;
         }
         h1 {
             font-size: 3rem;
@@ -32,7 +31,7 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            overflow-y: auto; /* Ensure content can be scrolled */
+            overflow-y: auto;
         }
         p {
             font-size: 1.2rem;
