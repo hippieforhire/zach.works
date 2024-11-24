@@ -56,11 +56,9 @@ const gameData = {
 let outputBox, inputBox;
 
 function startZorkGame() {
-    const gameContainer = document.getElementById("zorkGame");
     outputBox = document.getElementById("output");
     inputBox = document.getElementById("input");
 
-    gameContainer.style.display = "block";
     outputBox.textContent = "";
     addOutput(gameData.rooms[gameData.currentRoom].description);
     inputBox.focus();
