@@ -127,6 +127,7 @@ button:hover {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
+    display: none;
 }
 #messages {
     height: 300px;
