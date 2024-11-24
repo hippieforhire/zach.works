@@ -108,33 +108,49 @@
     <p>Hello! I'm Zach Rogers. I am just playing around with different types of coding right now, click out some of the buttons below!</p>
 
     <button onclick="changeBackgroundColor()">Change Background Color</button>
-    <button id="startGameButton" onclick="openModal()">Play Flappy Bird Game</button>
+    <button id="startGameButton" onclick="openModal('flappyBirdModal')">Play Flappy Bird Game</button>
+    <button id="startZorkButton" onclick="openModal('zorkModal')">Play Zork Game</button>
 
     <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal('flappyBirdModal')">&times;</span>
             <canvas id="gameCanvas"></canvas>
             <button id="restartButton" onclick="restartGame()">Restart Game</button>
             <div id="score">Score: 0</div>
         </div>
     </div>
 
+    <div id="zorkModal" class="modal" onclick="closeModalOnOutsideClick(event)">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('zorkModal')">&times;</span>
+            <div id="zorkGame">
+                <div id="output"></div>
+                <input type="text" id="input">
+                <button onclick="startZorkGame()">Start Zork Game</button>
+            </div>
+        </div>
+    </div>
+
     <script src="colorchange.js"></script>
     <script src="flappybird.js"></script>
+    <script src="zork.js"></script>
     <script>
-        function openModal() {
-            document.getElementById("flappyBirdModal").style.display = "block";
-            startGame();
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+            if (modalId === 'flappyBirdModal') startGame();
         }
-        function closeModal() {
-            document.getElementById("flappyBirdModal").style.display = "none";
-            stopGame(); // Ensure the game stops when modal is closed
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            if (modalId === 'flappyBirdModal') stopGame(); // Ensure the game stops when modal is closed
         }
+
         function closeModalOnOutsideClick(event) {
-            if (event.target === document.getElementById("flappyBirdModal")) {
-                closeModal();
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target.id);
             }
         }
+
         setInterval(() => {
             const now = new Date();
             const time = now.toLocaleTimeString();
