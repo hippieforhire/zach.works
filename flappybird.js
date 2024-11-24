@@ -16,6 +16,7 @@ function initGame() {
 }
 
 function startGame() {
+    resizeCanvas();
     initGame();
     canvas.style.display = "block";
     restartButton.style.display = "none";
@@ -27,6 +28,12 @@ function stopGame() {
     cancelAnimationFrame(gameLoopId);
     window.removeEventListener("click", birdFlap);
     window.removeEventListener("touchstart", birdFlap);
+}
+
+function resizeCanvas() {
+    const modalContent = document.querySelector(".modal-content");
+    canvas.width = modalContent.clientWidth;
+    canvas.height = modalContent.clientHeight;
 }
 
 function startMovement(event) {
@@ -62,18 +69,14 @@ function gameLoop() {
 }
 
 function drawBackground() {
-    // Draw sky
     ctx.fillStyle = "#87CEEB"; // Sky blue
     ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
-    // Draw grass
     ctx.fillStyle = "#228B22"; // Grassy green
     ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
-    // Optional: Draw sun
     ctx.fillStyle = "#FFD700"; // Sun yellow
     ctx.beginPath();
     ctx.arc(canvas.width - 50, 50, 30, 0, 2 * Math.PI);
     ctx.fill();
-    // Optional: Draw clouds
     ctx.fillStyle = "#FFFFFF"; // Cloud white
     drawCloud(100, 100);
     drawCloud(200, 150);
