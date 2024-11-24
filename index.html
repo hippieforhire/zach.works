@@ -97,7 +97,7 @@
             cursor: pointer;
         }
         #zorkGame {
-            display: block;
+            display: none; /* Hide the Zork game initially */
             margin: 20px auto;
             padding: 20px;
             background-color: #333;
@@ -122,6 +122,10 @@
             border-radius: 5px;
             border: none;
         }
+        #hideZorkButton {
+            display: none; /* Hide the hide button initially */
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -131,10 +135,11 @@
 
     <button onclick="changeBackgroundColor()">Change Background Color</button>
     <button id="startGameButton" onclick="openModal('flappyBirdModal')">Play Flappy Bird Game</button>
+    <button id="showZorkButton" onclick="showZorkGame()">Play My Zork-Like Game</button> <!-- New button to show Zork game -->
     <div id="zorkGame">
         <div id="output"></div>
         <input type="text" id="input">
-        <button onclick="startZorkGame()">Start Zork Game</button>
+        <button id="hideZorkButton" onclick="hideZorkGame()">Hide Zork Game</button> <!-- New button to hide Zork game -->
     </div>
 
     <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
@@ -164,6 +169,19 @@
             if (event.target.classList.contains('modal')) {
                 closeModal(event.target.id);
             }
+        }
+
+        function showZorkGame() {
+            document.getElementById("zorkGame").style.display = "block";
+            document.getElementById("hideZorkButton").style.display = "block"; // Show the hide button
+            document.getElementById("showZorkButton").style.display = "none"; // Hide the show button
+            startZorkGame();
+        }
+
+        function hideZorkGame() {
+            document.getElementById("zorkGame").style.display = "none";
+            document.getElementById("hideZorkButton").style.display = "none"; // Hide the hide button
+            document.getElementById("showZorkButton").style.display = "block"; // Show the show button
         }
 
         setInterval(() => {
