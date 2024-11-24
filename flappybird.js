@@ -40,6 +40,7 @@ function birdFlap(event) {
 function gameLoop() {
     if (isGameOver) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
     bird.velocity += bird.gravity;
     bird.y += bird.velocity;
     if (bird.y + bird.height > canvas.height || bird.y < 0) {
@@ -52,6 +53,33 @@ function gameLoop() {
     updateScore();
     timer++;
     requestAnimationFrame(gameLoop);
+}
+
+function drawBackground() {
+    // Draw sky
+    ctx.fillStyle = "#87CEEB"; // Sky blue
+    ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
+    // Draw grass
+    ctx.fillStyle = "#228B22"; // Grassy green
+    ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
+    // Optional: Draw sun
+    ctx.fillStyle = "#FFD700"; // Sun yellow
+    ctx.beginPath();
+    ctx.arc(canvas.width - 50, 50, 30, 0, 2 * Math.PI);
+    ctx.fill();
+    // Optional: Draw clouds
+    ctx.fillStyle = "#FFFFFF"; // Cloud white
+    drawCloud(100, 100);
+    drawCloud(200, 150);
+    drawCloud(300, 120);
+}
+
+function drawCloud(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, 2 * Math.PI);
+    ctx.arc(x + 25, y + 10, 25, 0, 2 * Math.PI);
+    ctx.arc(x + 50, y, 20, 0, 2 * Math.PI);
+    ctx.fill();
 }
 
 function drawBird() {
