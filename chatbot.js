@@ -28,6 +28,18 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("showZorkButton").style.display = "block";
     }
 
+    function showChatbot() {
+        document.getElementById("chatbox").style.display = "block";
+        document.getElementById("showChatbotButton").style.display = "none";
+        document.getElementById("hideChatbotButton").style.display = "block";
+    }
+
+    function hideChatbot() {
+        document.getElementById("chatbox").style.display = "none";
+        document.getElementById("hideChatbotButton").style.display = "none";
+        document.getElementById("showChatbotButton").style.display = "block";
+    }
+
     setInterval(() => {
         const now = new Date();
         const time = now.toLocaleTimeString();
@@ -66,4 +78,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.closeModalOnOutsideClick = closeModalOnOutsideClick;
     window.showZorkGame = showZorkGame;
     window.hideZorkGame = hideZorkGame;
+    window.showChatbot = showChatbot;
+    window.hideChatbot = hideChatbot;
 });
