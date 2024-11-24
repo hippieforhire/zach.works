@@ -5,128 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to my page!</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', Arial, sans-serif;
-            background: #121212;
-            color: #ffffff;
-            padding: 20px;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        h1 {
-            font-size: 3rem;
-            color: #bb86fc;
-            margin: 20px 0;
-            text-align: center;
-        }
-        #clock {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 10px 0;
-            animation: rainbow 5s infinite;
-        }
-        @keyframes rainbow {
-            0% { color: #ff0000; }
-            14% { color: #ffa500; }
-            28% { color: #ffff00; }
-            42% { color: #008000; }
-            57% { color: #0000ff; }
-            71% { color: #4b0082; }
-            85% { color: #ee82ee; }
-            100% { color: #ff0000; }
-        }
-        p {
-            font-size: 1.2rem;
-            color: #b0b0b0;
-            margin: 10px 0;
-            text-align: center;
-        }
-        button {
-            margin: 10px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            background-color: #808080;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            width: calc(33% - 20px);
-            min-width: 150px;
-            display: block;
-            margin: 10px auto;
-        }
-        button:hover {
-            background-color: #808080;
-            transform: scale(1.05);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 480px;
-            height: auto;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            margin: 10px;
-        }
-        .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        #zorkGame {
-            display: none; /* Hide the Zork game initially */
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #333;
-            border-radius: 10px;
-            max-width: 500px;
-            height: 400px; /* Increased height */
-            overflow-y: auto;
-        }
-        #output {
-            height: 200px;
-            overflow-y: auto;
-            background: #444;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        #input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: none;
-        }
-        #hideZorkButton {
-            display: none; /* Hide the hide button initially */
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Welcome to my page!</h1>
@@ -135,11 +14,11 @@
 
     <button onclick="changeBackgroundColor()">Change Background Color</button>
     <button id="startGameButton" onclick="openModal('flappyBirdModal')">Play Flappy Bird Game</button>
-    <button id="showZorkButton" onclick="showZorkGame()">Play My Zork-Like Game</button> <!-- New button to show Zork game -->
+    <button id="showZorkButton" onclick="showZorkGame()">Play My Zork-Like Game</button>
     <div id="zorkGame">
         <div id="output"></div>
         <input type="text" id="input">
-        <button id="hideZorkButton" onclick="hideZorkGame()">Hide Zork Game</button> <!-- New button to hide Zork game -->
+        <button id="hideZorkButton" onclick="hideZorkGame()">Hide Zork Game</button>
     </div>
 
     <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
@@ -151,44 +30,18 @@
         </div>
     </div>
 
+    <!-- Chatbot interface -->
+    <div id="chatbox">
+        <div id="messages"></div>
+        <div id="input-box">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
     <script src="colorchange.js"></script>
     <script src="flappybird.js"></script>
     <script src="zork.js"></script>
-    <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
-            if (modalId === 'flappyBirdModal') startGame();
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-            if (modalId === 'flappyBirdModal') stopGame(); // Ensure the game stops when modal is closed
-        }
-
-        function closeModalOnOutsideClick(event) {
-            if (event.target.classList.contains('modal')) {
-                closeModal(event.target.id);
-            }
-        }
-
-        function showZorkGame() {
-            document.getElementById("zorkGame").style.display = "block";
-            document.getElementById("hideZorkButton").style.display = "block"; // Show the hide button
-            document.getElementById("showZorkButton").style.display = "none"; // Hide the show button
-            startZorkGame();
-        }
-
-        function hideZorkGame() {
-            document.getElementById("zorkGame").style.display = "none";
-            document.getElementById("hideZorkButton").style.display = "none"; // Hide the hide button
-            document.getElementById("showZorkButton").style.display = "block"; // Show the show button
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            document.getElementById("clock").textContent = time;
-        }, 1000);
-    </script>
+    <script src="chatbot.js"></script>
 </body>
 </html>
