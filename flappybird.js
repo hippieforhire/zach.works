@@ -2,7 +2,7 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startButton = document.getElementById("startGameButton");
 const restartButton = document.getElementById("restartButton");
-let bird, pipes, score, isGameOver, timer;
+let bird, pipes, score, isGameOver, timer, gameLoopId;
 
 function initGame() {
     bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 };
@@ -21,6 +21,12 @@ function startGame() {
     restartButton.style.display = "none";
     canvas.addEventListener("click", startMovement);
     canvas.addEventListener("touchstart", startMovement, { passive: false });
+}
+
+function stopGame() {
+    cancelAnimationFrame(gameLoopId);
+    window.removeEventListener("click", birdFlap);
+    window.removeEventListener("touchstart", birdFlap);
 }
 
 function startMovement(event) {
@@ -52,7 +58,7 @@ function gameLoop() {
     checkCollisions();
     updateScore();
     timer++;
-    requestAnimationFrame(gameLoop);
+    gameLoopId = requestAnimationFrame(gameLoop);
 }
 
 function drawBackground() {
