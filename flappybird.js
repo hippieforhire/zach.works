@@ -103,6 +103,11 @@ function updatePipes() {
     }
     pipes.forEach(pipe => {
         pipe.x -= 3;
+        // Increment score when pipe passes the bird
+        if (pipe.x + 3 === bird.x) {
+            score++;
+            updateScore();
+        }
     });
     pipes = pipes.filter(pipe => pipe.x + 50 > 0);
 }
@@ -140,7 +145,6 @@ function restartGame() {
 }
 
 function updateScore() {
-    score++;
     document.getElementById("score").textContent = `Score: ${score}`;
 }
 
