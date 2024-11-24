@@ -1,11 +1,9 @@
-// Flappy Bird Game Logic
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startButton = document.getElementById("startGameButton");
 const restartButton = document.getElementById("restartButton");
 let bird, pipes, score, isGameOver, timer;
 
-// Game Setup
 function initGame() {
     bird = { x: 50, y: canvas.height / 2, width: 30, height: 30, gravity: 0.6, lift: -10, velocity: 0 };
     pipes = [];
@@ -26,7 +24,7 @@ function startGame() {
 }
 
 function startMovement(event) {
-    event.preventDefault(); // Prevent default behavior such as zooming
+    event.preventDefault();
     window.addEventListener("click", birdFlap);
     window.addEventListener("touchstart", birdFlap, { passive: false });
     gameLoop();
@@ -35,14 +33,9 @@ function startMovement(event) {
 }
 
 function birdFlap(event) {
-    event.preventDefault(); // Prevent default behavior such as zooming
+    event.preventDefault();
     bird.velocity = bird.lift;
 }
-
-// Comment out the following line to allow scrolling on touch devices
-// document.addEventListener('touchmove', function(event) {
-//     event.preventDefault();
-// }, { passive: false });
 
 function gameLoop() {
     if (isGameOver) return;
@@ -69,7 +62,7 @@ function drawBird() {
 function updatePipes() {
     if (timer % 60 === 0 && !isGameOver) {
         const pipeHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
-        const gap = 200; // Increased gap size
+        const gap = 200;
         pipes.push({ x: canvas.width, y: pipeHeight, gap: gap });
     }
     pipes.forEach(pipe => {
@@ -101,7 +94,7 @@ function endGame() {
     window.removeEventListener("click", birdFlap);
     window.removeEventListener("touchstart", birdFlap);
     document.getElementById("score").textContent += " - Game Over!";
-    restartButton.style.display = "block"; // Show the restart button when game is over
+    restartButton.style.display = "block";
 }
 
 function restartGame() {
