@@ -63,12 +63,8 @@ function startZorkGame() {
     addOutput(gameData.rooms[gameData.currentRoom].description);
     inputBox.focus();
 
-    // Ensure inputBox event listener is added here
     inputBox.addEventListener("keyup", handleZorkInput);
 }
-
-// Remove the event listener from DOMContentLoaded
-document.addEventListener("DOMContentLoaded", startZorkGame);
 
 function handleZorkInput(event) {
     if (event.key === "Enter") {
