@@ -1,32 +1,50 @@
 // Zork Game Logic
 const gameData = {
     currentRoom: "entrance",
+    inventory: [],
     rooms: {
         entrance: {
             description: "You are at the entrance of a dark cave. There is a torch on the wall.",
+            items: ["torch"],
             commands: {
-                take: "You take the torch.",
-                go: "You step into the cave. It's very dark. You feel the air grow colder.",
-                look: "The cave entrance looms ahead. The torch flickers faintly."
+                take: ["take", "grab", "pick up"],
+                look: ["look", "examine", "inspect"],
+                north: ["north", "forward", "go north"]
             },
-            next: "darkRoom"
+            next: { north: "darkRoom" }
         },
         darkRoom: {
             description: "You are now in a pitch-dark room. You can hear the sound of dripping water.",
+            items: [],
             commands: {
-                light: "You light the torch and see a narrow passage ahead.",
-                listen: "You hear faint whispers echoing in the distance.",
-                go: "You walk into the passage cautiously.",
+                light: ["light", "ignite", "burn"],
+                listen: ["listen", "hear"],
+                look: ["look", "examine", "inspect"],
+                north: ["north", "forward", "go north"],
+                south: ["south", "back", "go south"],
+                east: ["east", "right", "go east"]
             },
-            next: "treasureRoom"
+            next: { north: "treasureRoom", south: "entrance", east: "puzzleRoom" }
         },
         treasureRoom: {
             description: "You enter a room glittering with treasure! You've found the lost gold!",
+            items: ["gold"],
             commands: {
-                take: "You gather as much treasure as you can carry.",
-                leave: "You decide to leave the treasure and exit the cave safely."
+                take: ["take", "grab", "pick up"],
+                look: ["look", "examine", "inspect"],
+                south: ["south", "back", "go south"]
             },
-            next: "end"
+            next: { south: "darkRoom" }
+        },
+        puzzleRoom: {
+            description: "You are in a room with a locked door. There is a puzzle to solve.",
+            items: [],
+            commands: {
+                solve: ["solve", "complete", "answer"],
+                look: ["look", "examine", "inspect"],
+                west: ["west", "left", "go west"]
+            },
+            next: { west: "darkRoom" }
         }
     },
     end: {
@@ -48,6 +66,10 @@ function startZorkGame() {
     inputBox.focus();
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    inputBox.addEventListener("keyup", handleZorkInput);
+});
+
 function handleZorkInput(event) {
     if (event.key === "Enter") {
         const command = inputBox.value.trim().toLowerCase();
@@ -60,19 +82,30 @@ function processCommand(command) {
     const currentRoom = gameData.rooms[gameData.currentRoom];
     const commands = currentRoom.commands;
 
-    if (commands[command]) {
-        addOutput(commands[command]);
-
-        // Progress to the next room if available
-        if (command === "go" && currentRoom.next) {
-            gameData.currentRoom = currentRoom.next;
-            addOutput(gameData.rooms[gameData.currentRoom].description);
+    for (let key in commands) {
+        if (commands[key].includes(command)) {
+            executeCommand(key);
+            return;
         }
-    } else if (command === "quit") {
-        addOutput("You have quit the game.");
-        gameData.currentRoom = "entrance"; // Reset the game
+    }
+
+    addOutput("I don't understand that command. Try something else.");
+}
+
+function executeCommand(command) {
+    const currentRoom = gameData.rooms[gameData.currentRoom];
+    const nextRoom = currentRoom.next[command];
+
+    if (command === "take" && currentRoom.items.length > 0) {
+        gameData.inventory.push(currentRoom.items.pop());
+        addOutput("You take the item.");
+    } else if (command === "look") {
+        addOutput(currentRoom.description);
+    } else if (nextRoom) {
+        gameData.currentRoom = nextRoom;
+        addOutput(gameData.rooms[gameData.currentRoom].description);
     } else {
-        addOutput("I don't understand that command. Try something else.");
+        addOutput(currentRoom.commands[command]);
     }
 }
 
