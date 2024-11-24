@@ -57,7 +57,7 @@
             width: calc(33% - 20px);
             min-width: 150px;
             display: block;
-            margin: 10px auto; /* Add margin here */
+            margin: 10px auto;
         }
         button:hover {
             background-color: #808080;
@@ -80,7 +80,8 @@
             margin: 5% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 480px; /* Set width to match canvas width */
+            height: 640px; /* Set height to match canvas height */
         }
         .close {
             color: #aaa;
@@ -103,7 +104,7 @@
     <button onclick="changeBackgroundColor()">Change Background Color</button>
     <button id="startGameButton" onclick="openModal()">Play Flappy Bird Game</button>
 
-    <div id="flappyBirdModal" class="modal">
+    <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <canvas id="gameCanvas" width="480" height="640"></canvas>
@@ -125,6 +126,12 @@
         }
         function closeModal() {
             document.getElementById("flappyBirdModal").style.display = "none";
+            stopGame(); // Ensure the game stops when modal is closed
+        }
+        function closeModalOnOutsideClick(event) {
+            if (event.target === document.getElementById("flappyBirdModal")) {
+                closeModal();
+            }
         }
         setInterval(() => {
             const now = new Date();
