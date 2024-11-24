@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!D<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,12 +31,14 @@
     </div>
 
     <!-- Chatbot interface -->
+    <button id="showChatbotButton" onclick="showChatbot()">Talk to ChatGPT</button>
     <div id="chatbox">
         <div id="messages"></div>
         <div id="input-box">
             <input type="text" id="user-input" placeholder="Type a message...">
             <button onclick="sendMessage()">Send</button>
         </div>
+        <button id="hideChatbotButton" onclick="hideChatbot()">Hide ChatGPT</button>
     </div>
 
     <script src="colorchange.js"></script>
