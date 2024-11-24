@@ -31,9 +31,8 @@ function stopGame() {
 }
 
 function resizeCanvas() {
-    const modalContent = document.querySelector(".modal-content");
-    canvas.width = modalContent.clientWidth;
-    canvas.height = modalContent.clientHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
 function startMovement(event) {
