@@ -108,8 +108,8 @@
 <body>
     <h1>Game and Utility Hub</h1>
     <div class="button-container">
-        <button class="game-button" onclick="openModal('zorkModal')">Play Zork</button>
-        <button class="game-button" onclick="openModal('flappyBirdModal')">Play Flappy Bird</button>
+        <button class="game-button" onclick="window.location.href='zork.html'">Play Zork</button>
+        <button class="game-button" onclick="window.location.href='flappy.html'">Play Flappy Bird</button>
         <button class="game-button" onclick="openModal('ticTacToeModal')">Play Tic Tac Toe</button>
         <button class="game-button" onclick="openModal('memoryMatchModal')">Play Memory Match</button>
         <button class="game-button" onclick="openModal('spaceInvadersModal')">Play Space Invaders</button>
@@ -119,31 +119,7 @@
         <button class="game-button" onclick="displayRandomQuote()">Show Random Quote</button>
     </div>
 
-    <!-- Modals -->
-    <div id="zorkModal" class="modal">
-        <div class="modal-header">
-            <h2>Zork</h2>
-            <button class="close" onclick="closeModal('zorkModal')">&times;</button>
-        </div>
-        <div class="modal-content">
-            <div id="output"></div>
-            <input id="input" type="text" placeholder="Type your command...">
-            <button onclick="startZorkGame()">Start Zork</button>
-        </div>
-    </div>
-
-    <div id="flappyBirdModal" class="modal">
-        <div class="modal-header">
-            <h2>Flappy Bird</h2>
-            <button class="close" onclick="closeModal('flappyBirdModal')">&times;</button>
-        </div>
-        <div class="modal-content">
-            <p>Click the screen to make the bird fly!</p>
-            <canvas id="flappyBirdCanvas" width="400" height="600" style="background: skyblue;"></canvas>
-            <button onclick="initializeFlappyBird()">Start Flappy Bird</button>
-        </div>
-    </div>
-
+    <!-- Modals for remaining games -->
     <div id="ticTacToeModal" class="modal">
         <div class="modal-header">
             <h2>Tic Tac Toe</h2>
