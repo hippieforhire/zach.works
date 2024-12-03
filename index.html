@@ -138,6 +138,7 @@
         <div class="modal-content">
             <p>Click the screen to make the bird fly!</p>
             <canvas id="flappyBirdCanvas" width="400" height="600" style="background: skyblue;"></canvas>
+            <button onclick="initializeFlappyBird()">Start Flappy Bird</button>
         </div>
     </div>
 
@@ -188,6 +189,18 @@
         }
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Flappy Bird Initialization
+        function initializeFlappyBird() {
+            const canvas = document.getElementById('flappyBirdCanvas');
+            if (!canvas.getContext) {
+                alert("Canvas not supported in this browser.");
+                return;
+            }
+            // Trigger your flappybird.js logic
+            const event = new Event('DOMContentLoaded');
+            document.dispatchEvent(event);
         }
 
         // Ensure calculator and Rock-Paper-Scissors work outside modals
