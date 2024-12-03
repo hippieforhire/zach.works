@@ -3,192 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to my page!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Im Zach, welcome to my page</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', Arial, sans-serif;
-            background: #121212;
-            color: #ffffff;
-            padding: 20px;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        h1 {
-            font-size: 3rem;
-            color: #bb86fc;
+        /* Custom styles for the buttons */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             margin: 20px 0;
-            text-align: center;
         }
-        #clock {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 10px 0;
-            animation: rainbow 5s infinite;
-        }
-        @keyframes rainbow {
-            0% { color: #ff0000; }
-            14% { color: #ffa500; }
-            28% { color: #ffff00; }
-            42% { color: #008000; }
-            57% { color: #0000ff; }
-            71% { color: #4b0082; }
-            85% { color: #ee82ee; }
-            100% { color: #ff0000; }
-        }
-        p {
-            font-size: 1.2rem;
-            color: #b0b0b0;
-            margin: 10px 0;
-            text-align: center;
-        }
-        button {
+        .game-button {
             margin: 10px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            background-color: #808080;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #333;
             color: #ffffff;
-            border: none;
-            border-radius: 5px;
+            border: 2px solid #bb86fc;
+            border-radius: 10px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
-            width: calc(33% - 20px);
-            min-width: 150px;
-            display: block;
-            margin: 10px auto;
         }
-        button:hover {
-            background-color: #808080;
-            transform: scale(1.05);
+        .game-button:hover {
+            background-color: #bb86fc;
+            color: #121212;
+            transform: scale(1.1);
         }
-        .modal {
+        /* Style for the hidden sections */
+        .game-section {
             display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 480px;
-            height: auto;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            margin: 10px;
-        }
-        .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        #zorkGame {
-            display: none; /* Hide the Zork game initially */
             margin: 20px auto;
-            padding: 20px;
-            background-color: #333;
+            max-width: 600px;
+            background-color: #444;
             border-radius: 10px;
-            max-width: 500px;
-            height: 400px; /* Increased height */
-            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
-        #output {
-            height: 200px;
-            overflow-y: auto;
-            background: #444;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        #input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: none;
-        }
-        #hideZorkButton {
-            display: none; /* Hide the hide button initially */
-            margin-top: 10px;
+        canvas {
+            margin: auto;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to my page!</h1>
-    <div id="clock"></div>
-    <p>Hello! I'm Zach Rogers. I am just playing around with different types of coding right now, click out some of the buttons below!</p>
+    <h1>Games and Whatnot</h1>
+    <div class="button-container">
+        <button class="game-button" onclick="showGame('zorkGame')">Play Zork</button>
+        <button class="game-button" onclick="showGame('flappyBirdGame')">Play Flappy Bird</button>
+        <button class="game-button" onclick="showGame('ticTacToe')">Play Tic Tac Toe</button>
+        <button class="game-button" onclick="showGame('calculator')">Open Calculator</button>
+        <button class="game-button" onclick="showGame('memoryMatch')">Play Memory Match</button>
+        <button class="game-button" onclick="playRockPaperScissors()">Play Rock, Paper, Scissors</button>
+        <button class="game-button" onclick="showGame('spaceInvaders')">Play Space Invaders</button>
+        <button class="game-button" onclick="changeBackgroundColor()">Change Background Color</button>
+        <button class="game-button" onclick="displayRandomQuote()">Show Random Quote</button>
+    </div>
 
-    <button onclick="changeBackgroundColor()">Change Background Color</button>
-    <button id="startGameButton" onclick="openModal('flappyBirdModal')">Play Flappy Bird Game</button>
-    <button id="showZorkButton" onclick="showZorkGame()">Play My Zork-Like Game</button> <!-- New button to show Zork game -->
-    <div id="zorkGame">
+    <!-- Zork Game Section -->
+    <div id="zorkGame" class="game-section">
+        <h2>Zork</h2>
         <div id="output"></div>
-        <input type="text" id="input">
-        <button id="hideZorkButton" onclick="hideZorkGame()">Hide Zork Game</button> <!-- New button to hide Zork game -->
+        <input id="input" type="text" placeholder="Type your command...">
+        <button onclick="startZorkGame()">Start Zork</button>
     </div>
 
-    <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('flappyBirdModal')">&times;</span>
-            <canvas id="gameCanvas"></canvas>
-            <button id="restartButton" onclick="restartGame()">Restart Game</button>
-            <div id="score">Score: 0</div>
-        </div>
+    <!-- Flappy Bird Section -->
+    <div id="flappyBirdGame" class="game-section">
+        <h2>Flappy Bird</h2>
+        <p>Click the screen to make the bird fly!</p>
+        <canvas id="flappyBirdCanvas" width="400" height="600" style="background: skyblue;"></canvas>
     </div>
 
-    <script src="colorchange.js"></script>
-    <script src="flappybird.js"></script>
+    <!-- Tic Tac Toe Section -->
+    <div id="ticTacToe" class="game-section">
+        <h2>Tic Tac Toe</h2>
+        <div id="ticTacToeBoard" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 300px; margin: auto;"></div>
+    </div>
+
+    <!-- Calculator Section -->
+    <div id="calculator" class="game-section"></div>
+
+    <!-- Memory Match Section -->
+    <div id="memoryMatch" class="game-section">
+        <h2>Memory Match</h2>
+        <div id="memoryGameBoard" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 300px; margin: auto;"></div>
+    </div>
+
+    <!-- Space Invaders Section -->
+    <div id="spaceInvaders" class="game-section">
+        <h2>Space Invaders</h2>
+        <canvas id="spaceInvadersCanvas" width="500" height="400" style="background: black;"></canvas>
+        <button id="startSpaceInvaders">Start Space Invaders</button>
+    </div>
+
+    <!-- Quote Section -->
+    <div id="quote" class="game-section">
+        <h2>Quote</h2>
+        <p>Click the "Show Random Quote" button to display a quote here.</p>
+    </div>
+
     <script src="zork.js"></script>
+    <script src="flappybird.js"></script>
+    <script src="tictactoe.js"></script>
+    <script src="calculator.js"></script>
+    <script src="memorymatch.js"></script>
+    <script src="quotes.js"></script>
+    <script src="rockpaperscissors.js"></script>
+    <script src="spaceinvaders.js"></script>
+    <script src="colorchange.js"></script>
     <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
-            if (modalId === 'flappyBirdModal') startGame();
-        }
+        // Show a specific game section
+        function showGame(gameId) {
+            // Hide all game sections
+            document.querySelectorAll('.game-section').forEach(section => {
+                section.style.display = 'none';
+            });
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-            if (modalId === 'flappyBirdModal') stopGame(); // Ensure the game stops when modal is closed
-        }
-
-        function closeModalOnOutsideClick(event) {
-            if (event.target.classList.contains('modal')) {
-                closeModal(event.target.id);
+            // Show the selected game section
+            const gameSection = document.getElementById(gameId);
+            if (gameSection) {
+                gameSection.style.display = 'block';
             }
         }
-
-        function showZorkGame() {
-            document.getElementById("zorkGame").style.display = "block";
-            document.getElementById("hideZorkButton").style.display = "block"; // Show the hide button
-            document.getElementById("showZorkButton").style.display = "none"; // Hide the show button
-            startZorkGame();
-        }
-
-        function hideZorkGame() {
-            document.getElementById("zorkGame").style.display = "none";
-            document.getElementById("hideZorkButton").style.display = "none"; // Hide the hide button
-            document.getElementById("showZorkButton").style.display = "block"; // Show the show button
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            document.getElementById("clock").textContent = time;
-        }, 1000);
     </script>
 </body>
 </html>
