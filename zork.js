@@ -1,4 +1,4 @@
-// Zork Game Logic with Weapons and Advanced Enemies
+// Zork Game Logic with Lunr.js Fully Indexed
 const gameData = {
     currentRoom: "entrance",
     inventory: [],
@@ -74,14 +74,35 @@ const gameData = {
             ],
             next: { east: "darkRoom" }
         }
-    },
-    end: {
-        description: "The adventure is over. Thank you for playing!"
     }
 };
 
-let outputBox, inputBox;
+let outputBox, inputBox, lunrIndex;
 
+// Initialize Lunr.js Index
+function initializeLunr() {
+    lunrIndex = lunr(function () {
+        this.field("command");
+        this.field("description");
+        this.field("items");
+        this.field("enemies");
+        this.ref("id");
+
+        // Index all rooms and commands
+        Object.keys(gameData.rooms).forEach(roomId => {
+            const room = gameData.rooms[roomId];
+            this.add({
+                id: roomId,
+                command: Object.values(gameData.synonyms).flat().join(" "),
+                description: room.description,
+                items: room.items.join(" "),
+                enemies: room.enemies.map(e => e.name).join(" ")
+            });
+        });
+    });
+}
+
+// Start the Game
 function startZorkGame() {
     outputBox = document.getElementById("output");
     inputBox = document.getElementById("input");
@@ -91,6 +112,7 @@ function startZorkGame() {
     inputBox.focus();
 
     inputBox.addEventListener("keyup", handleZorkInput);
+    initializeLunr(); // Initialize the Lunr index
 }
 
 function handleZorkInput(event) {
@@ -101,134 +123,65 @@ function handleZorkInput(event) {
     }
 }
 
-function processCommand(command) {
-    const currentRoom = gameData.rooms[gameData.currentRoom];
-    const synonyms = gameData.synonyms;
+function processCommand(input) {
+    // Search command in Lunr index
+    const results = lunrIndex.search(input);
 
-    // Match command to a synonym category
-    for (let action in synonyms) {
-        if (synonyms[action].some(phrase => command.includes(phrase))) {
-            executeCommand(action, command);
-            return;
+    if (results.length > 0) {
+        const bestMatch = results[0];
+        const matchedRoom = gameData.rooms[bestMatch.ref];
+        const currentRoom = gameData.rooms[gameData.currentRoom];
+
+        for (let action in gameData.synonyms) {
+            if (gameData.synonyms[action].some(word => input.includes(word))) {
+                executeCommand(action, input, matchedRoom);
+                return;
+            }
         }
     }
 
     addOutput("I don't understand that command. Try something else.");
 }
 
-function executeCommand(action, input) {
+function executeCommand(action, input, matchedRoom) {
     const currentRoom = gameData.rooms[gameData.currentRoom];
-    const inventory = gameData.inventory;
 
-    // Handle "take" actions
     if (action === "take") {
-        if (currentRoom.items.length > 0) {
-            const item = currentRoom.items.find(item => input.includes(item)) || currentRoom.items.pop();
+        const item = currentRoom.items.find(i => input.includes(i)) || currentRoom.items.pop();
+        if (item) {
             gameData.inventory.push(item);
             currentRoom.items = currentRoom.items.filter(i => i !== item);
             addOutput(`You take the ${item}.`);
         } else {
             addOutput("There's nothing here to take.");
         }
-    }
-
-    // Handle "look" actions
-    else if (action === "look") {
+    } else if (action === "look") {
         addOutput(currentRoom.description);
-        if (currentRoom.items.length > 0) {
-            addOutput(`You see: ${currentRoom.items.join(", ")}`);
-        }
-        if (currentRoom.enemies.length > 0) {
-            const enemyNames = currentRoom.enemies.map(e => e.name).join(", ");
-            addOutput(`Enemies present: ${enemyNames}`);
-        }
-    }
-
-    // Handle "equip" actions
-    else if (action === "equip") {
+        if (currentRoom.items.length > 0) addOutput(`You see: ${currentRoom.items.join(", ")}`);
+        if (currentRoom.enemies.length > 0) addOutput(`Enemies present: ${currentRoom.enemies.map(e => e.name).join(", ")}`);
+    } else if (action === "equip") {
         const weapon = Object.keys(gameData.weapons).find(w => input.includes(w));
-        if (weapon && inventory.includes(weapon)) {
+        if (weapon && gameData.inventory.includes(weapon)) {
             gameData.equippedWeapon = gameData.weapons[weapon];
             addOutput(`You equip the ${weapon}. Your attack power increases.`);
         } else {
             addOutput("You don't have that weapon to equip.");
         }
-    }
-
-    // Handle "attack" actions
-    else if (action === "attack") {
+    } else if (action === "attack") {
         if (currentRoom.enemies.length > 0) {
             const enemy = currentRoom.enemies[0];
             enemy.health -= gameData.player.attackPower;
             addOutput(`You attack the ${enemy.name} for ${gameData.player.attackPower} damage.`);
             if (enemy.health <= 0) {
                 addOutput(`You have defeated the ${enemy.name}!`);
-                currentRoom.enemies.shift(); // Remove defeated enemy
-            } else {
-                enemyAction(enemy);
+                currentRoom.enemies.shift();
             }
         } else {
             addOutput("There's nothing to attack here.");
         }
-    }
-
-    // Handle "block" actions
-    else if (action === "block") {
-        if (currentRoom.enemies.length > 0) {
-            const enemy = currentRoom.enemies[0];
-            const damageBlocked = Math.min(gameData.player.defensePower, enemy.attackPower);
-            gameData.player.health -= (enemy.attackPower - damageBlocked);
-            addOutput(`You block the ${enemy.name}'s attack, reducing damage to ${enemy.attackPower - damageBlocked}.`);
-            if (gameData.player.health <= 0) {
-                addOutput("You have been defeated! Game over.");
-                resetGame();
-            }
-        } else {
-            addOutput("There's nothing to block here.");
-        }
-    }
-
-    // Handle movement
-    else if (currentRoom.next[action]) {
-        if (currentRoom.enemies.length > 0) {
-            addOutput(`The ${currentRoom.enemies[0].name} blocks your path! Defeat it first.`);
-        } else {
-            gameData.currentRoom = currentRoom.next[action];
-            addOutput(gameData.rooms[gameData.currentRoom].description);
-        }
-    }
-
-    // Default response
-    else {
+    } else {
         addOutput("You can't do that here.");
     }
-}
-
-function enemyAction(enemy) {
-    if (enemy.behavior === "basic") {
-        gameData.player.health -= enemy.attackPower;
-        addOutput(`The ${enemy.name} attacks you for ${enemy.attackPower} damage.`);
-    } else if (enemy.behavior === "defensive") {
-        enemy.health += 10;
-        addOutput(`The ${enemy.name} heals itself for 10 health!`);
-    } else if (enemy.behavior === "ambush") {
-        gameData.player.health -= enemy.attackPower * 2;
-        addOutput(`The ${enemy.name} ambushes you for ${enemy.attackPower * 2} damage!`);
-    }
-    if (gameData.player.health <= 0) {
-        addOutput("You have been defeated! Game over.");
-        resetGame();
-    } else {
-        addOutput(`Your health: ${gameData.player.health}`);
-    }
-}
-
-function resetGame() {
-    gameData.currentRoom = "entrance";
-    gameData.inventory = [];
-    gameData.equippedWeapon = null;
-    gameData.player.health = 100;
-    addOutput("The game resets. Try again!");
 }
 
 function addOutput(text) {
