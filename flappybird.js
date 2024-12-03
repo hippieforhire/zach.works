@@ -1,7 +1,5 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const startButton = document.getElementById("startGameButton");
-const restartButton = document.getElementById("restartButton");
 let bird, pipes, score, isGameOver, timer, gameLoopId;
 
 function initGame() {
@@ -12,22 +10,6 @@ function initGame() {
     timer = 0;
     updateScore();
     document.getElementById("score").style.display = "block";
-    restartButton.style.display = "none";
-}
-
-function startGame() {
-    resizeCanvas();
-    initGame();
-    canvas.style.display = "block";
-    restartButton.style.display = "none";
-    canvas.addEventListener("click", startMovement);
-    canvas.addEventListener("touchstart", startMovement, { passive: false });
-}
-
-function stopGame() {
-    cancelAnimationFrame(gameLoopId);
-    window.removeEventListener("click", birdFlap);
-    window.removeEventListener("touchstart", birdFlap);
 }
 
 function resizeCanvas() {
@@ -35,18 +17,19 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-function startMovement(event) {
-    event.preventDefault();
-    window.addEventListener("click", birdFlap);
-    window.addEventListener("touchstart", birdFlap, { passive: false });
-    gameLoop();
-    canvas.removeEventListener("click", startMovement);
-    canvas.removeEventListener("touchstart", startMovement);
-}
-
 function birdFlap(event) {
     event.preventDefault();
-    bird.velocity = bird.lift;
+    if (isGameOver) {
+        restartGame(); // Restart the game if it's over
+    } else {
+        bird.velocity = bird.lift; // Make the bird flap
+    }
+}
+
+function startGame() {
+    resizeCanvas();
+    initGame();
+    gameLoop();
 }
 
 function gameLoop() {
@@ -132,21 +115,19 @@ function checkCollisions() {
 
 function endGame() {
     isGameOver = true;
-    window.removeEventListener("click", birdFlap);
-    window.removeEventListener("touchstart", birdFlap);
     document.getElementById("score").textContent += " - Game Over!";
-    restartButton.style.display = "block";
 }
 
 function restartGame() {
     initGame();
-    canvas.addEventListener("click", startMovement);
-    canvas.addEventListener("touchstart", startMovement);
+    gameLoop();
 }
 
 function updateScore() {
     document.getElementById("score").textContent = `Score: ${score}`;
 }
 
-startButton.addEventListener("click", startGame);
-restartButton.addEventListener("click", restartGame);
+// Initialize game
+resizeCanvas();
+canvas.addEventListener("click", birdFlap);
+canvas.addEventListener("touchstart", birdFlap, { passive: false });
