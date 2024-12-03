@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupMemoryGame() {
         memoryGameBoard.innerHTML = '';
-        const shuffledCards = cards.sort(() => 0.5 - Math.random());
+        const shuffledCards = [...cards].sort(() => Math.random() - 0.5); // Properly shuffle cards
         shuffledCards.forEach(card => {
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function onCardClick(event) {
         const clickedCard = event.currentTarget;
+
+        // Ignore clicks on already flipped cards
+        if (clickedCard.classList.contains('flipped')) return;
+
         if (!firstCard) {
             firstCard = clickedCard.dataset.value;
             firstCardElement = clickedCard;
@@ -27,17 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (!secondCard && clickedCard !== firstCardElement) {
             secondCard = clickedCard.dataset.value;
             clickedCard.classList.add('flipped');
+
             if (firstCard === secondCard) {
-                firstCardElement = null;
+                // Match found: reset variables
                 firstCard = null;
                 secondCard = null;
+                firstCardElement = null;
             } else {
+                // No match: flip back cards after a short delay
                 setTimeout(() => {
                     firstCardElement.classList.remove('flipped');
                     clickedCard.classList.remove('flipped');
-                    firstCardElement = null;
                     firstCard = null;
                     secondCard = null;
+                    firstCardElement = null;
                 }, 1000);
             }
         }
