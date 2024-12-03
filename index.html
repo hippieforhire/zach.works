@@ -102,6 +102,8 @@
             width: 300px;
         }
     </style>
+    <!-- Include Lunr.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
 </head>
 <body>
     <h1>Game and Utility Hub</h1>
@@ -173,6 +175,7 @@
         </div>
     </div>
 
+    <!-- Include All Game Logic -->
     <script src="zork.js"></script>
     <script src="flappybird.js"></script>
     <script src="tictactoe.js"></script>
@@ -189,18 +192,6 @@
         }
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Flappy Bird Initialization
-        function initializeFlappyBird() {
-            const canvas = document.getElementById('flappyBirdCanvas');
-            if (!canvas.getContext) {
-                alert("Canvas not supported in this browser.");
-                return;
-            }
-            // Trigger your flappybird.js logic
-            const event = new Event('DOMContentLoaded');
-            document.dispatchEvent(event);
         }
 
         // Ensure calculator and Rock-Paper-Scissors work outside modals
