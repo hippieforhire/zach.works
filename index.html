@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Im Zach, welcome to my page</title>
+    <title>Game and Utility Hub</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Custom styles for the buttons */
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #121212;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #bb86fc;
+            margin: 20px 0;
+        }
         .button-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            gap: 15px;
             margin: 20px 0;
         }
         .game-button {
-            margin: 10px;
             padding: 15px 30px;
             font-size: 1.2rem;
             background-color: #333;
@@ -29,77 +42,134 @@
             color: #121212;
             transform: scale(1.1);
         }
-        /* Style for the hidden sections */
-        .game-section {
+
+        /* Modal Styles */
+        .modal {
             display: none;
-            margin: 20px auto;
+            position: fixed;
+            z-index: 1000;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
             max-width: 600px;
-            background-color: #444;
+            background: #444;
+            color: #fff;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close {
+            background: none;
+            border: none;
+            color: #bb86fc;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #ff3d00;
+        }
+        .modal-content {
+            margin-top: 20px;
+        }
+
+        /* Canvas and Boards */
         canvas {
-            margin: auto;
             display: block;
+            margin: 20px auto;
+            border: 1px solid white;
+        }
+        #ticTacToeBoard, #memoryGameBoard {
+            display: grid;
+            margin: 20px auto;
+        }
+        #ticTacToeBoard {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 300px;
+        }
+        #memoryGameBoard {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 300px;
         }
     </style>
 </head>
 <body>
-    <h1>Games and Whatnot</h1>
+    <h1>Game and Utility Hub</h1>
     <div class="button-container">
-        <button class="game-button" onclick="showGame('zorkGame')">Play Zork</button>
-        <button class="game-button" onclick="showGame('flappyBirdGame')">Play Flappy Bird</button>
-        <button class="game-button" onclick="showGame('ticTacToe')">Play Tic Tac Toe</button>
-        <button class="game-button" onclick="showGame('calculator')">Open Calculator</button>
-        <button class="game-button" onclick="showGame('memoryMatch')">Play Memory Match</button>
+        <button class="game-button" onclick="openModal('zorkModal')">Play Zork</button>
+        <button class="game-button" onclick="openModal('flappyBirdModal')">Play Flappy Bird</button>
+        <button class="game-button" onclick="openModal('ticTacToeModal')">Play Tic Tac Toe</button>
+        <button class="game-button" onclick="openModal('memoryMatchModal')">Play Memory Match</button>
+        <button class="game-button" onclick="openModal('spaceInvadersModal')">Play Space Invaders</button>
+        <button class="game-button" onclick="showCalculator()">Open Calculator</button>
         <button class="game-button" onclick="playRockPaperScissors()">Play Rock, Paper, Scissors</button>
-        <button class="game-button" onclick="showGame('spaceInvaders')">Play Space Invaders</button>
         <button class="game-button" onclick="changeBackgroundColor()">Change Background Color</button>
         <button class="game-button" onclick="displayRandomQuote()">Show Random Quote</button>
     </div>
 
-    <!-- Zork Game Section -->
-    <div id="zorkGame" class="game-section">
-        <h2>Zork</h2>
-        <div id="output"></div>
-        <input id="input" type="text" placeholder="Type your command...">
-        <button onclick="startZorkGame()">Start Zork</button>
+    <!-- Modals -->
+    <div id="zorkModal" class="modal">
+        <div class="modal-header">
+            <h2>Zork</h2>
+            <button class="close" onclick="closeModal('zorkModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div id="output"></div>
+            <input id="input" type="text" placeholder="Type your command...">
+            <button onclick="startZorkGame()">Start Zork</button>
+        </div>
     </div>
 
-    <!-- Flappy Bird Section -->
-    <div id="flappyBirdGame" class="game-section">
-        <h2>Flappy Bird</h2>
-        <p>Click the screen to make the bird fly!</p>
-        <canvas id="flappyBirdCanvas" width="400" height="600" style="background: skyblue;"></canvas>
+    <div id="flappyBirdModal" class="modal">
+        <div class="modal-header">
+            <h2>Flappy Bird</h2>
+            <button class="close" onclick="closeModal('flappyBirdModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <p>Click the screen to make the bird fly!</p>
+            <canvas id="flappyBirdCanvas" width="400" height="600" style="background: skyblue;"></canvas>
+        </div>
     </div>
 
-    <!-- Tic Tac Toe Section -->
-    <div id="ticTacToe" class="game-section">
-        <h2>Tic Tac Toe</h2>
-        <div id="ticTacToeBoard" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 300px; margin: auto;"></div>
+    <div id="ticTacToeModal" class="modal">
+        <div class="modal-header">
+            <h2>Tic Tac Toe</h2>
+            <button class="close" onclick="closeModal('ticTacToeModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div id="ticTacToeBoard"></div>
+        </div>
     </div>
 
-    <!-- Calculator Section -->
-    <div id="calculator" class="game-section"></div>
-
-    <!-- Memory Match Section -->
-    <div id="memoryMatch" class="game-section">
-        <h2>Memory Match</h2>
-        <div id="memoryGameBoard" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 300px; margin: auto;"></div>
+    <div id="memoryMatchModal" class="modal">
+        <div class="modal-header">
+            <h2>Memory Match</h2>
+            <button class="close" onclick="closeModal('memoryMatchModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div id="memoryGameBoard"></div>
+        </div>
     </div>
 
-    <!-- Space Invaders Section -->
-    <div id="spaceInvaders" class="game-section">
-        <h2>Space Invaders</h2>
-        <canvas id="spaceInvadersCanvas" width="500" height="400" style="background: black;"></canvas>
-        <button id="startSpaceInvaders">Start Space Invaders</button>
-    </div>
-
-    <!-- Quote Section -->
-    <div id="quote" class="game-section">
-        <h2>Quote</h2>
-        <p>Click the "Show Random Quote" button to display a quote here.</p>
+    <div id="spaceInvadersModal" class="modal">
+        <div class="modal-header">
+            <h2>Space Invaders</h2>
+            <button class="close" onclick="closeModal('spaceInvadersModal')">&times;</button>
+        </div>
+        <div class="modal-content">
+            <canvas id="spaceInvadersCanvas" width="500" height="400"></canvas>
+            <button id="startSpaceInvaders">Start Space Invaders</button>
+        </div>
     </div>
 
     <script src="zork.js"></script>
@@ -112,18 +182,18 @@
     <script src="spaceinvaders.js"></script>
     <script src="colorchange.js"></script>
     <script>
-        // Show a specific game section
-        function showGame(gameId) {
-            // Hide all game sections
-            document.querySelectorAll('.game-section').forEach(section => {
-                section.style.display = 'none';
-            });
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
 
-            // Show the selected game section
-            const gameSection = document.getElementById(gameId);
-            if (gameSection) {
-                gameSection.style.display = 'block';
-            }
+        // Ensure calculator and Rock-Paper-Scissors work outside modals
+        function showCalculator() {
+            const calculator = document.getElementById('calculator');
+            calculator.style.display = 'block';
         }
     </script>
 </body>
