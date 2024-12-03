@@ -3,223 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Game Hub</title>
+    <title>Welcome to my page!</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
         body {
             margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #1a1a1a;
-            color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #121212;
+            color: #ffffff;
+            padding: 20px;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-
         h1 {
             font-size: 3rem;
-            color: #6c63ff;
-            margin-top: 20px;
+            color: #bb86fc;
+            margin: 20px 0;
+            text-align: center;
         }
-
+        #clock {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            animation: rainbow 5s infinite;
+        }
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            14% { color: #ffa500; }
+            28% { color: #ffff00; }
+            42% { color: #008000; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #ee82ee; }
+            100% { color: #ff0000; }
+        }
         p {
             font-size: 1.2rem;
-            margin-bottom: 20px;
+            color: #b0b0b0;
+            margin: 10px 0;
             text-align: center;
-            max-width: 600px;
         }
-
         button {
             margin: 10px;
-            padding: 15px 20px;
+            padding: 12px 20px;
             font-size: 1rem;
-            color: #fff;
-            background-color: #6c63ff;
+            background-color: #808080;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
+            transition: background 0.3s, transform 0.2s;
+            width: calc(33% - 20px);
+            min-width: 150px;
+            display: block;
+            margin: 10px auto;
         }
-
         button:hover {
-            background-color: #5a52e6;
-            transform: scale(1.1);
+            background-color: #808080;
+            transform: scale(1.05);
         }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
         .modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 1;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
         }
-
         .modal-content {
-            background: #222;
-            color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 500px;
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid #888;
             width: 90%;
-            text-align: center;
+            max-width: 480px;
+            height: auto;
         }
-
-        .modal-content canvas {
-            display: block;
-            margin: 0 auto;
-            border: 1px solid #fff;
-        }
-
         .close {
-            color: #bbb;
+            color: #aaa;
             float: right;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
             cursor: pointer;
         }
-
-        .close:hover {
-            color: #fff;
+        #zorkGame {
+            display: none; /* Hide the Zork game initially */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            max-width: 500px;
+            height: 400px; /* Increased height */
+            overflow-y: auto;
         }
-
-        .game-section {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        #clock {
-            font-size: 1.5rem;
-            margin: 20px 0;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { color: #6c63ff; }
-            50% { color: #f5f5f5; }
-            100% { color: #6c63ff; }
-        }
-
         #output {
             height: 200px;
             overflow-y: auto;
-            background: #333;
-            color: #fff;
+            background: #444;
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
+            color: #fff;
         }
-
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        #input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        #hideZorkButton {
+            display: none; /* Hide the hide button initially */
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Interactive Game Hub</h1>
-    <p>Welcome to the Interactive Game Hub! Explore games, tools, and activities by clicking the buttons below.</p>
+    <h1>Welcome to my page!</h1>
     <div id="clock"></div>
-    <div class="container">
-        <button onclick="changeBackgroundColor()">Change Background</button>
-        <button onclick="showCalculator()">Calculator</button>
-        <button onclick="setupDrawingCanvas()">Drawing Canvas</button>
-        <button onclick="openModal('flappyBirdModal')">Flappy Bird</button>
-        <button onclick="showChatbot()">Chatbot</button>
-        <button onclick="showZorkGame()">Zork Game</button>
-        <button onclick="playRockPaperScissors()">Rock-Paper-Scissors</button>
-        <button onclick="setupTicTacToe()">Tic-Tac-Toe</button>
+    <p>Hello! I'm Zach Rogers. I am just playing around with different types of coding right now, click out some of the buttons below!</p>
+
+    <button onclick="changeBackgroundColor()">Change Background Color</button>
+    <button id="startGameButton" onclick="openModal('flappyBirdModal')">Play Flappy Bird Game</button>
+    <button id="showZorkButton" onclick="showZorkGame()">Play My Zork-Like Game</button> <!-- New button to show Zork game -->
+    <div id="zorkGame">
+        <div id="output"></div>
+        <input type="text" id="input">
+        <button id="hideZorkButton" onclick="hideZorkGame()">Hide Zork Game</button> <!-- New button to hide Zork game -->
     </div>
 
-    <!-- Modal for Flappy Bird -->
     <div id="flappyBirdModal" class="modal" onclick="closeModalOnOutsideClick(event)">
         <div class="modal-content">
             <span class="close" onclick="closeModal('flappyBirdModal')">&times;</span>
-            <canvas id="gameCanvas" width="400" height="600"></canvas>
-            <button onclick="restartGame()">Restart Game</button>
-            <p id="score">Score: 0</p>
+            <canvas id="gameCanvas"></canvas>
+            <button id="restartButton" onclick="restartGame()">Restart Game</button>
+            <div id="score">Score: 0</div>
         </div>
     </div>
 
-    <!-- Section for Games -->
-    <div id="zorkGame" class="game-section">
-        <div id="output"></div>
-        <input type="text" id="input" placeholder="Enter a command">
-        <button onclick="hideZorkGame()">Hide Zork Game</button>
-    </div>
-
-    <div id="chatbox" class="game-section">
-        <div id="messages"></div>
-        <div class="flex-center">
-            <input type="text" id="user-input" placeholder="Type a message">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-        <button onclick="hideChatbot()">Hide Chatbot</button>
-    </div>
-
-    <!-- JavaScript -->
     <script src="colorchange.js"></script>
     <script src="flappybird.js"></script>
     <script src="zork.js"></script>
-    <script src="chatbot.js"></script>
-    <script src="tictactoe.js"></script>
-    <script src="memorymatch.js"></script>
-    <script src="quotes.js"></script>
-    <script src="rockpaperscissors.js"></script>
     <script>
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = "flex";
+            document.getElementById(modalId).style.display = "block";
+            if (modalId === 'flappyBirdModal') startGame();
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
+            if (modalId === 'flappyBirdModal') stopGame(); // Ensure the game stops when modal is closed
         }
 
         function closeModalOnOutsideClick(event) {
             if (event.target.classList.contains('modal')) {
-                event.target.style.display = "none";
+                closeModal(event.target.id);
             }
         }
 
-        function changeBackgroundColor() {
-            const colors = ["#6c63ff", "#222", "#1a1a1a", "#444", "#282828"];
-            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        function showZorkGame() {
+            document.getElementById("zorkGame").style.display = "block";
+            document.getElementById("hideZorkButton").style.display = "block"; // Show the hide button
+            document.getElementById("showZorkButton").style.display = "none"; // Hide the show button
+            startZorkGame();
         }
 
-        function showCalculator() {
-            const calcContainer = document.getElementById("calculator") || document.createElement("div");
-            calcContainer.id = "calculator";
-            calcContainer.innerHTML = `
-                <input type="text" id="calcInput" readonly>
-                <div class="flex-center">
-                    <button onclick="appendCalcValue('1')">1</button>
-                    <button onclick="appendCalcValue('2')">2</button>
-                    <button onclick="appendCalcValue('+')">+</button>
-                </div>
-                <button onclick="calculateResult()">=</button>
-                <button onclick="clearCalc()">C</button>
-            `;
-            document.body.appendChild(calcContainer);
+        function hideZorkGame() {
+            document.getElementById("zorkGame").style.display = "none";
+            document.getElementById("hideZorkButton").style.display = "none"; // Hide the hide button
+            document.getElementById("showZorkButton").style.display = "block"; // Show the show button
         }
 
-        // Other functionality remains unchanged but streamlined.
+        setInterval(() => {
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            document.getElementById("clock").textContent = time;
+        }, 1000);
     </script>
 </body>
 </html>
