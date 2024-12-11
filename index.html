@@ -26,6 +26,7 @@
     /* Modal Styles */
     .modal {
       transition: opacity 0.5s ease;
+      z-index: 50; /* Ensure modal is above other elements */
     }
     .hidden {
       opacity: 0;
@@ -80,7 +81,7 @@
       width: 10px;
       height: 10px;
       opacity: 0.7;
-      z-index: 50;
+      z-index: 40;
       pointer-events: none;
       animation: confettiFall linear forwards;
     }
@@ -259,6 +260,29 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+    /* Theme Text Styles */
+    .theme-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1f2937; /* Tailwind gray-800 */
+      margin-bottom: 10px;
+      user-select: none;
+      cursor: pointer;
+    }
+    .theme-letter {
+      display: inline-block;
+      margin: 0 2px;
+      padding: 5px;
+      border-radius: 3px;
+      transition: background-color 0.3s;
+    }
+    .theme-letter.selected {
+      background-color: #4b5563; /* Tailwind gray-700 */
+      color: white;
+    }
+    .theme-letter:hover {
+      background-color: #d1d5db; /* Tailwind gray-300 */
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen relative">
@@ -289,6 +313,9 @@
 
     <!-- Round Indicator -->
     <div id="roundIndicator" class="text-sm">Round 1</div>
+
+    <!-- Theme Display (Clickable Text for Anagram) -->
+    <div id="themeDisplay" class="theme-text">Theme: <span id="themeLetters">Country or State Capitals</span></div>
 
     <!-- On-Screen Keyboard -->
     <div id="wordleKeyboard" class="flex flex-wrap justify-center mt-4"></div>
