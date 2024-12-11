@@ -1,7 +1,6 @@
 // yetanotherwordlegame.js
 
 document.addEventListener('DOMContentLoaded', () => {
-  const wordleModal = document.getElementById('wordleModal');
   const wordleBoard = document.getElementById('wordleBoard');
   const wordleInput = document.getElementById('wordleInput');
   const wordleMessage = document.getElementById('wordleMessage');
@@ -9,10 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const powerUpButton = document.getElementById('powerUpButton');
   const wordleKeyboard = document.getElementById('wordleKeyboard');
   const currentThemeDisplay = document.getElementById('currentTheme');
-  const roundIndicator = document.getElementById('roundIndicator'); // New Element
-  const correctGuessMessage = document.getElementById('correctGuessMessage'); // New Element
-  const confettiContainer = document.getElementById('confetti'); // New Element
-  const progressBar = document.getElementById('progressBar'); // New Element
+  const roundIndicator = document.getElementById('roundIndicator'); // Added Element
+  const correctGuessMessage = document.getElementById('correctGuessMessage'); // Existing Element
+  const confettiContainer = document.getElementById('confetti'); // Existing Element
+  const progressBar = document.getElementById('progressBar'); // Existing Element
+  const resetButton = document.getElementById('resetButton'); // Reset Button
 
   // Configuration for the game
   const dailyGames = {
@@ -435,26 +435,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Close the modal when clicking outside the content
-  wordleModal.addEventListener('click', (e) => {
-    if (e.target === wordleModal) {
-      closeWordleModal();
-    }
-  });
+  // Removed wordleModal references as they are not present in the HTML
 
   // Ensure the input field is focused when the modal is opened
-  wordleModal.addEventListener('transitionend', () => {
-    if (!wordleModal.classList.contains('hidden')) {
-      wordleInput.focus();
-    }
-  });
+  // Removed wordleModal references as they are not present in the HTML
 
   // Ensure the input field is focused when the modal is opened via JavaScript
-  const openModalObserver = new MutationObserver(() => {
-    if (!wordleModal.classList.contains('hidden')) {
-      wordleInput.focus();
-    }
-  });
-  openModalObserver.observe(wordleModal, { attributes: true, attributeFilter: ['class'] });
+  // Removed wordleModal references as they are not present in the HTML
 
   // Initialize the game if not played yet
   if (!hasPlayedToday()) {
@@ -484,16 +471,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to display Correct Guess Message with animation
   function displayCorrectGuess() {
     correctGuessMessage.textContent = "Correct Guess!";
-    correctGuessMessage.style.opacity = '1';
+    correctGuessMessage.style.display = 'flex';
+    correctGuessMessage.classList.remove('hidden');
     correctGuessMessage.classList.add('animate-fade-in');
 
     // After displaying, fade out the message after 3 seconds
     setTimeout(() => {
       correctGuessMessage.classList.remove('animate-fade-in');
       correctGuessMessage.classList.add('animate-fade-out');
-      correctGuessMessage.style.opacity = '0';
-      correctGuessMessage.textContent = '';
-    }, 3000); // Increased from 2000ms to 3000ms to match animation duration
+      setTimeout(() => {
+        correctGuessMessage.classList.add('hidden');
+        correctGuessMessage.classList.remove('animate-fade-out');
+        correctGuessMessage.textContent = '';
+      }, 1000); // Duration matches the CSS animation duration
+    }, 3000); // Display duration
   }
 
   // Function to trigger confetti animation
@@ -551,9 +542,10 @@ document.addEventListener('DOMContentLoaded', () => {
     startConfetti();
   }
 
-  // Define closeWordleModal function
-  function closeWordleModal() {
-    wordleModal.classList.add('hidden');
-  }
+  // Reset Game Functionality
+  resetButton.addEventListener('click', () => {
+    initializeWordleGame();
+    wordleMessage.textContent = "Game has been reset.";
+  });
 
 });
