@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const startWordleButton = document.getElementById('startWordleButton');
   const powerUpButton = document.getElementById('powerUpButton');
   const wordleKeyboard = document.getElementById('wordleKeyboard');
-  const currentThemeDisplay = document.getElementById('currentTheme');
-  const themeDisplay = document.getElementById('themeLetters'); // Updated Element
+  const themeDisplay = document.getElementById('themeLetters'); // Corrected Element
   const roundIndicator = document.getElementById('roundIndicator'); // Added Element
   const correctGuessMessage = document.getElementById('correctGuessMessage'); // Existing Element
   const confettiContainer = document.getElementById('confetti'); // Existing Element
@@ -105,10 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
     anagramGuess = '';
     gameOver = false;
     wordleMessage.textContent = `Theme: ${theme}`;
-    currentThemeDisplay.textContent = `Theme: ${theme}`;
+    displayClickableTheme();
     createBoard();
     createKeyboard();
-    displayClickableTheme();
     wordleInput.disabled = false;
     wordleInput.value = '';
     wordleInput.focus(); // Ensure the input is focused
@@ -435,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOver = false;
         anagramFound = false;
         wordleMessage.textContent = `Round ${currentRound + 1}: ${newTheme}`;
-        currentThemeDisplay.textContent = `Theme: ${newTheme}`;
         // Reset theme display
         resetThemeDisplay();
         // Adjust the board based on new word length
@@ -501,7 +498,6 @@ document.addEventListener('DOMContentLoaded', () => {
     wordleMessage.textContent = "You have already played today's game.";
     wordleInput.disabled = true;
     powerUpButton.disabled = true;
-    currentThemeDisplay.textContent = `Theme: ${theme}`;
     displayClickableTheme(); // Display theme letters
     updateProgressBar(); // Initialize Progress Bar
   }
@@ -703,33 +699,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize the theme display when the game starts
   function initializeThemeDisplay() {
     displayClickableTheme();
-  }
-
-  // Initialize the game
-  function initializeWordleGame() {
-    currentRound = 0;
-    usedPowerUp = false;
-    anagramFound = false;
-    secretWord = words[currentRound].toLowerCase();
-    wordLength = secretWord.length;
-    maxGuesses = 6;
-    guesses = [];
-    currentGuess = '';
-    anagramGuess = '';
-    gameOver = false;
-    wordleMessage.textContent = `Theme: ${theme}`;
-    currentThemeDisplay.textContent = `Theme: ${theme}`;
-    createBoard();
-    createKeyboard();
-    displayClickableTheme();
-    wordleInput.disabled = false;
-    wordleInput.value = '';
-    wordleInput.focus(); // Ensure the input is focused
-    powerUpButton.disabled = false;
-    powerUpButton.textContent = "Use Power-Up";
-    updateKeyboard();
-    showRoundIndicator(); // Show Round Indicator
-    updateProgressBar(); // Reset Progress Bar
   }
 
 });
