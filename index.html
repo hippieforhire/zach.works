@@ -3,351 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ultimate Wordle Game</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Your Wordle Game</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      min-height: 100vh;
+      background-color: #f3f4f6; /* Tailwind gray-100 */
+    }
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2rem;
+      color: #1f2937; /* Tailwind gray-800 */
+    }
+    /* Modal Styles */
+    .modal {
+      transition: opacity 0.5s ease;
+    }
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Animation Classes */
+    .animate-fade-in {
+      animation: fadeIn 1s forwards;
+    }
+    .animate-fade-out {
+      animation: fadeOut 1s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+    .animate-flip {
+      animation: flip 0.6s;
+    }
+    @keyframes flip {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(90deg); }
+      100% { transform: rotateX(0deg); }
+    }
+    .animate-bounce {
+      animation: bounce 0.3s;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .animate-press {
+      animation: press 0.2s;
+    }
+    @keyframes press {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    /* Confetti Styles */
+    .confetti-piece {
+      position: absolute;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      opacity: 0.7;
+      z-index: 50;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    /* Wordle Cell Styles */
+    .wordle-row {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .wordle-cell {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #d1d5db; /* Tailwind gray-300 */
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      position: relative;
-      overflow-x: hidden;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: background-color 0.3s, border-color 0.3s;
     }
-
-    .game-container {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    .wordle-cell.correct {
+      background-color: #10b981; /* Tailwind green-500 */
+      border-color: #10b981;
+      color: white;
+    }
+    .wordle-cell.present {
+      background-color: #f59e0b; /* Tailwind amber-500 */
+      border-color: #f59e0b;
+      color: white;
+    }
+    .wordle-cell.absent {
+      background-color: #9ca3af; /* Tailwind gray-400 */
+      border-color: #9ca3af;
+      color: white;
+    }
+    /* On-Screen Keyboard Styles */
+    .wordle-key {
+      width: 40px;
+      height: 50px;
+      margin: 3px;
+      background-color: #d1d5db; /* Tailwind gray-300 */
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    .wordle-key:hover {
+      background-color: #e5e7eb; /* Tailwind gray-200 */
+      transform: scale(1.05);
+    }
+    .wordle-key.correct {
+      background-color: #10b981; /* Tailwind green-500 */
+      color: white;
+    }
+    .wordle-key.present {
+      background-color: #f59e0b; /* Tailwind amber-500 */
+      color: white;
+    }
+    .wordle-key.absent {
+      background-color: #9ca3af; /* Tailwind gray-400 */
+      color: white;
+    }
+    /* Progress Bar Styles */
+    #progressBar {
+      height: 10px;
+      background-color: #3b82f6; /* Tailwind blue-500 */
+      transition: width 0.5s;
+    }
+    /* Modal Content Styles */
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
       max-width: 600px;
       width: 90%;
       position: relative;
     }
-
-    h1 {
-      font-family: 'Press Start 2P', cursive;
+    .modal-header {
       font-size: 1.5rem;
-      text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 10px;
     }
-
-    /* Rules Modal Styles */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 1000;
-    }
-
-    .modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-content {
-      background-color: #ffffff;
-      color: #333333;
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 500px;
-      width: 90%;
-      position: relative;
-      animation: slideDown 0.5s ease forwards;
-    }
-
-    @keyframes slideDown {
-      from {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .close-modal {
+    .modal-close {
       position: absolute;
       top: 10px;
       right: 15px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: #333333;
-    }
-
-    /* Wordle Board Styles */
-    #wordleBoard {
-      display: grid;
-      gap: 5px;
-      justify-items: center;
-      margin-bottom: 1.5rem;
-      perspective: 1000px;
-    }
-
-    .wordle-row {
-      display: grid;
-      gap: 5px;
-    }
-
-    .wordle-cell {
-      width: 50px;
-      height: 50px;
-      background-color: #d3d6da;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-size: 1.5rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: #ffffff;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      backface-visibility: hidden;
-      transform: rotateY(0deg);
-      position: relative;
-    }
-
-    .wordle-cell.correct {
-      background-color: #6aaa64;
-      color: #ffffff;
-      border: none;
-    }
-
-    .wordle-cell.present {
-      background-color: #c9b458;
-      color: #ffffff;
-      border: none;
-    }
-
-    .wordle-cell.absent {
-      background-color: #787c7e;
-      color: #ffffff;
-      border: none;
-    }
-
-    /* Animations */
-    @keyframes flip {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(180deg); }
-    }
-
-    .animate-flip {
-      animation: flip 0.6s forwards;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    .animate-bounce {
-      animation: bounce 0.6s forwards;
-    }
-
-    /* On-Screen Keyboard Styles */
-    #wordleKeyboard {
-      display: grid;
-      grid-template-columns: repeat(10, 40px);
-      gap: 5px;
-      justify-content: center;
-      margin-top: 1rem;
-    }
-
-    .wordle-key {
-      width: 40px;
-      height: 40px;
-      background-color: #818384;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 5px;
       cursor: pointer;
-      user-select: none;
-      font-weight: bold;
-      text-transform: uppercase;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-      color: #ffffff;
     }
-
-    .wordle-key.correct {
-      background-color: #6aaa64;
-      color: #ffffff;
-    }
-
-    .wordle-key.present {
-      background-color: #c9b458;
-      color: #ffffff;
-    }
-
-    .wordle-key.absent {
-      background-color: #787c7e;
-      color: #ffffff;
-    }
-
-    .wordle-key:hover {
-      background-color: #a8a29e;
-      transform: scale(1.05);
-    }
-
-    .wordle-key:active {
-      transform: scale(0.95);
-    }
-
-    /* Progress Bar Styles */
-    #progressBarContainer {
-      width: 100%;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-bottom: 1rem;
-    }
-
-    #progressBar {
-      width: 0%;
-      height: 10px;
-      background-color: #4caf50;
-      transition: width 0.3s ease;
-    }
-
-    /* Confetti Styles */
-    #confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 1001;
-    }
-
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      opacity: 0;
-      animation: confetti-fall 3s forwards;
-    }
-
-    @keyframes confetti-fall {
-      0% {
-        transform: translateY(-10px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
-    }
-
-    /* Correct Guess Message Styles */
+    /* Correct Guess Overlay */
     #correctGuessMessage {
-      position: absolute;
-      top: 10%;
+      position: fixed;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(106, 170, 100, 0.9);
-      color: #ffffff;
-      padding: 10px 20px;
+      transform: translate(-50%, -50%);
+      background-color: rgba(16, 185, 129, 0.9); /* Tailwind green-500 with opacity */
+      color: white;
+      padding: 20px 40px;
       border-radius: 10px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-      z-index: 1000;
-    }
-
-    /* Smooth Modal Transitions */
-    .modal-content {
-      transition: transform 0.5s ease, opacity 0.5s ease;
-    }
-
-    /* Close Button Hover Effect */
-    .close-modal:hover {
-      color: #ff0000;
+      font-size: 2rem;
+      display: none;
+      z-index: 100;
     }
   </style>
 </head>
-<body>
-  <!-- Confetti Container -->
-  <div id="confetti"></div>
+<body class="flex flex-col items-center justify-center min-h-screen relative">
 
-  <!-- Correct Guess Message -->
-  <div id="correctGuessMessage">Congratulations! You guessed the word!</div>
+  <!-- Header -->
+  <header class="mb-6">
+    <h1>Your Wordle Game</h1>
+  </header>
 
   <!-- Game Container -->
-  <div class="game-container">
-    <h1>Ultimate Wordle</h1>
-    
+  <div class="game-container flex flex-col items-center">
     <!-- Progress Bar -->
-    <div id="progressBarContainer">
-      <div id="progressBar"></div>
+    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+      <div id="progressBar" class="bg-blue-500 h-2 rounded-full" style="width: 0%;"></div>
     </div>
 
     <!-- Wordle Board -->
-    <div id="wordleBoard"></div>
+    <div id="wordleBoard" class="mb-4"></div>
 
     <!-- On-Screen Keyboard -->
-    <div id="wordleKeyboard"></div>
-
-    <!-- Game Messages -->
-    <p id="wordleMessage" class="text-center"></p>
+    <div id="wordleKeyboard" class="flex flex-wrap justify-center max-w-md"></div>
 
     <!-- Control Buttons -->
-    <div class="flex justify-center space-x-4 mt-4">
-      <button id="startWordleButton" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition">Start Game</button>
-      <button onclick="openRulesModal()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition">Rules</button>
-      <button onclick="resetGame()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition">Reset</button>
+    <div class="mt-4 flex space-x-4">
+      <button id="startWordleButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Start Game</button>
+      <button id="rulesButton" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">Rules</button>
+      <button id="resetButton" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Reset</button>
+      <button id="powerUpButton" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">Power-Up</button>
     </div>
 
-    <!-- Power-Up Button -->
-    <button id="powerUpButton" class="mt-4 w-full px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-400 transition">Use Power-Up</button>
+    <!-- Messages -->
+    <div id="wordleMessage" class="mt-4 text-center text-lg text-gray-700"></div>
+    <div id="currentTheme" class="mt-2 text-center text-sm text-gray-600"></div>
   </div>
+
+  <!-- Confetti Container -->
+  <div id="confetti" class="fixed top-0 left-0 w-full h-full pointer-events-none z-40"></div>
+
+  <!-- Correct Guess Message -->
+  <div id="correctGuessMessage" class="hidden"></div>
 
   <!-- Rules Modal -->
-  <div id="rulesModal" class="modal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeRulesModal()">&times;</button>
-      <h2 class="text-2xl font-bold mb-4 text-center">How to Play</h2>
-      <p class="mb-4">
-        Guess the <strong>secret word</strong> in six tries. Each guess must be a valid word. After each guess, the color of the tiles will change to show how close your guess was to the word.
-      </p>
-      <ul class="list-disc list-inside mb-4">
-        <li><span class="font-bold">Green</span>: The letter is in the correct spot.</li>
-        <li><span class="font-bold">Yellow</span>: The letter is in the word but in the wrong spot.</li>
-        <li><span class="font-bold">Gray</span>: The letter is not in the word.</li>
-      </ul>
-      <p class="mb-4">
-        Good luck and have fun!
-      </p>
-      <div class="flex justify-center">
-        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition" onclick="closeRulesModal()">Got It!</button>
+  <div id="rulesModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="modal-content relative">
+      <span class="modal-close">&times;</span>
+      <h2 class="modal-header mb-4">How to Play</h2>
+      <p class="mb-4">Guess the secret word within six tries. Each guess must be a valid word.</p>
+      <!-- Example Tiles -->
+      <div class="mb-4">
+        <div class="flex space-x-2 justify-center mb-2">
+          <div class="wordle-cell correct animate-flip animate-bounce">A</div>
+          <div class="wordle-cell">B</div>
+          <div class="wordle-cell">C</div>
+          <div class="wordle-cell">D</div>
+          <div class="wordle-cell">E</div>
+        </div>
+        <p class="text-center">The letter <strong>A</strong> is in the word and in the correct spot.</p>
       </div>
+      <div class="mb-4">
+        <div class="flex space-x-2 justify-center mb-2">
+          <div class="wordle-cell">F</div>
+          <div class="wordle-cell present animate-flip animate-bounce">G</div>
+          <div class="wordle-cell">H</div>
+          <div class="wordle-cell">I</div>
+          <div class="wordle-cell">J</div>
+        </div>
+        <p class="text-center">The letter <strong>G</strong> is in the word but in the wrong spot.</p>
+      </div>
+      <div class="mb-4">
+        <div class="flex space-x-2 justify-center mb-2">
+          <div class="wordle-cell">K</div>
+          <div class="wordle-cell">L</div>
+          <div class="wordle-cell absent animate-flip animate-bounce">M</div>
+          <div class="wordle-cell">N</div>
+          <div class="wordle-cell">O</div>
+        </div>
+        <p class="text-center">The letter <strong>M</strong> is not in the word in any spot.</p>
+      </div>
+      <button id="closeRulesButton" class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Got It!</button>
     </div>
   </div>
 
-  <!-- Import Your JavaScript File -->
-  <script src="yetanotherwordlegame.js"></script>
+  <!-- JavaScript -->
+  <script src="js/yetanotherwordlegame.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rulesButton = document.getElementById('rulesButton');
+      const rulesModal = document.getElementById('rulesModal');
+      const closeRulesButton = document.getElementById('closeRulesButton');
+      const modalClose = document.querySelector('.modal-close');
+
+      // Function to open rules modal
+      function openRulesModal() {
+        rulesModal.classList.remove('hidden');
+        rulesModal.classList.add('active');
+      }
+
+      // Function to close rules modal
+      function closeRulesModal() {
+        rulesModal.classList.remove('active');
+        rulesModal.classList.add('hidden');
+      }
+
+      // Open modal on rules button click
+      rulesButton.addEventListener('click', openRulesModal);
+
+      // Close modal on close button click
+      closeRulesButton.addEventListener('click', closeRulesModal);
+      modalClose.addEventListener('click', closeRulesModal);
+
+      // Automatically open the rules modal on page load
+      openRulesModal();
+    });
+  </script>
 </body>
 </html>
