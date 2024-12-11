@@ -12,12 +12,13 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #f3f4f6; /* Tailwind gray-100 */
+      background: linear-gradient(135deg, #f6f9fc 0%, #e9eff5 100%); /* Soft gradient background */
     }
     h1 {
       font-family: 'Press Start 2P', cursive;
       font-size: 2rem;
       color: #1f2937; /* Tailwind gray-800 */
+      text-shadow: 2px 2px #d1d5db; /* Subtle shadow for depth */
     }
     /* Modal Styles */
     .modal {
@@ -103,6 +104,8 @@
       font-weight: bold;
       text-transform: uppercase;
       transition: background-color 0.3s, border-color 0.3s;
+      background-color: white;
+      border-radius: 5px;
     }
     .wordle-cell.correct {
       background-color: #10b981; /* Tailwind green-500 */
@@ -132,6 +135,7 @@
       cursor: pointer;
       user-select: none;
       transition: background-color 0.3s, transform 0.1s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
     }
     .wordle-key:hover {
       background-color: #e5e7eb; /* Tailwind gray-200 */
@@ -154,6 +158,7 @@
       height: 10px;
       background-color: #3b82f6; /* Tailwind blue-500 */
       transition: width 0.5s;
+      border-radius: 5px;
     }
     /* Modal Content Styles */
     .modal-content {
@@ -163,10 +168,18 @@
       max-width: 600px;
       width: 90%;
       position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Elevated shadow */
+      animation: slideDown 0.5s ease forwards;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .modal-header {
       font-size: 1.5rem;
       margin-bottom: 10px;
+      text-align: center;
+      color: #1f2937; /* Tailwind gray-800 */
     }
     .modal-close {
       position: absolute;
@@ -174,6 +187,11 @@
       right: 15px;
       font-size: 1.5rem;
       cursor: pointer;
+      color: #6b7280; /* Tailwind gray-500 */
+      transition: color 0.3s;
+    }
+    .modal-close:hover {
+      color: #374151; /* Tailwind gray-700 */
     }
     /* Correct Guess Overlay */
     #correctGuessMessage {
@@ -188,18 +206,19 @@
       font-size: 2rem;
       display: none;
       z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeInOverlay 0.5s forwards;
+    }
+    @keyframes fadeInOverlay {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
     }
     /* Round Indicator Styles */
     #roundIndicator {
       margin-top: 10px;
       font-size: 1rem;
       color: #6b7280; /* Tailwind gray-500 */
-    }
-    /* Hidden Input Field */
-    #wordleInput {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -211,7 +230,7 @@
   </header>
 
   <!-- Game Container -->
-  <div class="game-container flex flex-col items-center">
+  <div class="game-container flex flex-col items-center bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
     <!-- Progress Bar -->
     <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
       <div id="progressBar" class="bg-blue-500 h-2 rounded-full" style="width: 0%;"></div>
@@ -224,14 +243,22 @@
     <div id="roundIndicator" class="text-sm">Round 1</div>
 
     <!-- On-Screen Keyboard -->
-    <div id="wordleKeyboard" class="flex flex-wrap justify-center max-w-md"></div>
+    <div id="wordleKeyboard" class="flex flex-wrap justify-center mt-4"></div>
 
     <!-- Control Buttons -->
-    <div class="mt-4 flex space-x-4">
-      <button id="startWordleButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Start Game</button>
-      <button id="rulesButton" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">Rules</button>
-      <button id="resetButton" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Reset</button>
-      <button id="powerUpButton" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">Power-Up</button>
+    <div class="mt-6 flex flex-wrap justify-center gap-4">
+      <button id="startWordleButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition transform hover:scale-105 shadow">
+        Start Game
+      </button>
+      <button id="rulesButton" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition transform hover:scale-105 shadow">
+        Rules
+      </button>
+      <button id="resetButton" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition transform hover:scale-105 shadow">
+        Reset
+      </button>
+      <button id="powerUpButton" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition transform hover:scale-105 shadow">
+        Power-Up
+      </button>
     </div>
 
     <!-- Messages -->
@@ -253,9 +280,9 @@
     <div class="modal-content relative">
       <span class="modal-close">&times;</span>
       <h2 class="modal-header mb-4">How to Play</h2>
-      <p class="mb-4">Guess the secret word within six tries. Each guess must be a valid word.</p>
+      <p class="mb-6 text-center">Guess the secret word within six tries. Each guess must be a valid word.</p>
       <!-- Example Tiles -->
-      <div class="mb-4">
+      <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
           <div class="wordle-cell correct animate-flip animate-bounce">A</div>
           <div class="wordle-cell">B</div>
@@ -265,7 +292,7 @@
         </div>
         <p class="text-center">The letter <strong>A</strong> is in the word and in the correct spot.</p>
       </div>
-      <div class="mb-4">
+      <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
           <div class="wordle-cell">F</div>
           <div class="wordle-cell present animate-flip animate-bounce">G</div>
@@ -275,7 +302,7 @@
         </div>
         <p class="text-center">The letter <strong>G</strong> is in the word but in the wrong spot.</p>
       </div>
-      <div class="mb-4">
+      <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
           <div class="wordle-cell">K</div>
           <div class="wordle-cell">L</div>
@@ -285,7 +312,9 @@
         </div>
         <p class="text-center">The letter <strong>M</strong> is not in the word in any spot.</p>
       </div>
-      <button id="closeRulesButton" class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Got It!</button>
+      <button id="closeRulesButton" class="mt-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition transform hover:scale-105 shadow">
+        Got It!
+      </button>
     </div>
   </div>
 
