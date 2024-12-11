@@ -14,35 +14,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressBar = document.getElementById('progressBar'); // Existing Element
   const resetButton = document.getElementById('resetButton'); // Reset Button
 
-  // Configuration for the game
+  // Configuration for the game with Anagrams related to seasons
   const dailyGames = {
     "2024-12-09": {
       theme: "Famous Movies",
-      words: ["alien", "psycho", "titanic"]
+      words: ["alien", "psycho", "titanic"],
+      anagram: "cinema" // Related to fall (movie season)
     },
     "2024-12-10": {
       theme: "Famous Bands",
-      words: ["queen", "weezer", "nirvana"]
+      words: ["queen", "weezer", "nirvana"],
+      anagram: "winter" // Related to winter season
     },
     "2024-12-11": {
       theme: "Country or State Capitals",
-      words: ["texas", "berlin", "jakarta"]
+      words: ["texas", "berlin", "jakarta"],
+      anagram: "county" // Related to land zoning
     },
     "2024-12-12": {
       theme: "Common Cat Names",
-      words: ["salem", "oliver", "smokey"]
+      words: ["salem", "oliver", "smokey"],
+      anagram: "cocoa" // Related to winter season
     },
     "2024-12-13": {
       theme: "Car Types/Models",
-      words: ["civic", "accord", "mustang"]
+      words: ["civic", "accord", "mustang"],
+      anagram: "civic" // Self-anagram for demonstration
     },
     "2024-12-14": {
       theme: "Common Dog Names",
-      words: ["buddy", "bailey", "charlie"]
+      words: ["buddy", "bailey", "charlie"],
+      anagram: "buddy" // Self-anagram for demonstration
     },
     "2024-12-15": {
       theme: "American Cuisine",
-      words: ["cajun", "burger", "hotdogs"]
+      words: ["cajun", "burger", "hotdogs"],
+      anagram: "bunch" // Related to gatherings
     }
   };
 
@@ -71,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDate = firstDate;
   }
 
-  const { theme, words } = gameData;
+  const { theme, words, anagram } = gameData;
   let currentRound = 0; // 0,1,2 for rounds 1,2,3
   const totalRounds = 3;
   let usedPowerUp = false;
@@ -81,21 +88,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let guesses = [];
   let currentGuess = '';
   let gameOver = false;
+  let anagramGuess = '';
+  let anagramFound = false;
 
   // Initialize the game
   function initializeWordleGame() {
     currentRound = 0;
     usedPowerUp = false;
+    anagramFound = false;
     secretWord = words[currentRound].toLowerCase();
     wordLength = secretWord.length;
     maxGuesses = 6;
     guesses = [];
     currentGuess = '';
+    anagramGuess = '';
     gameOver = false;
     wordleMessage.textContent = `Theme: ${theme}`;
     currentThemeDisplay.textContent = theme;
     createBoard();
     createKeyboard();
+    createThemeAnagram();
     wordleInput.disabled = false;
     wordleInput.value = '';
     wordleInput.focus(); // Ensure the input is focused
@@ -137,6 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
       keyButton.addEventListener('click', () => handleKeyPress(key));
       wordleKeyboard.appendChild(keyButton);
     });
+  }
+
+  // Create Theme Anagram Display
+  function createThemeAnagram() {
+    const themeContainer = document.createElement('div');
+    themeContainer.classList.add('flex', 'space-x-2', 'justify-center', 'mt-4');
+    theme.split('').forEach((letter, index) => {
+      const letterBox = document.createElement('div');
+      letterBox.classList.add('wordle-cell', 'cursor-pointer');
+      letterBox.textContent = letter.toUpperCase();
+      letterBox.addEventListener('click', () => handleAnagramClick(letterBox, letter.toLowerCase()));
+      themeContainer.appendChild(letterBox);
+    });
+    currentThemeDisplay.appendChild(themeContainer);
   }
 
   // Update Keyboard based on guesses
@@ -320,13 +346,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Present options to the user
-    const powerUpChoice = prompt("Choose a Power-Up:\n1. Reveal a Letter\n2. Get an Extra Guess");
+    const powerUpChoice = prompt("Choose a Power-Up:\n1. Reveal a Letter\n2. Get an Extra Guess\n3. Anagram Bonus");
 
     if (powerUpChoice === '1') {
       revealLetterFunction();
       usedPowerUp = true;
     } else if (powerUpChoice === '2') {
       getExtraGuessFunction();
+      usedPowerUp = true;
+    } else if (powerUpChoice === '3') {
+      revealAnagramFunction();
       usedPowerUp = true;
     } else {
       wordleMessage.textContent = "Invalid Power-Up choice.";
@@ -383,30 +412,67 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgressBar(); // Update progress bar to reflect the extra guess
   }
 
+  function revealAnagramFunction() {
+    if (anagramFound) {
+      wordleMessage.textContent = "Anagram already found!";
+      return;
+    }
+    // Display the anagram in the theme section
+    const themeLetters = currentThemeDisplay.querySelectorAll('.wordle-cell');
+    themeLetters.forEach((cell, index) => {
+      cell.classList.add('bg-yellow-300');
+      cell.classList.add('animate-bounce');
+    });
+    wordleMessage.textContent = "Anagram Bonus Activated! Find the anagram related to the season.";
+    anagramFound = true;
+  }
+
   // Proceed to the next round
   function proceedToNextRound(won) {
     if (won && currentRound < totalRounds - 1) {
       currentRound += 1;
-      secretWord = words[currentRound].toLowerCase();
-      wordLength = secretWord.length;
-      maxGuesses = 6;
-      guesses = [];
-      currentGuess = '';
-      wordleMessage.textContent = `Round ${currentRound + 1}: ${theme}`;
-      createBoard();
-      createKeyboard();
-      wordleInput.disabled = false;
-      wordleInput.value = '';
-      wordleInput.focus();
-      powerUpButton.disabled = !usedPowerUp;
-      powerUpButton.textContent = usedPowerUp ? "Power-Up Used" : "Use Power-Up";
-      updateKeyboard();
-      showRoundIndicator(); // Show Round Indicator for the new round
-      updateProgressBar(); // Reset Progress Bar
+      gameData = dailyGames[getNextDate()];
+      if (gameData) {
+        const { theme: newTheme, words: newWords, anagram: newAnagram } = gameData;
+        secretWord = newWords[0].toLowerCase(); // Assuming single word per theme
+        wordLength = secretWord.length;
+        maxGuesses = 6;
+        guesses = [];
+        currentGuess = '';
+        anagramGuess = '';
+        gameOver = false;
+        anagramFound = false;
+        wordleMessage.textContent = `Round ${currentRound + 1}: ${newTheme}`;
+        currentThemeDisplay.innerHTML = newTheme; // Reset theme display
+        createBoard();
+        createKeyboard();
+        createThemeAnagram();
+        wordleInput.disabled = false;
+        wordleInput.value = '';
+        wordleInput.focus();
+        powerUpButton.disabled = false;
+        powerUpButton.textContent = "Use Power-Up";
+        updateKeyboard();
+        showRoundIndicator(); // Show Round Indicator
+        updateProgressBar(); // Reset Progress Bar
+      } else {
+        wordleMessage.textContent += " No more rounds available.";
+        gameOver = true;
+      }
     } else {
       wordleMessage.textContent += " Game Over.";
       gameOver = true;
     }
+  }
+
+  // Function to get the next date key from dailyGames
+  function getNextDate() {
+    const dates = Object.keys(dailyGames).sort();
+    const currentIndex = dates.indexOf(currentDate);
+    if (currentIndex >= 0 && currentIndex < dates.length - 1) {
+      return dates[currentIndex + 1];
+    }
+    return null;
   }
 
   // Save game state to localStorage
@@ -435,13 +501,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Close the modal when clicking outside the content
-  // Removed wordleModal references as they are not present in the HTML
+  // Removed wordleModal references as they are handled in HTML
 
   // Ensure the input field is focused when the modal is opened
-  // Removed wordleModal references as they are not present in the HTML
-
-  // Ensure the input field is focused when the modal is opened via JavaScript
-  // Removed wordleModal references as they are not present in the HTML
+  // Removed wordleModal references as they are handled in HTML
 
   // Initialize the game if not played yet
   if (!hasPlayedToday()) {
@@ -547,5 +610,40 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeWordleGame();
     wordleMessage.textContent = "Game has been reset.";
   });
+
+  // Handle Anagram Click
+  function handleAnagramClick(cell, letter) {
+    if (gameOver || !anagram) return;
+    anagramGuess += letter;
+    cell.classList.add('bg-green-300'); // Highlight clicked letter
+
+    // Check if anagram is complete
+    if (anagramGuess.length === anagram.length) {
+      if (anagramGuess === anagram.toUpperCase()) {
+        wordleMessage.textContent = "Anagram Correct! You've earned an extra Power-Up!";
+        awardExtraPowerUp();
+      } else {
+        wordleMessage.textContent = "Incorrect Anagram. Try Again!";
+      }
+      anagramGuess = '';
+      // Reset highlighted letters
+      const themeLetters = currentThemeDisplay.querySelectorAll('.wordle-cell');
+      themeLetters.forEach(cell => {
+        cell.classList.remove('bg-green-300');
+      });
+    }
+  }
+
+  // Award Extra Power-Up
+  function awardExtraPowerUp() {
+    // Implement the logic to grant an extra power-up
+    // For simplicity, we'll enable the power-up button again if it was used
+    if (usedPowerUp) {
+      usedPowerUp = false;
+      powerUpButton.disabled = false;
+      powerUpButton.textContent = "Use Power-Up";
+      wordleMessage.textContent += " You can use another Power-Up now.";
+    }
+  }
 
 });
