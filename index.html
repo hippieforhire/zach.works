@@ -16,9 +16,10 @@
     }
     h1 {
       font-family: 'Press Start 2P', cursive;
-      font-size: 2rem;
+      font-size: 2.5rem;
       color: #1f2937; /* Tailwind gray-800 */
       text-shadow: 2px 2px #d1d5db; /* Subtle shadow for depth */
+      margin-top: 20px;
     }
     /* Modal Styles */
     .modal {
@@ -220,13 +221,25 @@
       color: #6b7280; /* Tailwind gray-500 */
       font-weight: 500;
     }
+    /* Hidden Input Field */
+    #wordleInput {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen relative">
 
-  <!-- Header -->
-  <header class="mb-6">
-    <h1>Your Wordle Game</h1>
+  <!-- Logo and Header -->
+  <header class="mb-6 flex flex-col items-center">
+    <!-- Logo (Simple Inline SVG for Z) -->
+    <div class="mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 100 100" fill="none">
+        <text x="10" y="70" font-family="'Press Start 2P', cursive" font-size="70" fill="#10b981">Z</text>
+      </svg>
+    </div>
+    <h1>Zachdle</h1>
   </header>
 
   <!-- Game Container -->
@@ -280,35 +293,35 @@
     <div class="modal-content relative">
       <span class="modal-close">&times;</span>
       <h2 class="modal-header mb-4">How to Play</h2>
-      <p class="mb-6 text-center">Guess the secret word within six tries. Each guess must be a valid word.</p>
+      <p class="mb-6 text-center">Guess the secret word, based on the theme, within six tries each round. There are a total of 3 rounds.</p>
       <!-- Example Tiles -->
       <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
-          <div class="wordle-cell correct animate-flip animate-bounce">A</div>
-          <div class="wordle-cell">B</div>
+          <div class="wordle-cell correct animate-flip animate-bounce">Z</div>
+          <div class="wordle-cell">A</div>
           <div class="wordle-cell">C</div>
+          <div class="wordle-cell">H</div>
+          <div class="wordle-cell">S</div>
+        </div>
+        <p class="text-center">The letter <strong>Z</strong> is in the word and in the correct spot.</p>
+      </div>
+      <div class="mb-6">
+        <div class="flex space-x-2 justify-center mb-2">
+          <div class="wordle-cell">C</div>
+          <div class="wordle-cell">O</div>
           <div class="wordle-cell">D</div>
           <div class="wordle-cell">E</div>
+          <div class="wordle-cell">D</div>
         </div>
-        <p class="text-center">The letter <strong>A</strong> is in the word and in the correct spot.</p>
+        <p class="text-center">The letter <strong>O</strong> is in the word but in the wrong spot.</p>
       </div>
       <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
-          <div class="wordle-cell">F</div>
-          <div class="wordle-cell present animate-flip animate-bounce">G</div>
-          <div class="wordle-cell">H</div>
-          <div class="wordle-cell">I</div>
-          <div class="wordle-cell">J</div>
-        </div>
-        <p class="text-center">The letter <strong>G</strong> is in the word but in the wrong spot.</p>
-      </div>
-      <div class="mb-6">
-        <div class="flex space-x-2 justify-center mb-2">
-          <div class="wordle-cell">K</div>
-          <div class="wordle-cell">L</div>
-          <div class="wordle-cell absent animate-flip animate-bounce">M</div>
-          <div class="wordle-cell">N</div>
-          <div class="wordle-cell">O</div>
+          <div class="wordle-cell">G</div>
+          <div class="wordle-cell">A</div>
+          <div class="wordle-cell">M</div>
+          <div class="wordle-cell">E</div>
+          <div class="wordle-cell">S</div>
         </div>
         <p class="text-center">The letter <strong>M</strong> is not in the word in any spot.</p>
       </div>
