@@ -13,6 +13,8 @@
     body {
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #f6f9fc 0%, #e9eff5 100%); /* Soft gradient background */
+      overflow-x: hidden;
+      position: relative;
     }
     h1 {
       font-family: 'Press Start 2P', cursive;
@@ -107,6 +109,7 @@
       transition: background-color 0.3s, border-color 0.3s;
       background-color: white;
       border-radius: 5px;
+      cursor: pointer;
     }
     .wordle-cell.correct {
       background-color: #10b981; /* Tailwind green-500 */
@@ -137,6 +140,8 @@
       user-select: none;
       transition: background-color 0.3s, transform 0.1s;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+      font-size: 0.9rem;
+      font-weight: 500;
     }
     .wordle-key:hover {
       background-color: #e5e7eb; /* Tailwind gray-200 */
@@ -227,14 +232,44 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Decorative Animated Element Above Header */
+    .decorative-animation {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle at center, #a1c4fd, #c2e9fb);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+      opacity: 0.3;
+    }
+    @keyframes float {
+      0% { transform: translate(-50%, -10px) rotate(0deg); }
+      50% { transform: translate(-50%, 10px) rotate(180deg); }
+      100% { transform: translate(-50%, -10px) rotate(360deg); }
+    }
+    /* Animated "Z" Logo */
+    .z-logo {
+      animation: spin 10s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen relative">
+  
+  <!-- Decorative Animated Element Above Header -->
+  <div class="decorative-animation"></div>
 
   <!-- Logo and Header -->
-  <header class="mb-6 flex flex-col items-center">
-    <!-- Logo (Simple Inline SVG for Z) -->
-    <div class="mb-4">
+  <header class="mb-6 flex flex-col items-center z-10">
+    <!-- Logo (Animated Inline SVG for Z) -->
+    <div class="mb-4 z-logo">
       <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 100 100" fill="none">
         <text x="10" y="70" font-family="'Press Start 2P', cursive" font-size="70" fill="#10b981">Z</text>
       </svg>
@@ -243,7 +278,7 @@
   </header>
 
   <!-- Game Container -->
-  <div class="game-container flex flex-col items-center bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+  <div class="game-container flex flex-col items-center bg-white p-6 rounded-lg shadow-lg max-w-md w-full z-10">
     <!-- Progress Bar -->
     <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
       <div id="progressBar" class="bg-blue-500 h-2 rounded-full" style="width: 0%;"></div>
@@ -308,7 +343,7 @@
       <div class="mb-6">
         <div class="flex space-x-2 justify-center mb-2">
           <div class="wordle-cell">C</div>
-          <div class="wordle-cell">O</div>
+          <div class="wordle-cell present animate-flip animate-bounce">O</div>
           <div class="wordle-cell">D</div>
           <div class="wordle-cell">E</div>
           <div class="wordle-cell">D</div>
@@ -319,7 +354,7 @@
         <div class="flex space-x-2 justify-center mb-2">
           <div class="wordle-cell">G</div>
           <div class="wordle-cell">A</div>
-          <div class="wordle-cell">M</div>
+          <div class="wordle-cell absent animate-flip animate-bounce">M</div>
           <div class="wordle-cell">E</div>
           <div class="wordle-cell">S</div>
         </div>
