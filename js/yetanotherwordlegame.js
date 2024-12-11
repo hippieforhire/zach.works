@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const powerUpButton = document.getElementById('powerUpButton');
   const wordleKeyboard = document.getElementById('wordleKeyboard');
   const currentThemeDisplay = document.getElementById('currentTheme');
+  const themeDisplay = document.getElementById('themeDisplay'); // New Element
   const roundIndicator = document.getElementById('roundIndicator'); // Added Element
   const correctGuessMessage = document.getElementById('correctGuessMessage'); // Existing Element
   const confettiContainer = document.getElementById('confetti'); // Existing Element
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDate = firstDate;
   }
 
-  const { theme, words, anagram } = gameData;
+  let { theme, words, anagram } = gameData;
   let currentRound = 0; // 0,1,2 for rounds 1,2,3
   const totalRounds = 3;
   let usedPowerUp = false;
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     anagramGuess = '';
     gameOver = false;
     wordleMessage.textContent = `Theme: ${theme}`;
-    currentThemeDisplay.textContent = theme;
+    currentThemeDisplay.textContent = `Theme: ${theme}`;
     createBoard();
     createKeyboard();
     createThemeAnagram();
@@ -153,16 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Create Theme Anagram Display
   function createThemeAnagram() {
-    const themeContainer = document.createElement('div');
-    themeContainer.classList.add('flex', 'space-x-2', 'justify-center', 'mt-4');
-    theme.split('').forEach((letter, index) => {
-      const letterBox = document.createElement('div');
-      letterBox.classList.add('wordle-cell', 'cursor-pointer');
-      letterBox.textContent = letter.toUpperCase();
-      letterBox.addEventListener('click', () => handleAnagramClick(letterBox, letter.toLowerCase()));
-      themeContainer.appendChild(letterBox);
-    });
-    currentThemeDisplay.appendChild(themeContainer);
+    // No longer creating tile-based letters. Theme is displayed as regular text.
+    // This function can be used to initialize any additional logic if needed.
+    // Currently, it's not needed and can be removed or left empty.
   }
 
   // Update Keyboard based on guesses
@@ -346,16 +340,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Present options to the user
-    const powerUpChoice = prompt("Choose a Power-Up:\n1. Reveal a Letter\n2. Get an Extra Guess\n3. Anagram Bonus");
+    const powerUpChoice = prompt("Choose a Power-Up:\n1. Reveal a Letter\n2. Get an Extra Guess");
 
     if (powerUpChoice === '1') {
       revealLetterFunction();
       usedPowerUp = true;
     } else if (powerUpChoice === '2') {
       getExtraGuessFunction();
-      usedPowerUp = true;
-    } else if (powerUpChoice === '3') {
-      revealAnagramFunction();
       usedPowerUp = true;
     } else {
       wordleMessage.textContent = "Invalid Power-Up choice.";
@@ -412,21 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgressBar(); // Update progress bar to reflect the extra guess
   }
 
-  function revealAnagramFunction() {
-    if (anagramFound) {
-      wordleMessage.textContent = "Anagram already found!";
-      return;
-    }
-    // Display the anagram in the theme section
-    const themeLetters = currentThemeDisplay.querySelectorAll('.wordle-cell');
-    themeLetters.forEach((cell, index) => {
-      cell.classList.add('bg-yellow-300');
-      cell.classList.add('animate-bounce');
-    });
-    wordleMessage.textContent = "Anagram Bonus Activated! Find the anagram related to the season.";
-    anagramFound = true;
-  }
-
   // Proceed to the next round
   function proceedToNextRound(won) {
     if (won && currentRound < totalRounds - 1) {
@@ -434,6 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
       gameData = dailyGames[getNextDate()];
       if (gameData) {
         const { theme: newTheme, words: newWords, anagram: newAnagram } = gameData;
+        theme = newTheme;
+        anagram = newAnagram;
         secretWord = newWords[0].toLowerCase(); // Assuming single word per theme
         wordLength = secretWord.length;
         maxGuesses = 6;
@@ -443,10 +421,11 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOver = false;
         anagramFound = false;
         wordleMessage.textContent = `Round ${currentRound + 1}: ${newTheme}`;
-        currentThemeDisplay.innerHTML = newTheme; // Reset theme display
+        currentThemeDisplay.textContent = `Theme: ${newTheme}`;
+        // Reset theme display
+        resetThemeDisplay();
         createBoard();
         createKeyboard();
-        createThemeAnagram();
         wordleInput.disabled = false;
         wordleInput.value = '';
         wordleInput.focus();
@@ -513,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     wordleMessage.textContent = "You have already played today's game.";
     wordleInput.disabled = true;
     powerUpButton.disabled = true;
-    currentThemeDisplay.textContent = theme;
+    currentThemeDisplay.textContent = `Theme: ${theme}`;
     updateProgressBar(); // Initialize Progress Bar
   }
 
@@ -611,25 +590,35 @@ document.addEventListener('DOMContentLoaded', () => {
     wordleMessage.textContent = "Game has been reset.";
   });
 
-  // Handle Anagram Click
-  function handleAnagramClick(cell, letter) {
+  // Handle Theme Letter Clicks for Anagram
+  function handleThemeLetterClick(event) {
     if (gameOver || !anagram) return;
-    anagramGuess += letter;
-    cell.classList.add('bg-green-300'); // Highlight clicked letter
+    const cell = event.target;
+    const letter = cell.textContent.toLowerCase();
 
-    // Check if anagram is complete
+    if (cell.classList.contains('selected')) {
+      // Deselect the letter
+      cell.classList.remove('selected');
+      anagramGuess = anagramGuess.slice(0, -1);
+    } else {
+      // Select the letter
+      cell.classList.add('selected');
+      anagramGuess += letter;
+    }
+
+    // Check if the anagram is complete
     if (anagramGuess.length === anagram.length) {
-      if (anagramGuess === anagram.toUpperCase()) {
+      if (anagramGuess === anagram.toLowerCase()) {
         wordleMessage.textContent = "Anagram Correct! You've earned an extra Power-Up!";
         awardExtraPowerUp();
       } else {
         wordleMessage.textContent = "Incorrect Anagram. Try Again!";
       }
       anagramGuess = '';
-      // Reset highlighted letters
-      const themeLetters = currentThemeDisplay.querySelectorAll('.wordle-cell');
-      themeLetters.forEach(cell => {
-        cell.classList.remove('bg-green-300');
+      // Reset all selections
+      const allLetters = document.querySelectorAll('.theme-letter');
+      allLetters.forEach(letterSpan => {
+        letterSpan.classList.remove('selected');
       });
     }
   }
@@ -644,6 +633,60 @@ document.addEventListener('DOMContentLoaded', () => {
       powerUpButton.textContent = "Use Power-Up";
       wordleMessage.textContent += " You can use another Power-Up now.";
     }
+  }
+
+  // Function to display theme as clickable text
+  function displayClickableTheme() {
+    const themeText = theme;
+    const themeLetters = themeText.split('').map(letter => {
+      const span = document.createElement('span');
+      span.textContent = letter;
+      span.classList.add('theme-letter');
+      span.addEventListener('click', handleThemeLetterClick);
+      return span;
+    });
+    const themeContainer = document.getElementById('themeLetters');
+    themeContainer.innerHTML = '';
+    themeLetters.forEach(span => themeContainer.appendChild(span));
+  }
+
+  // Reset Theme Display for New Rounds
+  function resetThemeDisplay() {
+    const themeContainer = document.getElementById('themeLetters');
+    themeContainer.innerHTML = '';
+    displayClickableTheme();
+  }
+
+  // Initialize the theme display when the game starts
+  function initializeThemeDisplay() {
+    displayClickableTheme();
+  }
+
+  // Initialize the game
+  function initializeWordleGame() {
+    currentRound = 0;
+    usedPowerUp = false;
+    anagramFound = false;
+    secretWord = words[currentRound].toLowerCase();
+    wordLength = secretWord.length;
+    maxGuesses = 6;
+    guesses = [];
+    currentGuess = '';
+    anagramGuess = '';
+    gameOver = false;
+    wordleMessage.textContent = `Theme: ${theme}`;
+    currentThemeDisplay.textContent = `Theme: ${theme}`;
+    createBoard();
+    createKeyboard();
+    displayClickableTheme();
+    wordleInput.disabled = false;
+    wordleInput.value = '';
+    wordleInput.focus(); // Ensure the input is focused
+    powerUpButton.disabled = false;
+    powerUpButton.textContent = "Use Power-Up";
+    updateKeyboard();
+    showRoundIndicator(); // Show Round Indicator
+    updateProgressBar(); // Reset Progress Bar
   }
 
 });
