@@ -189,6 +189,18 @@
       display: none;
       z-index: 100;
     }
+    /* Round Indicator Styles */
+    #roundIndicator {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #6b7280; /* Tailwind gray-500 */
+    }
+    /* Hidden Input Field */
+    #wordleInput {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen relative">
@@ -208,6 +220,9 @@
     <!-- Wordle Board -->
     <div id="wordleBoard" class="mb-4"></div>
 
+    <!-- Round Indicator -->
+    <div id="roundIndicator" class="text-sm">Round 1</div>
+
     <!-- On-Screen Keyboard -->
     <div id="wordleKeyboard" class="flex flex-wrap justify-center max-w-md"></div>
 
@@ -223,6 +238,9 @@
     <div id="wordleMessage" class="mt-4 text-center text-lg text-gray-700"></div>
     <div id="currentTheme" class="mt-2 text-center text-sm text-gray-600"></div>
   </div>
+
+  <!-- Hidden Input Field for Keyboard Events -->
+  <input type="text" id="wordleInput" autocomplete="off">
 
   <!-- Confetti Container -->
   <div id="confetti" class="fixed top-0 left-0 w-full h-full pointer-events-none z-40"></div>
