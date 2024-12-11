@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const keys = [
       'Q','W','E','R','T','Y','U','I','O','P',
       'A','S','D','F','G','H','J','K','L',
-      'ENTER','Z','X','C','V','B','N','M','BACKSPACE'
+      'Ent','Z','X','C','V','B','N','M','BCK'
     ];
     wordleKeyboard.innerHTML = '';
     keys.forEach(key => {
@@ -192,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle On-Screen Keyboard Click
   function handleKeyPress(key) {
     if (gameOver) return;
-    if (key === 'ENTER') {
+    if (key === 'Ent') {
       submitGuess();
-    } else if (key === 'BACKSPACE') {
+    } else if (key === 'BCK') {
       currentGuess = currentGuess.slice(0, -1);
       updateBoardUI();
     } else {
