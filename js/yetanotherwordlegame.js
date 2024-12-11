@@ -551,10 +551,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startConfetti();
   }
 
-  // Function to display Correct Guess Message with animation
-  // (Already defined above)
-
-  // Function to show Round Indicator
-  // (Already defined above)
+  // Define closeWordleModal function
+  function closeWordleModal() {
+    wordleModal.classList.add('hidden');
+  }
 
 });
