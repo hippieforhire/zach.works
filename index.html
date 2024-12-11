@@ -316,7 +316,7 @@
     <div id="roundIndicator" class="text-sm">Round 1</div>
 
     <!-- Theme Display (Clickable Text for Anagram) -->
-    <div id="themeDisplay" class="theme-text">Theme: <span id="themeLetters">Country or State Capitals</span></div>
+    <div id="themeDisplay" class="theme-text">Theme: <span id="themeLetters">Country</span></div>
 
     <!-- On-Screen Keyboard -->
     <div id="wordleKeyboard" class="flex flex-col items-center mt-4">
@@ -425,6 +425,9 @@
 
       // Ensure modal appears above all elements
       rulesModal.style.zIndex = '100';
+
+      // **Automatically open the rules modal on page load**
+      openRulesModal();
     });
   </script>
 </body>
