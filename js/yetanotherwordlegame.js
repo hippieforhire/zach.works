@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const powerUpButton = document.getElementById('powerUpButton');
   const wordleKeyboard = document.getElementById('wordleKeyboard');
   const currentThemeDisplay = document.getElementById('currentTheme');
-  const themeDisplay = document.getElementById('themeDisplay'); // New Element
+  const themeDisplay = document.getElementById('themeLetters'); // Updated Element
   const roundIndicator = document.getElementById('roundIndicator'); // Added Element
   const correctGuessMessage = document.getElementById('correctGuessMessage'); // Existing Element
   const confettiContainer = document.getElementById('confetti'); // Existing Element
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentThemeDisplay.textContent = `Theme: ${theme}`;
     createBoard();
     createKeyboard();
-    createThemeAnagram();
+    displayClickableTheme();
     wordleInput.disabled = false;
     wordleInput.value = '';
     wordleInput.focus(); // Ensure the input is focused
@@ -143,20 +143,39 @@ document.addEventListener('DOMContentLoaded', () => {
       'Ent','Z','X','C','V','B','N','M','BCK'
     ];
     wordleKeyboard.innerHTML = '';
-    keys.forEach(key => {
+    // Create keyboard rows
+    const firstRow = document.createElement('div');
+    firstRow.classList.add('flex', 'justify-center', 'mb-2');
+    keys.slice(0,10).forEach(key => {
       const keyButton = document.createElement('div');
       keyButton.classList.add('wordle-key');
       keyButton.textContent = key;
       keyButton.addEventListener('click', () => handleKeyPress(key));
-      wordleKeyboard.appendChild(keyButton);
+      firstRow.appendChild(keyButton);
     });
-  }
+    wordleKeyboard.appendChild(firstRow);
 
-  // Create Theme Anagram Display
-  function createThemeAnagram() {
-    // No longer creating tile-based letters. Theme is displayed as regular text.
-    // This function can be used to initialize any additional logic if needed.
-    // Currently, it's not needed and can be removed or left empty.
+    const secondRow = document.createElement('div');
+    secondRow.classList.add('flex', 'justify-center', 'mb-2');
+    keys.slice(10,19).forEach(key => {
+      const keyButton = document.createElement('div');
+      keyButton.classList.add('wordle-key');
+      keyButton.textContent = key;
+      keyButton.addEventListener('click', () => handleKeyPress(key));
+      secondRow.appendChild(keyButton);
+    });
+    wordleKeyboard.appendChild(secondRow);
+
+    const thirdRow = document.createElement('div');
+    thirdRow.classList.add('flex', 'justify-center');
+    keys.slice(19).forEach(key => {
+      const keyButton = document.createElement('div');
+      keyButton.classList.add('wordle-key');
+      keyButton.textContent = key;
+      keyButton.addEventListener('click', () => handleKeyPress(key));
+      thirdRow.appendChild(keyButton);
+    });
+    wordleKeyboard.appendChild(thirdRow);
   }
 
   // Update Keyboard based on guesses
@@ -165,28 +184,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const { guess, feedback } = guessObj;
       guess.split('').forEach((letter, index) => {
         const key = letter.toUpperCase();
-        const keyButton = Array.from(wordleKeyboard.children).find(btn => btn.textContent === key);
+        const keyButton = Array.from(wordleKeyboard.querySelectorAll('.wordle-key')).find(btn => btn.textContent === key);
         if (keyButton) {
           if (feedback[index] === 'correct') {
             keyButton.classList.remove('present', 'absent');
             keyButton.classList.add('correct', 'animate-press');
             setTimeout(() => {
               keyButton.classList.remove('animate-press');
-            }, 600); // Increased from 300ms to match animation duration
+            }, 600); // Match animation duration
           } else if (feedback[index] === 'present') {
             if (!keyButton.classList.contains('correct')) {
               keyButton.classList.remove('absent');
               keyButton.classList.add('present', 'animate-press');
               setTimeout(() => {
                 keyButton.classList.remove('animate-press');
-              }, 600); // Increased from 300ms to match animation duration
+              }, 600);
             }
           } else {
             if (!keyButton.classList.contains('correct') && !keyButton.classList.contains('present')) {
               keyButton.classList.add('absent', 'animate-press');
               setTimeout(() => {
                 keyButton.classList.remove('animate-press');
-              }, 600); // Increased from 300ms to match animation duration
+              }, 600);
             }
           }
         }
@@ -240,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
       wordleMessage.textContent = `Please enter a ${wordLength}-letter word.`;
       return;
     }
-    // Commented out word validation to allow any combination of letters
+    // Uncomment and implement word validation if needed
     /*
     if (!isValidWord(currentGuess.toLowerCase())) {
       wordleMessage.textContent = "Word not in list.";
@@ -313,23 +332,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateBoardColors(feedback) {
     const currentRow = wordleBoard.children[guesses.length - 1];
     Array.from(currentRow.children).forEach((cell, index) => {
-      // Remove the class if it's already present to re-trigger animation
+      // Remove existing classes to re-trigger animation
       cell.classList.remove('animate-flip', 'bounce');
       void cell.offsetWidth; // Trigger reflow
 
-      // Add feedback class and animate-flip
+      // Add feedback class and animations
       cell.classList.add(feedback[index], 'animate-flip', 'bounce');
 
-      // Remove the animation class after animation completes to allow re-animation
+      // Remove the animation class after animation completes
       setTimeout(() => {
         cell.classList.remove('animate-flip', 'bounce');
       }, 1000); // Duration matches the CSS animation duration
     });
-  }
-
-  // Validate the word using the words array from dailyGames
-  function isValidWord(word) {
-    return words.includes(word);
   }
 
   // Power-Up Functionality
@@ -367,11 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Remove the animation class after animation completes
         setTimeout(() => {
           cell.classList.remove('animate-flip', 'bounce');
-        }, 1000); // Increased from 500ms to match animation duration
+        }, 1000); // Match animation duration
 
         // Update keyboard
         const key = secretWord[i].toUpperCase();
-        const keyButton = Array.from(wordleKeyboard.children).find(btn => btn.textContent === key);
+        const keyButton = Array.from(wordleKeyboard.querySelectorAll('.wordle-key')).find(btn => btn.textContent === key);
         if (keyButton) {
           // Remove existing feedback classes to avoid conflicts
           keyButton.classList.remove('present', 'absent', 'animate-press');
@@ -380,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
           keyButton.classList.add('correct', 'animate-press');
           setTimeout(() => {
             keyButton.classList.remove('animate-press');
-          }, 600); // Increased from 300ms to match animation duration
+          }, 600); // Match animation duration
         }
         break;
       }
@@ -424,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentThemeDisplay.textContent = `Theme: ${newTheme}`;
         // Reset theme display
         resetThemeDisplay();
-        createBoard();
+        // Adjust the board based on new word length
+        adjustBoardForNewRound();
         createKeyboard();
         wordleInput.disabled = false;
         wordleInput.value = '';
@@ -479,12 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeWordleGame();
   });
 
-  // Close the modal when clicking outside the content
-  // Removed wordleModal references as they are handled in HTML
-
-  // Ensure the input field is focused when the modal is opened
-  // Removed wordleModal references as they are handled in HTML
-
   // Initialize the game if not played yet
   if (!hasPlayedToday()) {
     // Wait for the user to click Start
@@ -493,6 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
     wordleInput.disabled = true;
     powerUpButton.disabled = true;
     currentThemeDisplay.textContent = `Theme: ${theme}`;
+    displayClickableTheme(); // Display theme letters
     updateProgressBar(); // Initialize Progress Bar
   }
 
@@ -507,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       roundIndicator.classList.remove('animate-fade-in');
       roundIndicator.classList.add('animate-fade-out');
-    }, 2500); // Increased from 1500ms to 2500ms to match animation duration
+    }, 2500); // Match animation duration
   }
 
   // Function to display Correct Guess Message with animation
@@ -592,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handle Theme Letter Clicks for Anagram
   function handleThemeLetterClick(event) {
-    if (gameOver || !anagram) return;
+    if (gameOver || anagramFound) return;
     const cell = event.target;
     const letter = cell.textContent.toLowerCase();
 
@@ -610,7 +620,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (anagramGuess.length === anagram.length) {
       if (anagramGuess === anagram.toLowerCase()) {
         wordleMessage.textContent = "Anagram Correct! You've earned an extra Power-Up!";
+        triggerAnagramSuccessAnimation();
         awardExtraPowerUp();
+        anagramFound = true;
       } else {
         wordleMessage.textContent = "Incorrect Anagram. Try Again!";
       }
@@ -626,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Award Extra Power-Up
   function awardExtraPowerUp() {
     // Implement the logic to grant an extra power-up
-    // For simplicity, we'll enable the power-up button again if it was used
+    // For simplicity, we'll reset the usedPowerUp flag and enable the power-up button again
     if (usedPowerUp) {
       usedPowerUp = false;
       powerUpButton.disabled = false;
@@ -645,9 +657,8 @@ document.addEventListener('DOMContentLoaded', () => {
       span.addEventListener('click', handleThemeLetterClick);
       return span;
     });
-    const themeContainer = document.getElementById('themeLetters');
-    themeContainer.innerHTML = '';
-    themeLetters.forEach(span => themeContainer.appendChild(span));
+    themeDisplay.innerHTML = '';
+    themeLetters.forEach(span => themeDisplay.appendChild(span));
   }
 
   // Reset Theme Display for New Rounds
@@ -655,6 +666,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeContainer = document.getElementById('themeLetters');
     themeContainer.innerHTML = '';
     displayClickableTheme();
+  }
+
+  // Function to adjust the board based on new round's word length
+  function adjustBoardForNewRound() {
+    wordleBoard.innerHTML = '';
+    for (let i = 0; i < maxGuesses; i++) {
+      const row = document.createElement('div');
+      row.classList.add('wordle-row');
+      row.style.gridTemplateColumns = `repeat(${wordLength}, 50px)`; // Dynamic columns
+      for (let j = 0; j < wordLength; j++) {
+        const cell = document.createElement('div');
+        cell.classList.add('wordle-cell');
+        row.appendChild(cell);
+      }
+      wordleBoard.appendChild(row);
+    }
+  }
+
+  // Function to handle anagram success animation
+  function triggerAnagramSuccessAnimation() {
+    // Highlight random letters in the theme to flash gray
+    const allLetters = document.querySelectorAll('.theme-letter');
+    allLetters.forEach(letterSpan => {
+      const random = Math.random();
+      if (random < 0.3) { // 30% chance to highlight
+        letterSpan.style.transition = 'background-color 0.5s';
+        letterSpan.style.backgroundColor = '#9ca3af'; // Tailwind gray-400
+        setTimeout(() => {
+          letterSpan.style.backgroundColor = ''; // Revert back
+        }, 1000); // Duration of the flash
+      }
+    });
   }
 
   // Initialize the theme display when the game starts
